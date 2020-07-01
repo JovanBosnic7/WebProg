@@ -108,12 +108,11 @@ public class UserDAO {
 
 	public User update(User user) {
 		User forUpdate = users.getOrDefault(user.getUsername(), null);
-		if(forUpdate != null && !forUpdate.isDeleted()) {
+		if (forUpdate != null && !forUpdate.isDeleted()) {
 			forUpdate.setFirstname(user.getFirstname());
 			forUpdate.setGender(user.getGender());
 			forUpdate.setLastname(user.getLastname());
 			forUpdate.setPassword(user.getPassword());
-			users.replace(user.getUsername(), forUpdate);
 			saveUsers();
 			return forUpdate;
 		}

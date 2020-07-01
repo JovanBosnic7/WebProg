@@ -99,7 +99,7 @@ public class ApartmentDAO {
 	public Apartment add(Apartment apartment) {
 		int maxId = 0;
 		for (int id : apartments.keySet()) {
-			if(id > maxId)
+			if (id > maxId)
 				maxId = id;
 		}
 		apartment.setId(++maxId);
