@@ -34,7 +34,7 @@ public class ApartmentDAO {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			String sr = System.getProperty("file.separator");
-			File f = new File(contextPath + sr + "apartmetns.json");
+			File f = new File(contextPath + sr + "apartments.json");
 
 			if (!f.exists())
 				return;
