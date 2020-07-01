@@ -23,4 +23,12 @@ public class Host extends User {
 		this.apartments = apartments;
 	}
 
+	public List<Apartment> getApartments() {
+		return apartments;
+	}
+
+	public void setApartments(List<Apartment> apartments) {
+		this.apartments = apartments;
+	}
+
 }
