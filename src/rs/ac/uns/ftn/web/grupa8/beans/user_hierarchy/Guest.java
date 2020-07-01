@@ -19,9 +19,9 @@ public class Guest extends User {
 		reservations = new ArrayList<Reservation>();
 	}
 
-	public Guest(String username, String password, String firstname, String lastname, Gender gender, 
+	public Guest(String username, String password, String firstname, String lastname, Gender gender, Boolean deleted,
 			List<Apartment> apartments, List<Reservation> reservations) {
-		super(username, password, firstname, lastname, gender, AccountType.GUEST);
+		super(username, password, firstname, lastname, gender, AccountType.GUEST, deleted);
 		this.apartments = apartments;
 		this.reservations = reservations;
 	}

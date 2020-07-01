@@ -11,16 +11,18 @@ public class Amenities implements Serializable {
 	private String name;
 	private String description;
 	private AmenitiesCategory category;
+	private Boolean deleted;
 
 	public Amenities() {
 		super();
 	}
 
-	public Amenities(int id, String name, String description, AmenitiesCategory category) {
+	public Amenities(int id, String name, String description, AmenitiesCategory category, Boolean deleted) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.category = category;
+		this.deleted = deleted;
 	}
 
 	public int getId() {
@@ -53,5 +55,13 @@ public class Amenities implements Serializable {
 
 	public void setCategory(AmenitiesCategory category) {
 		this.category = category;
+	}
+
+	public Boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 }

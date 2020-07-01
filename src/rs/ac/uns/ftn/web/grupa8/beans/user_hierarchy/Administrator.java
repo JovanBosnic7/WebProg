@@ -11,8 +11,8 @@ public class Administrator extends User {
 		super();
 	}
 
-	public Administrator(String username, String password, String firstname, String lastname, Gender gender) {
-		super(username, password, firstname, lastname, gender, AccountType.ADMINISTRATOR);
+	public Administrator(String username, String password, String firstname, String lastname, Gender gender, Boolean deleted) {
+		super(username, password, firstname, lastname, gender, AccountType.ADMINISTRATOR, deleted);
 	}
 	
 }

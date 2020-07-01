@@ -16,18 +16,19 @@ public class Reservation implements Serializable {
 	private String reservationMessage;
 	private Guest guest;
 	private ReservationStatus status;
+	private Boolean deleted;
 
 	public Reservation() {
 		super();
 	}
 
-	public Reservation(Apartment apartment, Date startDate, double totalPrice,
-			String reservationMessage, Guest guest, ReservationStatus status) {
-		this(apartment, startDate, totalPrice, reservationMessage, guest, status, 1);
+	public Reservation(Apartment apartment, Date startDate, double totalPrice, String reservationMessage, Guest guest,
+			ReservationStatus status, Boolean deleted) {
+		this(apartment, startDate, totalPrice, reservationMessage, guest, status, deleted, 1);
 	}
-	
-	public Reservation(Apartment apartment, Date startDate, double totalPrice,
-			String reservationMessage, Guest guest, ReservationStatus status, int nightsNumber) {
+
+	public Reservation(Apartment apartment, Date startDate, double totalPrice, String reservationMessage, Guest guest,
+			ReservationStatus status, Boolean deleted, int nightsNumber) {
 		this.apartment = apartment;
 		this.startDate = startDate;
 		this.nightsNumber = nightsNumber;
@@ -35,6 +36,7 @@ public class Reservation implements Serializable {
 		this.reservationMessage = reservationMessage;
 		this.guest = guest;
 		this.status = status;
+		this.deleted = deleted;
 	}
 
 	public Apartment getApartment() {
@@ -91,6 +93,14 @@ public class Reservation implements Serializable {
 
 	public void setStatus(ReservationStatus status) {
 		this.status = status;
+	}
+
+	public Boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

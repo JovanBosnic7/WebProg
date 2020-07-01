@@ -13,13 +13,14 @@ public class User implements Serializable {
 	private String lastname;
 	private Gender gender;
 	private AccountType accountType;
+	private Boolean deleted;
 
 	public User() {
 		super();
 	}
 
 	public User(String username, String password, String firstname, String lastname, Gender gender,
-			AccountType accountType) {
+			AccountType accountType, Boolean deleted) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -27,6 +28,7 @@ public class User implements Serializable {
 		this.lastname = lastname;
 		this.gender = gender;
 		this.accountType = accountType;
+		this.deleted = deleted;
 	}
 
 	public String getUsername() {
@@ -75,6 +77,14 @@ public class User implements Serializable {
 
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
+	}
+
+	public Boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

@@ -29,7 +29,8 @@ public class Apartment implements Serializable {
 	private ApartmentStatus apartmentStatus;
 	private List<Amenities> amenities;
 	private List<Reservation> reservations;
-
+	private Boolean deleted;
+	
 	public Apartment() {
 		super();
 		rentDates = new ArrayList<Date>();
@@ -41,14 +42,14 @@ public class Apartment implements Serializable {
 	public Apartment(ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
 			List<Date> rentDates, HashMap<Date, Boolean> availabilityByDate, Host host, List<ApartmentComment> comments,
 			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities, 
-			List<Reservation> reservations) {
-		this(apartmentType, roomNumber, guestNumber, location, rentDates, availabilityByDate, host, comments, imagePaths, priceByNight, apartmentStatus, amenities, reservations, LocalTime.of(14, 0), LocalTime.of(10, 0));
+			List<Reservation> reservations, Boolean deleted) {
+		this(apartmentType, roomNumber, guestNumber, location, rentDates, availabilityByDate, host, comments, imagePaths, priceByNight, apartmentStatus, amenities, reservations, deleted, LocalTime.of(14, 0), LocalTime.of(10, 0));
 	}
 
 	public Apartment(ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
 			List<Date> rentDates, HashMap<Date, Boolean> availabilityByDate, Host host, List<ApartmentComment> comments,
 			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities, 
-			List<Reservation> reservations, LocalTime checkInTime, LocalTime checkOutTime) {
+			List<Reservation> reservations, Boolean deleted, LocalTime checkInTime, LocalTime checkOutTime) {
 		this.apartmentType = apartmentType;
 		this.roomNumber = roomNumber;
 		this.guestNumber = guestNumber;
@@ -184,6 +185,14 @@ public class Apartment implements Serializable {
 
 	public void setReservations(List<Reservation> reservations) {
 		this.reservations = reservations;
+	}
+
+	public Boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }

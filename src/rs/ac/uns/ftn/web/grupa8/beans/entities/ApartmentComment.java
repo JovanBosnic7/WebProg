@@ -11,16 +11,18 @@ public class ApartmentComment implements Serializable {
 	private Apartment apartment;
 	private String commentText;
 	private double grade;
+	private Boolean deleted;
 
 	public ApartmentComment() {
 		super();
 	}
 
-	public ApartmentComment(Guest guest, Apartment apartment, String commentText, double grade) {
+	public ApartmentComment(Guest guest, Apartment apartment, String commentText, double grade, Boolean deleted) {
 		this.guest = guest;
 		this.apartment = apartment;
 		this.commentText = commentText;
 		this.grade = grade;
+		this.deleted = deleted;
 	}
 
 	public Guest getGuest() {
@@ -53,6 +55,14 @@ public class ApartmentComment implements Serializable {
 
 	public void setGrade(double grade) {
 		this.grade = grade;
+	}
+
+	public Boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }
