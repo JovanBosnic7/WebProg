@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title> Rezervisanje smeštaja</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="custom.css">
+ 
+</head>
+<body>
+<!-- -----------------------------------------NAVBAR -------------------------------------------------------------------->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Rezervisanje smeštaja</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Početna stranica</a></li>
+    </ul>
+    
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" data-target="#registerModal" data-toggle="modal"><span class="glyphicon glyphicon-user"></span>Registracija</a></li>
+        <li><a href="#" data-target="#loginModal" data-toggle="modal"><span class="glyphicon glyphicon-log-in" ></span> Prijava</a></li>
+      </ul>
+    <form id="searchform" class="navbar-form navbar-right" action="/action_page.php">
+      <div class="form-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Pretražite smeštaj" name="search">
+      </div>
+      <button type="submit" id = "searchButton"class="btn btn-default">Pretraga</button>
+    </form>
+  </div>
+</nav>
+<!-- -----------------------------------------LoginModal -------------------------------------------------------------------->
+
+<div>
+<div id="loginModal" class="modal" tabindex="-1" role="dialog" data-backdrop="false" > 
+    <!-- Modal content -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button class="close" data-dismiss="modal">&times;</button>    
+            <h4 class="modal-title">Prijavite se</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="inputUserName">Korisničko ime</label>
+                        <input class ="form-control" name="username" placeholder="Unesite korisničko ime" type="text" id="inputUserName">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword">Lozinka</label>
+                        <input class="form-control" placeholder="Unesite lozinku" type="password" name="password" id="inputPassword">
+                    </div>
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary">Prijava</button>
+                <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- -----------------------------------------RegisterModal -------------------------------------------------------------------->
+
+<div>
+   
+<div id="registerModal" class="modal" tabindex="-1" data-backdrop="false"> 
+    <!-- Modal content -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button class="close" data-dismiss="modal">&times;</button>    
+            <h4 class="modal-title">Registrujte se</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <input class ="form-control" placeholder="Unesite korisničko ime" name="username" type="text" id="inputUserName">
+                    </div>
+                    <div class="form-group">
+                        <input class ="form-control" placeholder="Unesite ime" name="firstname" type="text" id="inputUserName">
+                    </div>
+                    <div class="form-group">
+                        <input class ="form-control" placeholder="Unesite prezime" name="lastname" type="text" id="inputUserName">
+                    </div>
+                    <div class="form-group">
+                        <label for="pol">Odaberite pol:</label>
+                        <select name="gender" id="pol">
+                            <option value="muski">Muški</option>
+                            <option value="zenski">Ženski</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Unesite lozinku" name="password" type="password" id="inputPassword">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Ponovite lozinku" type="password" id="confirmPassword">
+                    </div>    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary">Registracija</button>
+                <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                
+            </div>
+          </div>
+        </div>
+     </div>
+    </div>
+
+       
+</body>
+</html>
+
+   
