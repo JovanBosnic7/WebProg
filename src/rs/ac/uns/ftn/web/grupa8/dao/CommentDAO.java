@@ -37,7 +37,8 @@ public class CommentDAO {
 			File f = new File(contextPath + sr + "comments.json");
 
 			if (!f.exists())
-				return;
+				if(!f.createNewFile())
+					return;
 
 			mapper.writerWithDefaultPrettyPrinter().writeValue(f, comments.values());
 		} catch (Exception ex) {

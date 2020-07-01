@@ -37,7 +37,8 @@ public class AmenitiesDAO {
 			File f = new File(contextPath + sr + "amenities.json");
 
 			if (!f.exists())
-				return;
+				if(!f.createNewFile())
+					return;
 
 			mapper.writerWithDefaultPrettyPrinter().writeValue(f, allAmenities.values());
 		} catch (Exception ex) {

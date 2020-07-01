@@ -37,8 +37,9 @@ public class UserDAO {
 			File f = new File(contextPath + sr + "users.json");
 
 			if (!f.exists())
-				return;
-
+				if(!f.createNewFile())
+					return;
+					
 			mapper.writerWithDefaultPrettyPrinter().writeValue(f, users.values());
 		} catch (Exception ex) {
 			ex.printStackTrace();

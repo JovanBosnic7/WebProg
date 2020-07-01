@@ -37,7 +37,8 @@ public class ReservationDAO {
 			File f = new File(contextPath + sr + "reservations.json");
 
 			if (!f.exists())
-				return;
+				if(!f.createNewFile())
+					return;
 
 			mapper.writerWithDefaultPrettyPrinter().writeValue(f, reservations.values());
 		} catch (Exception ex) {

@@ -37,7 +37,8 @@ public class ApartmentDAO {
 			File f = new File(contextPath + sr + "apartments.json");
 
 			if (!f.exists())
-				return;
+				if(!f.createNewFile())
+					return;
 
 			mapper.writerWithDefaultPrettyPrinter().writeValue(f, apartments.values());
 		} catch (Exception ex) {
