@@ -7,6 +7,7 @@ import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
 public class ApartmentComment implements Serializable {
 
 	private static final long serialVersionUID = 8403653528635877869L;
+	private int id;
 	private Guest guest;
 	private Apartment apartment;
 	private String commentText;
@@ -17,12 +18,22 @@ public class ApartmentComment implements Serializable {
 		super();
 	}
 
-	public ApartmentComment(Guest guest, Apartment apartment, String commentText, double grade, Boolean deleted) {
+	public ApartmentComment(int id, Guest guest, Apartment apartment, String commentText, double grade,
+			Boolean deleted) {
+		this.id = id;
 		this.guest = guest;
 		this.apartment = apartment;
 		this.commentText = commentText;
 		this.grade = grade;
 		this.deleted = deleted;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Guest getGuest() {

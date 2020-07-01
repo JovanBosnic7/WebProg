@@ -14,6 +14,7 @@ import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host;
 public class Apartment implements Serializable {
 
 	private static final long serialVersionUID = 8539232035200018509L;
+	private int id;
 	private ApartmentType apartmentType;
 	private int roomNumber;
 	private int guestNumber;
@@ -30,7 +31,7 @@ public class Apartment implements Serializable {
 	private List<Amenities> amenities;
 	private List<Reservation> reservations;
 	private Boolean deleted;
-	
+
 	public Apartment() {
 		super();
 		rentDates = new ArrayList<Date>();
@@ -38,18 +39,21 @@ public class Apartment implements Serializable {
 		comments = new ArrayList<ApartmentComment>();
 		imagePaths = new ArrayList<String>();
 	}
-	
-	public Apartment(ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
+
+	public Apartment(int id, ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
 			List<Date> rentDates, HashMap<Date, Boolean> availabilityByDate, Host host, List<ApartmentComment> comments,
-			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities, 
+			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities,
 			List<Reservation> reservations, Boolean deleted) {
-		this(apartmentType, roomNumber, guestNumber, location, rentDates, availabilityByDate, host, comments, imagePaths, priceByNight, apartmentStatus, amenities, reservations, deleted, LocalTime.of(14, 0), LocalTime.of(10, 0));
+		this(id, apartmentType, roomNumber, guestNumber, location, rentDates, availabilityByDate, host, comments,
+				imagePaths, priceByNight, apartmentStatus, amenities, reservations, deleted, LocalTime.of(14, 0),
+				LocalTime.of(10, 0));
 	}
 
-	public Apartment(ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
+	public Apartment(int id, ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
 			List<Date> rentDates, HashMap<Date, Boolean> availabilityByDate, Host host, List<ApartmentComment> comments,
-			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities, 
+			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities,
 			List<Reservation> reservations, Boolean deleted, LocalTime checkInTime, LocalTime checkOutTime) {
+		this.id = id;
 		this.apartmentType = apartmentType;
 		this.roomNumber = roomNumber;
 		this.guestNumber = guestNumber;
@@ -65,6 +69,14 @@ public class Apartment implements Serializable {
 		this.apartmentStatus = apartmentStatus;
 		this.amenities = amenities;
 		this.reservations = reservations;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public ApartmentType getApartmentType() {

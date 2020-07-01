@@ -15,7 +15,7 @@ import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
 
 public class UserDAO {
 
-	private HashMap<String, User> users = new HashMap<>();
+	private HashMap<String, User> users = new HashMap<String, User>();
 	private String contextPath;
 
 	public UserDAO() {

@@ -9,6 +9,7 @@ import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
 public class Reservation implements Serializable {
 
 	private static final long serialVersionUID = 6649753648984634510L;
+	private int id;
 	private Apartment apartment;
 	private Date startDate;
 	private int nightsNumber;
@@ -22,13 +23,14 @@ public class Reservation implements Serializable {
 		super();
 	}
 
-	public Reservation(Apartment apartment, Date startDate, double totalPrice, String reservationMessage, Guest guest,
-			ReservationStatus status, Boolean deleted) {
-		this(apartment, startDate, totalPrice, reservationMessage, guest, status, deleted, 1);
+	public Reservation(int id, Apartment apartment, Date startDate, double totalPrice, String reservationMessage,
+			Guest guest, ReservationStatus status, Boolean deleted) {
+		this(id, apartment, startDate, totalPrice, reservationMessage, guest, status, deleted, 1);
 	}
 
-	public Reservation(Apartment apartment, Date startDate, double totalPrice, String reservationMessage, Guest guest,
-			ReservationStatus status, Boolean deleted, int nightsNumber) {
+	public Reservation(int id, Apartment apartment, Date startDate, double totalPrice, String reservationMessage,
+			Guest guest, ReservationStatus status, Boolean deleted, int nightsNumber) {
+		this.id = id;
 		this.apartment = apartment;
 		this.startDate = startDate;
 		this.nightsNumber = nightsNumber;
@@ -37,6 +39,14 @@ public class Reservation implements Serializable {
 		this.guest = guest;
 		this.status = status;
 		this.deleted = deleted;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Apartment getApartment() {
