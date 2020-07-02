@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import rs.ac.uns.ftn.web.grupa8.beans.enums.ApartmentStatus;
@@ -24,7 +25,9 @@ public class Apartment implements Serializable {
 	private Location location;
 	private List<Date> rentDates;
 	private HashMap<Date, Boolean> availabilityByDate;
+    @JsonIgnoreProperties(value = {"apartments"})
 	private Host host;
+    @JsonIgnoreProperties(value = {"apartment"})
 	private List<ApartmentComment> comments;
 	private List<String> imagePaths;
 	private double priceByNight;
@@ -32,6 +35,7 @@ public class Apartment implements Serializable {
 	private LocalTime checkOutTime;
 	private ApartmentStatus apartmentStatus;
 	private List<Amenities> amenities;
+	@JsonIgnoreProperties(value = {"apartment"})
 	private List<Reservation> reservations;
 	private Boolean deleted;
 

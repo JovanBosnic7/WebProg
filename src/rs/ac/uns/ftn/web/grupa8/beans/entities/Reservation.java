@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import rs.ac.uns.ftn.web.grupa8.beans.enums.ReservationStatus;
@@ -13,11 +14,13 @@ public class Reservation implements Serializable {
 	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = Reservation.class)
 	private static final long serialVersionUID = 6649753648984634510L;
 	private int id;
+	@JsonIgnoreProperties(value = {"reservations"})
 	private Apartment apartment;
 	private Date startDate;
 	private int nightsNumber;
 	private double totalPrice;
 	private String reservationMessage;
+	@JsonIgnoreProperties(value = {"reservations"})
 	private Guest guest;
 	private ReservationStatus status;
 	private Boolean deleted;

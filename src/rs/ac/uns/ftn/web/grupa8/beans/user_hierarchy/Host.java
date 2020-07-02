@@ -3,13 +3,16 @@ package rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy;
 import java.util.ArrayList;
 import java.util.List;
 
-import rs.ac.uns.ftn.web.grupa8.beans.entities.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.AccountType;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.Gender;
 
 public class Host extends User {
 
 	private static final long serialVersionUID = -5541749480701077181L;
+    @JsonIgnoreProperties(value = {"host"})
 	List<Apartment> apartments;
 
 	public Host() {

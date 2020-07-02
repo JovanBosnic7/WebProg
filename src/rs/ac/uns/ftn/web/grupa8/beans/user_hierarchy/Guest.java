@@ -3,7 +3,10 @@ package rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy;
 import java.util.ArrayList;
 import java.util.List;
 
-import rs.ac.uns.ftn.web.grupa8.beans.entities.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.AccountType;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.Gender;
 
@@ -11,6 +14,7 @@ public class Guest extends User {
 
 	private static final long serialVersionUID = -257435521795022059L;
 	List<Apartment> apartments;
+    @JsonIgnoreProperties(value = {"guest"})
 	List<Reservation> reservations;
 
 	public Guest() {
