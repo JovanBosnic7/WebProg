@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import rs.ac.uns.ftn.web.grupa8.beans.enums.AccountType;
+import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
 import rs.ac.uns.ftn.web.grupa8.dao.UserDAO;
 
@@ -31,6 +32,7 @@ public class UserAccountService {
 	public void init() {
 		if (ctx.getAttribute("userDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
+			System.out.println(contextPath);
 			ctx.setAttribute("userDAO", new UserDAO(contextPath));
 		}
 	}
@@ -39,9 +41,7 @@ public class UserAccountService {
 	@Path("/register")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response RegisterUser(User user) throws ServletException, IOException {
-		System.out.println("Usao u registraciju");
-		System.out.println(user.getFirstname());
+	public Response RegisterUser(Guest user) throws ServletException, IOException {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		if (!isUserValid(user)) {
 			return Response.status(400).entity("Popunite sva polja za registraciju korisnika").build();

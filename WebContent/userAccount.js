@@ -19,7 +19,7 @@ $(document).ready(function () {
 			"gender":gender,
 			"password" : inputedPassword
 		}
-		alert('Pre posta');
+		
 	$.ajax({
 			type: 'POST',
 			url: 'rest/register',
@@ -31,7 +31,6 @@ $(document).ready(function () {
 				$('#registerModal').modal('toggle');
 			}, 
 			error: function (message) {
-				alert('posle posta');
 				$('#errorReg').text(message.responseText);
 				$('#errorReg').show();
 				$('#errorReg').delay(5000).fadeOut('slow');
