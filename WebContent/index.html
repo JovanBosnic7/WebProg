@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="userAccount.js"></script>
   <link rel="stylesheet" type="text/css" href="custom.css">
  
 </head>
@@ -75,37 +76,39 @@
             <h4 class="modal-title">Registrujte se</h4>
             </div>
             <div class="modal-body">
-                <form>
+                <form id = "formRegisterUser" method="POST">
                     <div class="form-group">
-                        <input class ="form-control" placeholder="Unesite korisničko ime" name="username" type="text" id="inputUserName">
+                        <input class ="form-control" placeholder="Unesite korisničko ime" name="username" type="text" id="inputUserNameReg">
                     </div>
                     <div class="form-group">
-                        <input class ="form-control" placeholder="Unesite ime" name="firstname" type="text" id="inputUserName">
+                        <input class ="form-control" placeholder="Unesite ime" name="firstname" type="text" id="inputFirstNameReg">
                     </div>
                     <div class="form-group">
-                        <input class ="form-control" placeholder="Unesite prezime" name="lastname" type="text" id="inputUserName">
+                        <input class ="form-control" placeholder="Unesite prezime" name="lastname" type="text" id="inputLastNameReg">
                     </div>
                     <div class="form-group">
                         <label  style="font-size:13px;" class="label label-default"for="pol">Odaberite pol:</label>
-                        <select name="gender" id="pol">
-                            <option value="muski">Muški</option>
-                            <option value="zenski">Ženski</option>
+                        <select name="gender" id="genderReg">
+                            <option value="MALE">Muški</option>
+                            <option value="FEMALE">Ženski</option>
+							<option value="UNDEFINED">Ne želim da odgovorim</option>
                       </select>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" placeholder="Unesite lozinku" name="password" type="password" id="inputPassword">
+                        <input class="form-control" placeholder="Unesite lozinku" name="password" type="password" id="inputPasswordReg">
                     </div>
                     <div class="form-group">
-                        <input class="form-control" placeholder="Ponovite lozinku" type="password" id="confirmPassword">
+                        <input class="form-control" placeholder="Ponovite lozinku" type="password" id="confirmPasswordReg">
                     </div>    
                 </form>
             </div>
             <div class="modal-footer">
                 
                 <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
-								<button class="btn btn-secondary">Registracija</button>
+								<button  type="submit" form = "formRegisterUser" class="btn btn-secondary" id="buttonRegConf">Registracija</button>
                 
             </div>
+			<p id="errorReg" style="color:red;"></p>
           </div>
         </div>
      </div>
