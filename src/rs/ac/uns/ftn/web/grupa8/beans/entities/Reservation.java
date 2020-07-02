@@ -3,11 +3,14 @@ package rs.ac.uns.ftn.web.grupa8.beans.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import rs.ac.uns.ftn.web.grupa8.beans.enums.ReservationStatus;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
 
 public class Reservation implements Serializable {
-
+	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = Reservation.class)
 	private static final long serialVersionUID = 6649753648984634510L;
 	private int id;
 	private Apartment apartment;

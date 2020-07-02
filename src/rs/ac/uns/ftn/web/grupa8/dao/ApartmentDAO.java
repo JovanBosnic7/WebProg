@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.*;
 
@@ -32,6 +33,7 @@ public class ApartmentDAO {
 
 	public void saveApartments() {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		try {
 			String sr = System.getProperty("file.separator");
 			File f = new File(contextPath + sr + "apartments.json");
@@ -40,7 +42,7 @@ public class ApartmentDAO {
 				if(!f.createNewFile())
 					return;
 
-			mapper.writerWithDefaultPrettyPrinter().writeValue(f, apartments.values());
+			mapper.writerWithDefaultPrettyPrinter().writeValue(f, new ArrayList<Apartment>(apartments.values()));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -49,6 +51,7 @@ public class ApartmentDAO {
 	public void loadApartments() {
 		BufferedReader br = null;
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		List<Apartment> loadedApartments = new ArrayList<>();
 		try {
 			String sr = System.getProperty("file.separator");
@@ -57,7 +60,7 @@ public class ApartmentDAO {
 				return;
 			br = new BufferedReader(new FileReader(f));
 			if (br != null) {
-				loadedApartments = mapper.readValue(br, new TypeReference<List<Apartment>>() {
+				loadedApartments = mapper.readValue(br, new TypeReference<ArrayList<Apartment>>() {
 				});
 				apartments.clear();
 

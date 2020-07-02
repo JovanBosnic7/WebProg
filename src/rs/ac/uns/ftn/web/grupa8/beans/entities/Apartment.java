@@ -7,12 +7,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import rs.ac.uns.ftn.web.grupa8.beans.enums.ApartmentStatus;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.ApartmentType;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host;
 
 public class Apartment implements Serializable {
-
+	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = Apartment.class)
 	private static final long serialVersionUID = 8539232035200018509L;
 	private int id;
 	private ApartmentType apartmentType;

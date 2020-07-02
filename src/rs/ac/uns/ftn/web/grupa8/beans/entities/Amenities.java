@@ -2,10 +2,13 @@ package rs.ac.uns.ftn.web.grupa8.beans.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import rs.ac.uns.ftn.web.grupa8.beans.enums.AmenitiesCategory;
 
 public class Amenities implements Serializable {
-
+	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = Amenities.class)
 	private static final long serialVersionUID = -4984256778608375468L;
 	private int id;
 	private String name;

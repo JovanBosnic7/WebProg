@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
 
@@ -32,6 +33,7 @@ public class ReservationDAO {
 
 	public void saveReservations() {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		try {
 			String sr = System.getProperty("file.separator");
 			File f = new File(contextPath + sr + "reservations.json");
@@ -40,7 +42,7 @@ public class ReservationDAO {
 				if(!f.createNewFile())
 					return;
 
-			mapper.writerWithDefaultPrettyPrinter().writeValue(f, reservations.values());
+			mapper.writerWithDefaultPrettyPrinter().writeValue(f, new ArrayList<Reservation>(reservations.values()));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -49,6 +51,7 @@ public class ReservationDAO {
 	public void loadReservations() {
 		BufferedReader br = null;
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		List<Reservation> loadedReservations = new ArrayList<>();
 		try {
 			String sr = System.getProperty("file.separator");
@@ -57,7 +60,7 @@ public class ReservationDAO {
 				return;
 			br = new BufferedReader(new FileReader(f));
 			if (br != null) {
-				loadedReservations = mapper.readValue(br, new TypeReference<List<Reservation>>() {
+				loadedReservations = mapper.readValue(br, new TypeReference<ArrayList<Reservation>>() {
 				});
 				reservations.clear();
 

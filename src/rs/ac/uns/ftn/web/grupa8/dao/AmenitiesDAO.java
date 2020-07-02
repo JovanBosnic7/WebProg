@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.*;
 
@@ -32,6 +33,7 @@ public class AmenitiesDAO {
 
 	public void saveAmenities() {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		try {
 			String sr = System.getProperty("file.separator");
 			File f = new File(contextPath + sr + "amenities.json");
@@ -40,7 +42,7 @@ public class AmenitiesDAO {
 				if(!f.createNewFile())
 					return;
 
-			mapper.writerWithDefaultPrettyPrinter().writeValue(f, allAmenities.values());
+			mapper.writerWithDefaultPrettyPrinter().writeValue(f, new ArrayList<Amenities>(allAmenities.values()));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -49,6 +51,7 @@ public class AmenitiesDAO {
 	public void loadAmenities() {
 		BufferedReader br = null;
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		List<Amenities> loadedAmenities = new ArrayList<>();
 		try {
 			String sr = System.getProperty("file.separator");
@@ -57,7 +60,7 @@ public class AmenitiesDAO {
 				return;
 			br = new BufferedReader(new FileReader(f));
 			if (br != null) {
-				loadedAmenities = mapper.readValue(br, new TypeReference<List<Amenities>>() {
+				loadedAmenities = mapper.readValue(br, new TypeReference<ArrayList<Amenities>>() {
 				});
 				allAmenities.clear();
 

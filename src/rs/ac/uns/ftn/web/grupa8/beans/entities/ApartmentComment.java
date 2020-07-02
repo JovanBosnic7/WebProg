@@ -2,10 +2,13 @@ package rs.ac.uns.ftn.web.grupa8.beans.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
 
 public class ApartmentComment implements Serializable {
-
+	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = ApartmentComment.class)
 	private static final long serialVersionUID = 8403653528635877869L;
 	private int id;
 	private Guest guest;

@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
 
@@ -32,6 +33,7 @@ public class UserDAO {
 
 	public void saveUsers() {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		try {
 			String sr = System.getProperty("file.separator");
 			File f = new File(contextPath + sr + "users.json");
@@ -39,8 +41,8 @@ public class UserDAO {
 			if (!f.exists())
 				if(!f.createNewFile())
 					return;
-					
-			mapper.writerWithDefaultPrettyPrinter().writeValue(f, users.values());
+
+			mapper.writerWithDefaultPrettyPrinter().writeValue(f, new ArrayList<User>(users.values()));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -49,6 +51,7 @@ public class UserDAO {
 	public void loadUsers() {
 		BufferedReader br = null;
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		List<User> loadedUsers = new ArrayList<>();
 		try {
 			String sr = System.getProperty("file.separator");
@@ -57,7 +60,7 @@ public class UserDAO {
 				return;
 			br = new BufferedReader(new FileReader(f));
 			if (br != null) {
-				loadedUsers = mapper.readValue(br, new TypeReference<List<User>>() {
+				loadedUsers = mapper.readValue(br, new TypeReference<ArrayList<User>>() {
 				});
 				users.clear();
 
@@ -101,6 +104,13 @@ public class UserDAO {
 		if (users.containsKey(user.getUsername()))
 			return null;
 		else {
+			int maxId = 0;
+			for (User u : users.values()) {
+				int id = u.getId();
+				if (id > maxId)
+					maxId = id;
+			}
+			user.setId(++maxId);
 			users.put(user.getUsername(), user);
 			saveUsers();
 			return user;

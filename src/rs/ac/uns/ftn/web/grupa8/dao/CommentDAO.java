@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.*;
 
@@ -32,6 +33,7 @@ public class CommentDAO {
 
 	public void saveComments() {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		try {
 			String sr = System.getProperty("file.separator");
 			File f = new File(contextPath + sr + "comments.json");
@@ -40,7 +42,7 @@ public class CommentDAO {
 				if(!f.createNewFile())
 					return;
 
-			mapper.writerWithDefaultPrettyPrinter().writeValue(f, comments.values());
+			mapper.writerWithDefaultPrettyPrinter().writeValue(f, new ArrayList<ApartmentComment>(comments.values()));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -49,6 +51,7 @@ public class CommentDAO {
 	public void loadComments() {
 		BufferedReader br = null;
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.enableDefaultTyping(DefaultTyping.NON_FINAL);
 		List<ApartmentComment> loadedComments = new ArrayList<>();
 		try {
 			String sr = System.getProperty("file.separator");
@@ -57,7 +60,7 @@ public class CommentDAO {
 				return;
 			br = new BufferedReader(new FileReader(f));
 			if (br != null) {
-				loadedComments = mapper.readValue(br, new TypeReference<List<ApartmentComment>>() {
+				loadedComments = mapper.readValue(br, new TypeReference<ArrayList<ApartmentComment>>() {
 				});
 				comments.clear();
 
