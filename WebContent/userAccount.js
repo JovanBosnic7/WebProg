@@ -186,6 +186,8 @@ $(document).ready(function() {
 			}
 		});
 
+		});
+
 		$('#inputUserName').on('input', function() { 
 			validateUsernameLogin();
 		});
@@ -250,7 +252,7 @@ $(document).ready(function() {
 			return validateUsernameLogin() && validatePasswordLogin();
 		}
 		
-		$('#formLoginUser').submit(function(event) {
+		$('form#formLoginUser').submit(function(event) {
 			event.preventDefault();
 			$('#errorLogin').text('');
 			let username = $('#inputUserName').val();
@@ -268,18 +270,18 @@ $(document).ready(function() {
 				url : 'rest/login',
 				data : JSON.stringify(loginInput),
 				contentType : 'application/json',
-				success : function() {
+				success : function(user) {
 					$('#loginModal').modal('toggle');
 					if(user.accountType == 'GUEST')
 						window.location.href="/WebProg/guest.html";
-
+					if(user.accountType == 'ADMINISTRATOR')
+						window.location.href="/WebProg/administrator.html";
 				},
 				error : function(message) {
-					$('#errorLog').text(message.responseText);
-					$('#errorLog').show();
-					$('#errorLog').delay(4000).fadeOut('slow');
+					$('#errorLogin').text(message.responseText);
+					$('#errorLogin').show();
+					$('#errorLogin').delay(4000).fadeOut('slow');
 				}
 			});
 		});
-	});
 });
