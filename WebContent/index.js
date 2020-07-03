@@ -17,6 +17,7 @@ $(document).ready(function(){
 function addApartment(apartment){
 		var tr = $('<tr class="tableRow"></tr>');	
 		var image = $('<td><img class="img-fluid img-thumbnail" alt="Slika" src="'+apartment.imagePaths[0]+'"</img></td>');
+		var name = $('<td class="tableData">'+apartment.name+'</td>');
 		var roomNumber = $('<td class="tableData">'+apartment.roomNumber+'</td>');
 		var guestNumber = $('<td class="tableData">'+apartment.guestNumber+'</td>');
 		var location = $('<td class="tableData">'+apartment.location.address.street +'<br>'+
@@ -28,7 +29,7 @@ function addApartment(apartment){
 		var apartmentType = $('<td class="tableData">'+apartment.apartmentType+'</td>');
 		var price = $('<td class="tableData">'+apartment.priceByNight+'</td>');
 		var host = $('<td class="tableData">'+apartment.host.firstname + '<br>' + apartment.host.lastname +'</td>');
-		tr.append(image).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host);
+		tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host);
 		 $('#tableApartments tbody').append(tr);
 }
 		
