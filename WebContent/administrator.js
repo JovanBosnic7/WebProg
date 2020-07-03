@@ -1,4 +1,34 @@
+var currentUser = 'none';
 $(document).ready(function() {
+
+	 $.ajax({
+	        type : "get",
+	        url : "rest/currentUser",
+	        contentType : "application/json",
+	        success : function(response){
+	           currentUser = response;
+	           $('span#usersName').text(currentUser.firstname);
+	     	},
+			error : function(message) {
+				alert(message.responseText);
+			}
+	  });
+
+	$('a#logout').click(function(event) {
+			event.preventDefault();
+			$.ajax({
+	        type : "POST",
+	        url : "rest/logout",
+	        contentType : "application/json",
+	        success : function(){
+	            currentUser = 'none';
+				window.location.href="/WebProg/index.html";
+	            },
+			error : function(message) {
+				alert(message.responseText);
+			}
+			});
+	  });
 
     $('#showUsers').hide();
     $('#showApartments').show();

@@ -7,6 +7,7 @@ $(document).ready(function(){
 	        contentType : "application/json",
 	        success : function(response){
 	           currentUser = response;
+	           $('span#usersName').text(currentUser.firstname);
 	     	},
 			error : function(message) {
 				alert(message.responseText);
@@ -18,7 +19,7 @@ $(document).ready(function(){
 	        url : "rest/apartments",
 	        contentType : "application/json",
 	        success : function(response){
-	            $('#tableApartments tbody').empty();
+	            $('#tableApartmentsGuest tbody').empty();
 	            console.log(response);
 	            for(var apartment of response){
 					if(apartment.apartmentStatus == 'ACTIVE'){
@@ -59,6 +60,6 @@ $(document).ready(function(){
 		var price = $('<td class="tableData">'+apartment.priceByNight+'</td>');
 		var host = $('<td class="tableData">'+apartment.host.firstname + '<br>' + apartment.host.lastname +'</td>');
 		tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host);
-		 $('#tableApartments tbody').append(tr);
+		 $('#tableApartmentsGuest tbody').append(tr);
 	}
 });

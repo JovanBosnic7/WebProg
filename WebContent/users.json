@@ -1,0 +1,34 @@
+[ "java.util.ArrayList", [ [ "rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host", {
+  "@id" : 1,
+  "id" : 1,
+  "username" : "jovan123",
+  "password" : "jovan123",
+  "firstname" : "Jovan",
+  "lastname" : "Bosnic",
+  "gender" : "MALE",
+  "accountType" : "HOST",
+  "deleted" : false,
+  "apartments" : [ "java.util.ArrayList", [ ] ]
+} ], [ "rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest", {
+  "@id" : 2,
+  "id" : 2,
+  "username" : "aleksa255",
+  "password" : "aleksa255",
+  "firstname" : "Aleksandar",
+  "lastname" : "Stevanovic",
+  "gender" : "MALE",
+  "accountType" : "GUEST",
+  "deleted" : false,
+  "apartments" : [ "java.util.ArrayList", [ ] ],
+  "reservations" : [ "java.util.ArrayList", [ ] ]
+} ], [ "rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Administrator", {
+  "@id" : 3,
+  "id" : 3,
+  "username" : "marija123",
+  "password" : "marija123",
+  "firstname" : "Marija",
+  "lastname" : "Markovic",
+  "gender" : "FEMALE",
+  "accountType" : "ADMINISTRATOR",
+  "deleted" : false
+} ] ] ]

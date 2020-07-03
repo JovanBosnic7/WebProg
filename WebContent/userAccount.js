@@ -272,10 +272,15 @@ $(document).ready(function() {
 				contentType : 'application/json',
 				success : function(user) {
 					$('#loginModal').modal('toggle');
-					if(user.accountType == 'GUEST')
+					if(user.accountType == 'GUEST'){
 						window.location.href="/WebProg/guest.html";
-					if(user.accountType == 'ADMINISTRATOR')
+					}
+					if(user.accountType == 'ADMINISTRATOR'){
 						window.location.href="/WebProg/administrator.html";
+					}
+					if(user.accountType == 'HOST'){
+						window.location.href="/WebProg/host.html";
+					}
 				},
 				error : function(message) {
 					$('#errorLogin').text(message.responseText);

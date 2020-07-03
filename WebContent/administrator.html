@@ -8,7 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="administrator.js"></script>
-  <script src=""></script>
+  <script src="userAccount.js"></script>
   
   <link rel="stylesheet" type="text/css" href="custom.css">
  
@@ -23,7 +23,8 @@
       
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#" id="edit-user" data-target="#editUserModal" data-toggle="modal" ><span class="glyphicon glyphicon-edit"></span>Izmenite profil</a></li>
-            <li><a href="#" id="logout-user"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>  
+			<li><a id="userAccount"><span><span class="glyphicon glyphicon-user"></span><span id="usersName"></span></a></li>
+            <li><a id="logout"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>  
             </ul>
             <ul class="nav navbar-nav navbar-left">
               <li><a href="#" id ="openUsers" ><span class="glyphicon glyphicon-user"></span>Prikaz svih korisnika</a></li>
