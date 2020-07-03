@@ -22,6 +22,7 @@ public class User implements Serializable {
 
 	public User() {
 		super();
+		this.deleted = false;
 	}
 
 	public User(int id, String username, String password, String firstname, String lastname, Gender gender,

@@ -5,7 +5,10 @@ import java.io.IOException;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -48,12 +51,56 @@ public class UserAccountService {
 		}
 		user.setAccountType(AccountType.GUEST);
 		user.setDeleted(false);
-		User forReg = dao.add(user);
+		Guest forReg = (Guest) dao.add(user);
 		if (forReg == null)
 			return Response.status(400).entity("Korisnik sa unetim korisničkim imenom već postoji").build();
 		else {
-			return Response.status(200).build();
+			return Response.ok(forReg).status(200).build();
 		}
+	}
+	
+	@GET
+	@Path("/currentUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public User getCurrentUser(@Context HttpServletRequest request) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		User retVal = (User) session.getAttribute("user");
+		if (retVal == null) {
+			return null;
+		}
+		return retVal;
+	}
+	
+	@POST
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response login(User user, @Context HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("user") != null) {
+			return Response.status(400).entity("Već ste prijavljeni").build();
+		}
+
+		if (!areCredentialsValid(user)) {
+			return Response.status(400).entity("Korisničko ime i/ili lozinka nisu validni").build();
+		}
+		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
+		User forLogin = (User) userDAO.getByUsername(user.getUsername());
+		session.setAttribute("user", forLogin);
+		return Response.ok(forLogin).status(200).build();
+
+	}
+
+	private Boolean areCredentialsValid(User user) {
+		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
+		User toCheck = userDAO.getByUsername(user.getUsername());
+		if (toCheck == null)
+			return false;
+		if (!toCheck.getPassword().equals(user.getPassword()))
+			return false;
+
+		return true;
 	}
 
 	private Boolean isUserValid(User user) {

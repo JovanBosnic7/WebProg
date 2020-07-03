@@ -21,6 +21,7 @@ public class ApartmentComment implements Serializable {
 
 	public ApartmentComment() {
 		super();
+		this.deleted = false;
 	}
 
 	public ApartmentComment(int id, Guest guest, Apartment apartment, String commentText, double grade,

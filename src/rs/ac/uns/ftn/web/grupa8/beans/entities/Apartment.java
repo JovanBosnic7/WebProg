@@ -41,6 +41,7 @@ public class Apartment implements Serializable {
 
 	public Apartment() {
 		super();
+		this.deleted = false;
 		rentDates = new ArrayList<Date>();
 		availabilityByDate = new HashMap<Date, Boolean>();
 		comments = new ArrayList<ApartmentComment>();

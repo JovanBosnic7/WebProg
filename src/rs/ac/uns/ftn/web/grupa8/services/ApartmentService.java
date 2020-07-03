@@ -27,7 +27,7 @@ public class ApartmentService {
 		if (ctx.getAttribute("apartmentDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
 			System.out.println(contextPath);
-			ctx.setAttribute("apartmentDAO", new ApartmentDAO("C:\\Users\\Jovan\\Desktop"));
+			ctx.setAttribute("apartmentDAO", new ApartmentDAO(contextPath));
 		}
 	}
 	

@@ -18,6 +18,7 @@ public class Amenities implements Serializable {
 
 	public Amenities() {
 		super();
+		this.deleted = false;
 	}
 
 	public Amenities(int id, String name, String description, AmenitiesCategory category, Boolean deleted) {

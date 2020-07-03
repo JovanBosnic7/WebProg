@@ -27,6 +27,7 @@ public class Reservation implements Serializable {
 
 	public Reservation() {
 		super();
+		this.deleted = false;
 	}
 
 	public Reservation(int id, Apartment apartment, Date startDate, double totalPrice, String reservationMessage,
