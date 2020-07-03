@@ -21,7 +21,7 @@
     </ul>
     
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" id="logout-user"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>
+        <li><a id="logout"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-left">
         <li><a href="#" data-target="#searchModal" data-toggle="modal"><span class="glyphicon glyphicon-search"></span>Pretražite apartmane</a></li>
@@ -110,68 +110,21 @@
         <div class="container">
             <div class="row">
               <div class="col-12">
-                  <table class="table table-image">
+                  <table id="tableApartmentsGuest" class="table table-image">
                     <thead style="background-color: black;">
                     <tr style="font-weight: bold; color: lightgrey; " class="table-active">
                         <th style="width: 400px;" scope="col">Prikaz smeštaja</th>
+						<th style="width: 200px;" scope="col">Naziv</th>			
                         <th style="width: 200px;" scope="col"> Broj soba</th>
                         <th  style="width: 200px;"scope="col">Broj gostiju</th>
                         <th style="width: 200px;" scope="col">Lokacija</th>
                         <th style="width: 200px;" scope="col">Tip smeštaja</th>
                         <th style="width: 250px;" scope="col">Cena po noćenju</th>
-                        <th style="width: 200px;" scope="col">Domaćin</th>
-                        <th style="width: 200px;" scope="col">Sadržaj smeštaja</th>
-                        
-                        
-                      </tr>
+                        <th style="width: 200px;" scope="col">Domaćin</th>  
+                    </tr>
                     </thead>
                     <tbody>
-                      <tr class="tableRow">
-                        <td >
-                            <img src="apartment1.jpg" class="img-fluid img-thumbnail" alt="Sheep">
-                        </td>
-                        <td class="tableData" >10</td>
-                        <td  class="tableData">4</td>
-                        <td  class="tableData">Kisacka 12 <br>Novi Sad <br> 42.213123123,55.42334223</td>
-                        <td  class="tableData">Ceo apartman</td>
-                        <td  class="tableData" style="text-decoration-line: underline; text-decoration-style: solid;
-                        text-decoration-color: white;">5000 RSD</td>
-                        <td class="tableData" >Pera Peric</td>
-                        <td class="tableData" >
-                            <ul>
-                                <li>Ves masina</li>
-                                <li>TV</li>
-                                <li>WI-FI</li>
-                                <li>Terasa</li>
-                                <li>Klima</li>
-                                
-                            </ul>
-                        </td>
-                        
-                      </tr>
-                      <tr class="tableRow">
-                        <td class="tableData">
-                            <img src="apartment2.jpg" class="img-fluid img-thumbnail" alt="Sheep">
-                        </td>
-                        <td class="tableData">10</td>
-                        <td class="tableData">4</td>
-                        <td class="tableData">Kisacka 12 <br>Novi Sad <br> 42.213123123,55.42334223</td>
-                        <td class="tableData">Ceo apartman</td>
-                        <td class="tableData" style="text-decoration-line: underline; text-decoration-style: solid;
-                        text-decoration-color: white;"> 5000 RSD</td>
-                        <td class="tableData">Pera Peric</td>
-                        <td class="tableData">
-                            <ul>
-                                <li>Ves masina</li>
-                                <li>TV</li>
-                                <li>WI-FI</li>
-                                <li>Terasa</li>
-                                <li>Klima</li>
-                                
-                            </ul>
-                        </td>
-                        
-                      </tr>
+                     
                     </tbody>
                   </table>   
               </div>

@@ -92,6 +92,14 @@ public class UserAccountService {
 
 	}
 
+	@POST
+	@Path("/logout")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void logout(@Context HttpServletRequest request) {
+		request.getSession().invalidate();
+	}
+	
 	private Boolean areCredentialsValid(User user) {
 		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
 		User toCheck = userDAO.getByUsername(user.getUsername());
