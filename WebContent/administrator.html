@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title> Administrator </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="administrator.js"></script>
+  <script src=""></script>
+  
+  <link rel="stylesheet" type="text/css" href="custom.css">
+ 
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#" id="homePage">Početna stranica</a></li>
+          </ul>
+      
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" id="edit-user" data-target="#editUserModal" data-toggle="modal" ><span class="glyphicon glyphicon-edit"></span>Izmenite profil</a></li>
+            <li><a href="#" id="logout-user"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>  
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+              <li><a href="#" id ="openUsers" ><span class="glyphicon glyphicon-user"></span>Prikaz svih korisnika</a></li>
+              <li><a href="#" id="openApratments" ><span class="glyphicon glyphicon-bed"></span>Prikaz svih apartmana</a></li>
+              <li><a href="#" id= "openReservations" ><span class="glyphicon glyphicon-calendar"></span>Prikaz svih rezervacija</a></li>
+              <li><a href="#" id="openComments" ><span class="glyphicon glyphicon-comment"></span>Prikaz svih komentara</a></li>
+              
+            </ul>
+      
+      
+        </div>
+      </nav>
+      
+
+       
+          <!-- -----------------------------------------UsersTable -------------------------------------------------------------------->
+
+          <div class="container" id="showUsers">
+            <div class="row">
+              <div class="col-12">
+                  <table id="tableApartments" class="table table-image">
+                    <thead style="background-color: black;">
+                    <tr style="font-weight: bold; color: lightgrey; " class="table-active">
+                        <th style="width: 100;" scope="col">Id</th>
+                        <th style="width: 200px;" scope="col"> Korisničko ime</th>
+                        <th  style="width: 200px;"scope="col">Lozinka</th>
+                        <th style="width: 200px;" scope="col">Ime</th>
+                        <th style="width: 200px;" scope="col">Prezime</th>
+                        <th style="width: 150px;" scope="col">Pol</th>
+                        <th style="width: 150px;" scope="col">Tip profila</th> 
+                        <th style="width: 150px;" scope="col">Brisanje</th> 
+                        <th style="width: 150px;" scope="col">Izmena</th> 
+                        
+                                               
+                    </tr>
+                    </thead>
+                    <tbody>
+                     <tr class="tableRow">
+                       <td class="tableData">1</td>
+                       <td class="tableData">Aco123</td>
+                       <td class="tableData">acoaco123</td>
+                       <td class="tableData">Aco</td>
+                       <td class="tableData">Simić</td>
+                       <td class="tableData">M</td>
+                       <td class="tableData">Domaćin</td>    
+                       <td class="tableData">
+                        <a href="#" style="color: white;" ><span class="glyphicon glyphicon-trash"></span>Brisanje</a>
+                       </td>  
+                       <td class="tableData">
+                        <a href="#" style="color: white;" ><span class="glyphicon glyphicon-edit"></span>Izmena</a>
+                       </td>                
+                     </tr>
+                    </tbody>
+                  </table>   
+              </div>
+            </div>
+            <label style="font-size:17px;" class="label label-default">Pretraga korisnika</label>
+            <div class="form-group"></div>
+            <form id="formSearchUser">
+              <div class="form-inline">
+                  <label style="font-size:15px;" class="label label-default">Odaberite ulogu korisnika:</label>
+                  <select class="form-control" name="typeOfUser" id="inputTypeOfUser">
+                    <option value="ADMINISTRATOR">Administrator</option>
+                    <option value="GUEST">Gost</option>
+                    <option value="HOST">Domaćin</option>                  
+                  </select>             
+                <label style="font-size:15px;" class="label label-default">Odaberite pol korisnika:</label>
+                <select class="form-control" name="gender" id="inputGender">
+                  <option value="MALE">Muški</option>
+                  <option value="FEMALE">Ženski</option>
+                  <option value="UNDEFINED">Ne želim da odgovorim</option>                
+                </select>          
+              <input style="width: 200px;" class="form-control" placeholder="Unesite korisničko ime" name="username" type="text" id="inputUsername">          
+              <button style="height: 35px;" type="submit" form = "formSearchUser"  id="buttonSearchUser"><span class="glyphicon glyphicon-search"></span>Pretraga</button>
+              </div>
+              </form>
+          </div>
+
+          
+          <!-- -----------------------------------------ApartmentTable -------------------------------------------------------------------->
+
+        <div class="container" id = "showApartments">
+          <div class="row">
+            <div class="col-12">
+                <table id="tableApartments" class="table table-image">
+                  <thead style="background-color: black;">
+                  <tr style="font-weight: bold; color: lightgrey; " class="table-active">
+                      <th style="width: 400px;" scope="col">Prikaz smeštaja</th>
+                      <th style="width: 200px;" scope="col"> Broj soba</th>
+                      <th  style="width: 200px;"scope="col">Broj gostiju</th>
+                      <th style="width: 200px;" scope="col">Lokacija</th>
+                      <th style="width: 200px;" scope="col">Tip smeštaja</th>
+                      <th style="width: 250px;" scope="col">Cena po noćenju</th>
+                      <th style="width: 200px;" scope="col">Domaćin</th>  
+                      <th style="width: 200px;" scope="col">Brisanje</th>
+                      <th style="width: 200px;" scope="col">Izmena</th>  
+                        
+                      
+                  </tr>
+                  </thead>
+                  <tbody>
+                   
+                  </tbody>
+                </table>   
+            </div>
+          </div>
+        </div>
+          <!-- -----------------------------------------ReservationTable -------------------------------------------------------------------->
+
+          <div class="container" id = "showReservations">
+            <div class="row">
+              <div class="col-12">
+                  <table id="tableReservations" class="table table-image">
+                    <thead style="background-color: black;">
+                    <tr style="font-weight: bold; color: lightgrey; " class="table-active">
+                      <th style="width: 100;" scope="col">Id</th>
+                      <th style="width: 200px;" scope="col"> Apartman</th>
+                      <th  style="width: 200px;"scope="col">Datum dolaska</th>
+                      <th style="width: 200px;" scope="col">Broj noćenja</th>
+                      <th style="width: 200px;" scope="col">Ukupna cena</th>
+                      <th style="width: 150px;" scope="col">Gost</th>
+                      <th style="width: 150px;" scope="col">Status rezervacije</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                     
+                    </tbody>
+                  </table>   
+              </div>
+            </div>
+          </div>
+           <!-- -----------------------------------------CommentsTable -------------------------------------------------------------------->
+
+           <div class="container" id = "showComments">
+            <div class="row">
+              <div class="col-12">
+                  <table  id="tableComments" class="table table-image">
+                    <thead style="background-color: black;">
+                    <tr style="font-weight: bold; color: lightgrey; " class="table-active">
+                      <th style="width: 100;" scope="col">Id</th>
+                      <th style="width: 150;" scope="col"> Gost</th>
+                      <th style="width: 200;" scope="col"> Apartman</th>                      
+                      <th  style="width: 450;"scope="col">Sadržaj komentara</th>
+                      <th style="width: 150;" scope="col">Ocena</th>
+                     
+                    </tr>
+                    </thead>
+                    <tbody>
+                     
+                    </tbody>
+                  </table>   
+              </div>
+            </div>
+          </div>
+
+<!-- -----------------------------------------EditUserModal -------------------------------------------------------------------->
+
+<div>
+   
+  <div id="editUserModal" class="modal" tabindex="-1" data-backdrop="false"> 
+      <!-- Modal content -->
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+              <button class="close" data-dismiss="modal">&times;</button>    
+              <h4 class="modal-title">Izmenite lične podatke</h4>
+              </div>
+              <div class="modal-body">
+                  <form id = "formEditUser" method="POST">
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite korisničko ime" readonly="true"; name="username" type="text" id="inputUserNameReg">
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite ime" name="firstname" type="text" id="inputFirstNameReg">
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite prezime" name="lastname" type="text" id="inputLastNameReg">
+                      </div>
+                      <div class="form-group">
+                          <label  style="font-size:13px;" class="label label-default"for="pol">Odaberite pol:</label>
+                          <select name="gender" id="genderReg">
+                              <option value="MALE">Muški</option>
+                              <option value="FEMALE">Ženski</option>
+                <option value="UNDEFINED">Ne želim da odgovorim</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                          <input class="form-control" placeholder="Unesite lozinku" name="password" type="password" id="inputPasswordReg">
+                      </div>
+                      <div class="form-group">
+                          <input class="form-control" placeholder="Ponovite lozinku" type="password" id="confirmPasswordReg">
+                      </div>    
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  
+                  <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                  <button  type="submit" form = "formRegisterUser" class="btn btn-secondary" id="buttonRegConf">Potvrda</button>
+                  
+              </div>
+        <p id="errorReg" style="color:red;"></p>
+            </div>
+          </div>
+       </div>
+      </div>
+
+</body>
+</html>
