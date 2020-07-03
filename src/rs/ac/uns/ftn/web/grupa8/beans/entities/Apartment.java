@@ -19,6 +19,7 @@ public class Apartment implements Serializable {
 	@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class,property="@id", scope = Apartment.class)
 	private static final long serialVersionUID = 8539232035200018509L;
 	private int id;
+	private String name;
 	private ApartmentType apartmentType;
 	private int roomNumber;
 	private int guestNumber;
@@ -51,16 +52,16 @@ public class Apartment implements Serializable {
 	public Apartment(int id, ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
 			List<Date> rentDates, HashMap<Date, Boolean> availabilityByDate, Host host, List<ApartmentComment> comments,
 			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities,
-			List<Reservation> reservations, Boolean deleted) {
+			List<Reservation> reservations, Boolean deleted, String name) {
 		this(id, apartmentType, roomNumber, guestNumber, location, rentDates, availabilityByDate, host, comments,
 				imagePaths, priceByNight, apartmentStatus, amenities, reservations, deleted, LocalTime.of(14, 0),
-				LocalTime.of(10, 0));
+				LocalTime.of(10, 0), name);
 	}
 
 	public Apartment(int id, ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
 			List<Date> rentDates, HashMap<Date, Boolean> availabilityByDate, Host host, List<ApartmentComment> comments,
 			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities,
-			List<Reservation> reservations, Boolean deleted, LocalTime checkInTime, LocalTime checkOutTime) {
+			List<Reservation> reservations, Boolean deleted, LocalTime checkInTime, LocalTime checkOutTime, String name) {
 		this.id = id;
 		this.apartmentType = apartmentType;
 		this.roomNumber = roomNumber;
@@ -77,6 +78,19 @@ public class Apartment implements Serializable {
 		this.apartmentStatus = apartmentStatus;
 		this.amenities = amenities;
 		this.reservations = reservations;
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
 	}
 
 	public int getId() {
