@@ -1,6 +1,7 @@
 var currentUser = 'none';
 var latinPattern = new RegExp("^[A-Za-zČĆčćĐđŠšŽž]+$");
 var usernamePattern =new RegExp("^[A-Za-zČĆčćĐđŠšŽž0-9-_]+$");
+var apartments = [];
 $(document).ready(function(){
 	
 	 $.ajax({
@@ -22,14 +23,118 @@ $(document).ready(function(){
 	        contentType : "application/json",
 	        success : function(response){
 	            $('#tableApartmentsGuest tbody').empty();
-	            console.log(response);
 	            for(var apartment of response){
 					if(apartment.apartmentStatus == 'ACTIVE'){
+					apartments.push(apartment);
 	            	addApartment(apartment);
 	            }   
 	     	}
 	     }
 	  });
+	  
+	  
+	  $('#filterApartments').submit(function(event){
+		  	event.preventDefault();
+			var startDate = new Date($('#inputcheckInDate').val());
+			var endDate = new Date($('#inputcheckOutDate').val());
+			var filteredApartments = apartments;
+			if(!isNaN(startDate) && !isNaN(endDate)){
+				if(startDate > endDate){
+				alert('Datum odlaska ne može biti pre datuma dolaska! Molimo proverite Vaš unos.');
+				return;
+				}
+				filteredApartments = searchByDate(filteredApartments);
+			}
+			var location = $('#inputLocation').val();
+			if(location.length > 0){
+				filteredApartments = searchByLocation(filteredApartments);
+			}
+			
+			var startPrice = $('#inputpriceByNightFrom').val();
+			var endPrice = $('#inputpriceByNightTill').val();
+			if(!isNaN(startPrice) && !isNaN(endPrice) && startPrice.length > 0 && endPrice.length > 0){
+				if(startPrice > endPrice){
+					alert('Neispravno unet cenovni rang');
+					return;
+				}
+				filteredApartments = searchByPrice(filteredApartments);
+			}
+			
+			var roomNumberFrom = $('#inputroomNumberFrom').val();
+			var roomNumberTill = $('#inputroomNumberTill').val();
+			if(!isNaN(roomNumberFrom) && !isNaN(roomNumberTill) && roomNumberFrom.length > 0 &&  roomNumberTill.length > 0){
+				if(roomNumberFrom > roomNumberTill){
+					alert('Neispravno unet broj soba');
+					return;
+				}
+				filteredApartments = searchByRoomNumber(filteredApartments);
+			}
+			
+			var guestNumber = $('#inputguestNumber').val();
+			
+			if(guestNumber.length > 0){
+				filteredApartments = searchByGuestNumber(filteredApartments);
+			}
+			
+			$('#tableApartmentsGuest tbody').empty();
+			for(var filteredA of filteredApartments){
+            	addApartment(filteredA);
+            }
+			
+			$('#searchModal').modal('toggle');
+        });
+	  
+	  function searchByGuestNumber(apartmentList){
+		  return apartmentList.filter(function (a) {
+			  	var guestNumber = $('#inputguestNumber').val();
+			  	if(guestNumber == '6plus')
+			  		guestNumber = 7;
+			  return  a.roomNumber >= guestNumber;
+		  });
+	  }
+	  
+	  function searchByRoomNumber(apartmentList){
+		  return apartmentList.filter(function (a) {
+			  	var roomNumberFrom = $('#inputroomNumberFrom').val();
+				var roomNumberTill = $('#inputroomNumberTill').val();
+			  return  a.roomNumber >= roomNumberFrom && a.roomNumber <= roomNumberTill;
+		  });
+	  }
+	  
+	  function searchByPrice(apartmentList){
+		  return apartmentList.filter(function (a) {
+			  	var startPrice = $('#inputpriceByNightFrom').val();
+				var endPrice = $('#inputpriceByNightTill').val();
+			  return  a.priceByNight >= startPrice && a.priceByNight <= endPrice;
+		  });
+	  }
+	  
+	  function searchByLocation(apartmentList){
+		  return apartmentList.filter(function (a) {
+			  var location = $('#inputLocation').val().toUpperCase();
+			  var flagStreet = a.location.address.street.toUpperCase().indexOf(location) > -1;
+			  var flagCity = a.location.address.city.toUpperCase().indexOf(location) > -1;
+			  var flagZipCode = a.location.address.zipCode.toString().toUpperCase().indexOf(location) > -1;
+			  return flagStreet || flagCity || flagZipCode;
+		  });
+	  }
+	  
+	  function searchByDate(apartmentList){
+		  var startDate = new Date($('#inputcheckInDate').val());
+		  var endDate = new Date($('#inputcheckOutDate').val());
+		  return apartmentList.filter(function (a) {
+            var rentDates = a.rentDates || [];
+            var dateList = [];
+            for(rentDate of rentDates){
+            	let dateNumber = Number(rentDate.date);
+            	let checkDate = new Date(dateNumber);
+            	if(checkDate >= startDate && checkDate <= endDate && rentDate.available)
+            		dateList.push(checkDate);
+            }
+            return dateList.length > 0;
+	  });
+	  }
+	  
 	 $("#editUserModal").on('show.bs.modal', function(){
 			$.ajax({
 	        type : "get",
@@ -208,7 +313,7 @@ $(document).ready(function(){
 			url : 'rest/editUser',
 			data : JSON.stringify(inputedData),
 			contentType : 'application/json',
-			success : function(data) {
+			success : function() {
 				$('#editUserModal').modal('toggle');
 				alert('Podaci uspešno ažurirani');
 				location.reload();

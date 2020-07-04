@@ -2,7 +2,7 @@
   "id" : 1,
   "name" : "Apartman 1",
   "apartmentType" : "ROOM",
-  "roomNumber" : 2,
+  "roomNumber" : 4,
   "guestNumber" : 4,
   "location" : [ "rs.ac.uns.ftn.web.grupa8.beans.entities.Location", {
     "latitude" : 44.12345,
@@ -13,18 +13,20 @@
       "zipCode" : 21000
     } ]
   } ],
-  "rentDates" : [ "java.util.ArrayList", [ ] ],
-  "availabilityByDate" : [ "java.util.HashMap", { } ],
+  "rentDates" : [ "java.util.ArrayList", [ [ "rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentRentDate", {
+    "date" : [ "java.util.Date", 1593727200000 ],
+    "available" : true
+  } ] ] ],
   "host" : [ "rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host", {
     "@id" : 1,
-    "id" : 0,
-    "username" : null,
-    "password" : null,
-    "firstname" : "Aca",
-    "lastname" : "Simic",
-    "gender" : null,
-    "accountType" : null,
-    "deleted" : null
+    "id" : 1,
+    "username" : "jovan123",
+    "password" : "jovan123",
+    "firstname" : "Jovan",
+    "lastname" : "Bosnic",
+    "gender" : "MALE",
+    "accountType" : "HOST",
+    "deleted" : false
   } ],
   "comments" : [ "java.util.ArrayList", [ ] ],
   "imagePaths" : [ "java.util.ArrayList", [ "apartment1.jpg" ] ],
