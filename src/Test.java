@@ -38,13 +38,14 @@ public class Test {
 		Host h = new Host();
 		h.setFirstname("Aca");
 		h.setLastname("Simic");
-		a.setHost(h);
+		
+		
 		ArrayList<String> images = new ArrayList<String>();
 		images.add("apartment1.jpg");
 		a.setImagePaths(images);
 		a.setDeleted(false);
 		a.setApartmentStatus(ApartmentStatus.ACTIVE);
-		ApartmentDAO apartmentDAO = new ApartmentDAO("C:\\Users\\Jovan\\Desktop");
+		ApartmentDAO apartmentDAO = new ApartmentDAO("C:\\\\Users\\\\Jovan\\\\Desktop\\\\WEBProjekat\\\\WebProg\\\\WebContent");
 		//apartmentDAO.add(a);
 		
 		User u = new User();
@@ -56,11 +57,23 @@ public class Test {
 		u.setGender(Gender.MALE);
 		u.setAccountType(AccountType.GUEST);
 		u.setDeleted(false);
-		UserDAO userDAO = new UserDAO("C:\\\\Users\\\\Jovan\\\\Desktop");
+		UserDAO userDAO = new UserDAO("C:\\Users\\Jovan\\Desktop\\WEBProjekat\\WebProg\\WebContent");
 		Guest g = new Guest();
 		g.setFirstname("Aca");
 		g.setLastname("Simic");
 		//userDAO.add(u);
+		Host jovanUser = (Host) userDAO.getByUsername("jovan123");
+		a.setHost(jovanUser);
+		ArrayList<Apartment> apartmani = new ArrayList<Apartment>();
+		apartmani.add(a);
+		jovanUser.setApartments(apartmani);
+		//apartmentDAO.update(a);
+		//userDAO.update(jovanUser);
+		
+		Guest aleksa255 = (Guest) userDAO.getByUsername("aleksa255");
+		aleksa255.setApartments(apartmani);
+		//userDAO.update(aleksa255);
+		
 		Reservation r = new Reservation();
 		r.setId(1);
 		r.setApartment(a);
@@ -72,8 +85,13 @@ public class Test {
 		@SuppressWarnings("deprecation")
 		Date startDate = new Date(2020,07,20);
 		r.setStartDate(startDate);
+		r.setGuest(aleksa255);
 		ReservationDAO reservationDAO = new ReservationDAO("C:\\Users\\Jovan\\Desktop");
 		//reservationDAO.add(r);
+		//reservationDAO.update(r);
+		
+		
+		
 		ApartmentComment apc = new ApartmentComment();
 		apc.setId(1);
 		apc.setApartment(a);
@@ -82,7 +100,7 @@ public class Test {
 		apc.setGuest(g);
 		CommentDAO commentDAO = new CommentDAO("C:\\Users\\Jovan\\Desktop");
 		apc.setDeleted(false);
-		//commentDAO.add(apc);
+		commentDAO.update(apc);
 	}
 	
 
