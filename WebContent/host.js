@@ -166,7 +166,77 @@ $(document).ready(function() {
 	function validateEditInputs(){
 		return validateUsername() && validateFirstname() && validateLastname() && validatePassword() && validateConfirmPassword();
 	}
-	
+	$('form#formAddApratment').submit(function(event){
+		event.preventDefault();
+		let id = $('input#inputId').val();
+		let name = $('#inputName').val();
+		let type = $('#apartmentTypeInput').val();
+		let rooms = $('#roomNumberInput').val();
+		let guests = $('#guestNumberInput').val();
+		let city = $('#inputCity').val();
+		let street = $('#inputStreet').val();
+		let zip = $('#inputZipCode').val();
+		let latitude = $('#inputLattitude').val();
+		let longitude = $('#inputLongitude').val();
+		let price = $('#inputPriceByNight').val();
+		var wifi = $('#wifiInput:checked').val();
+		var ac = $('#acInput:checked').val();
+		var cable = $('#cableInput:checked').val();
+		var tv = $('#tvInput:checked').val();
+		var heating = $('#heatingInput:checked').val();
+		var kitchen = $('#kitchenInput:checked').val();
+		var washer = $('#washerInput:checked').val();
+		var parking = $('#paringInput:checked').val();
+		var elevator = $('#elevatorInput:checked').val();
+		var bathroom = $('#bathroomInput:checked').val();
+		var address = {
+			"street" : street,
+			"city" : city,
+			"zipCode": zip
+		}
+		var location= {
+			"latitude":latitude,
+			"longitude":longitude,
+			"address" : address
+		}
+		
+		var apartment = {
+			"id": id,
+			"name": name,
+			"apartmentType": type,
+			"roomNumber" : rooms,
+			"guestNumber": guests,
+			"location" : location,
+			"host" : currentUser,
+			"priceByNight" : price,
+			"apartmentStatus" : 'INACTIVE',
+			
+			"deleted" : 'false'
+		 }
+		 $.ajax({
+			type : 'POST',
+			url : 'rest/addApartment',
+			data : JSON.stringify(apartment),
+			contentType : 'application/json',
+			success : function(response) {
+				$('#tableApartments tbody').empty();
+				for(var a of response) {
+					alert(a.name);
+					addApartment(a);
+				}
+				$('#addApartmentModal').modal('toggle');
+				alert('Uspešno ste dodali apartman');
+				location.reload();
+			},
+			error : function(message) {
+				$('#errorReg').text(message.responseText);
+				$('#errorReg').show();
+				$('#errorReg').delay(4000).fadeOut('slow');
+			}
+		});
+
+
+});
 	$('form#formEditUser').submit(function(event) {
 		event.preventDefault();
 		let username = $('input#inputUserNameEdit').val();

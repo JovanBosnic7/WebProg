@@ -364,18 +364,44 @@
                         <div class="form-inline">    
                             <label  style="font-size:13px;" class="label label-default">Unesite ime grada:</label>
                             <input class ="form-control" placeholder="Unesite ime grada" name="city" type="text" id="inputCity">
-                            <label  style="font-size:13px;" class="label label-default">Unesite ime države:</label>
-                            <input class ="form-control" placeholder="Unesite ime države" name="contry" type="text" id="inputContry">
+                            <label  style="font-size:13px;" class="label label-default">Unesite ulicu:</label>
+                            <input class ="form-control" placeholder="Unesite ulicu" name="street" type="text" id="inputStreet">
                             <label  style="font-size:13px;" class="label label-default"for="apartmentType">Unesite poštanski broj :</label>
-                            <input class ="form-control" placeholder="Unesite poštanski broj" name="zipCode" type="text" id="inputZipCode">                         
+                            <input class ="form-control" placeholder="Unesite poštanski broj" name="zipCode" type="text" id="inputZipCode">   
+                            <label  style="font-size:13px;" class="label label-default"for="latitude">Unesite geografsku širinu :</label>
+                            <input class ="form-control" placeholder="Unesite geografsku širinu" name="latitude" type="text" id="inputLatitude">   
+                            <label  style="font-size:13px;" class="label label-default"for="longitude">Unesite geografsku dužinu :</label>
+                            <input class ="form-control" placeholder="Unesite geografsku dužinu" name="longitude" type="text" id="inputLongitude">   
+                                                  
                         </div>  
                         <div class="form-inline">
                             <label  style="font-size:13px;" class="label label-default">Unesite cenu noćenja:</label>
                             <input class ="form-control" placeholder="Unesite cenu noćenja" name="priceByNight" type="text" id="inputPriceByNight">
-                        </div>                              
+                        </div> 
+                        
+                        <div class="form-group">
+                          <label  style="font-size:13px;" class="label label-default">Odaberite sadržaj apartmana:</label>
+                          <div class="form-inline">
+                          <label><input id="wifiInput"  type="checkbox" value="WI-FI">WI-FI</label>
+                              <label><input id="acInput" type="checkbox" value="AC">Klima</label>
+                              <label><input id="tvInput" type="checkbox" value="TV"> TV</label>
+                              <label><input  id="cableInput" type="checkbox" value="CableTV">Kablovska</label>
+                            </div>
+                          <div class="form-inline"> 
+                              <label><input id="heatingInput" type="checkbox" value="Heating">Grejanje</label>
+                              <label><input id="kitchenInput" type="checkbox" value="Kitchen">Kuhinja</label>
+                              <label><input id="washerInput" type="checkbox" value="Washer">Veš mašina</label>
+                            </div>
+                        <div class="form-inline">    
+                              <label><input id="paringInput" type="checkbox" value="Parking">Parking</label>
+                              <label><input  id="elevatorInput"type="checkbox" value="Elevator">Lift</label>
+                              <label><input id="bathroomInput" type="checkbox" value="Bathroom">Kupatilo</label>         
+                      </div> 
+                    </div>
+                                            
                 <div class="modal-footer">  
                     <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
-                    <button  type="submit" form = "formRegisterUser" class="btn btn-secondary" id="buttonRegConf">Potvrda</button>          
+                    <button  type="submit" form = "formAddApratment" class="btn btn-secondary" id="buttonRegConf">Potvrda</button>          
                 </div>
                     <p id="errorReg" style="color:red;"></p>
               </div>
