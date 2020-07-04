@@ -41,6 +41,10 @@ public class Test {
 		Address address = new Address("Bulevar Oslobodjenja 12","Novi Sad", 21000);
 		Location location = new Location(44.12345,55.12345,address);
 		a.setLocation(location);
+		Host h = new Host();
+		h.setFirstname("Aca");
+		h.setLastname("Simic");
+		
 		ArrayList<String> images = new ArrayList<String>();
 		images.add("apartment1.jpg");
 		a.setImagePaths(images);
@@ -65,6 +69,18 @@ public class Test {
 		u.setAccountType(AccountType.GUEST);
 		u.setDeleted(false);
 		//userDAO.add(u);
+		Host jovanUser = (Host) userDAO.getByUsername("jovan123");
+		a.setHost(jovanUser);
+		ArrayList<Apartment> apartmani = new ArrayList<Apartment>();
+		apartmani.add(a);
+		jovanUser.setApartments(apartmani);
+		//apartmentDAO.update(a);
+		//userDAO.update(jovanUser);
+		
+		Guest aleksa255 = (Guest) userDAO.getByUsername("aleksa255");
+		aleksa255.setApartments(apartmani);
+		//userDAO.update(aleksa255);
+		
 		Reservation r = new Reservation();
 		r.setId(1);
 		r.setApartment(a);
@@ -76,8 +92,13 @@ public class Test {
 		@SuppressWarnings("deprecation")
 		Date startDate = new Date(2020,07,20);
 		r.setStartDate(startDate);
+		r.setGuest(aleksa255);
 		ReservationDAO reservationDAO = new ReservationDAO("C:\\Users\\Jovan\\Desktop");
 		//reservationDAO.add(r);
+		//reservationDAO.update(r);
+		
+		
+		
 		ApartmentComment apc = new ApartmentComment();
 		apc.setId(1);
 		apc.setApartment(a);
@@ -86,7 +107,7 @@ public class Test {
 		//apc.setGuest(g);
 		CommentDAO commentDAO = new CommentDAO("C:\\Users\\Jovan\\Desktop");
 		apc.setDeleted(false);
-		//commentDAO.add(apc);
+		commentDAO.update(apc);
 	}
 	
 
