@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -44,7 +45,7 @@ public class UserAccountService {
 	@Path("/register")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response RegisterUser(Guest user) throws ServletException, IOException {
+	public Response registerUser(Guest user) throws ServletException, IOException {
 		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
 		if (!isUserValid(user)) {
 			return Response.status(400).entity("Popunite sva polja za registraciju korisnika").build();
@@ -70,6 +71,27 @@ public class UserAccountService {
 			return null;
 		}
 		return retVal;
+	}
+	
+	@PUT
+	@Path("/editUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editUser(User user, @Context HttpServletRequest request) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		User retVal = (User) session.getAttribute("user");
+		if (retVal == null) {
+			return Response.status(400).entity("Niste prijavljeni. Ne možete izvršiti izmene").build();
+		}
+		if(!retVal.getUsername().equals(user.getUsername())){
+			return Response.status(403).entity("Ne možete izmeniti tuđe podatke").build();
+		}
+		if (!isUserValid(user)) {
+			return Response.status(400).entity("Unešeni podaci nisu validni").build();
+		}
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		retVal = dao.update(user);
+		return Response.ok(retVal).status(200).build();
 	}
 	
 	@POST
