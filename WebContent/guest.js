@@ -33,7 +33,7 @@ $(document).ready(function(){
 	  });
 	  
 	  
-	  $('#filterApartments').submit(function(event){
+	  $('form#filterApartments').submit(function(event){
 		  	event.preventDefault();
 			var startDate = new Date($('#inputcheckInDate').val());
 			var endDate = new Date($('#inputcheckOutDate').val());
@@ -52,7 +52,9 @@ $(document).ready(function(){
 			
 			var startPrice = $('#inputpriceByNightFrom').val();
 			var endPrice = $('#inputpriceByNightTill').val();
-			if(!isNaN(startPrice) && !isNaN(endPrice) && startPrice.length > 0 && endPrice.length > 0){
+			startPrice = parseFloat(startPrice);
+			endPrice = parseFloat(endPrice);
+			if(!isNaN(startPrice) && !isNaN(endPrice)){
 				if(startPrice > endPrice){
 					alert('Neispravno unet cenovni rang');
 					return;
@@ -62,7 +64,9 @@ $(document).ready(function(){
 			
 			var roomNumberFrom = $('#inputroomNumberFrom').val();
 			var roomNumberTill = $('#inputroomNumberTill').val();
-			if(!isNaN(roomNumberFrom) && !isNaN(roomNumberTill) && roomNumberFrom.length > 0 &&  roomNumberTill.length > 0){
+			roomNumberFrom = parseInt(roomNumberFrom);
+			roomNumberTill = parseInt(roomNumberTill);
+			if(!isNaN(roomNumberFrom) && !isNaN(roomNumberTill)){
 				if(roomNumberFrom > roomNumberTill){
 					alert('Neispravno unet broj soba');
 					return;
@@ -87,9 +91,15 @@ $(document).ready(function(){
 	  function searchByGuestNumber(apartmentList){
 		  return apartmentList.filter(function (a) {
 			  	var guestNumber = $('#inputguestNumber').val();
-			  	if(guestNumber == '6plus')
-			  		guestNumber = 7;
-			  return  a.roomNumber >= guestNumber;
+			  	if(guestNumber == '6plus'){
+					guestNumber = 7;
+				}
+				else{
+					guestNumber = parseInt(guestNumber);
+				}
+			  		
+				var apGuestNumber = parseInt(a.guestNumber);
+			  return  apGuestNumber >= guestNumber;
 		  });
 	  }
 	  
@@ -97,7 +107,10 @@ $(document).ready(function(){
 		  return apartmentList.filter(function (a) {
 			  	var roomNumberFrom = $('#inputroomNumberFrom').val();
 				var roomNumberTill = $('#inputroomNumberTill').val();
-			  return  a.roomNumber >= roomNumberFrom && a.roomNumber <= roomNumberTill;
+				roomNumberFrom = parseInt(roomNumberFrom);
+				roomNumberTill = parseInt(roomNumberTill);
+				var roomNumber = parseInt(a.roomNumber);
+			  return roomNumber >= roomNumberFrom && roomNumber <= roomNumberTill;
 		  });
 	  }
 	  
@@ -105,7 +118,10 @@ $(document).ready(function(){
 		  return apartmentList.filter(function (a) {
 			  	var startPrice = $('#inputpriceByNightFrom').val();
 				var endPrice = $('#inputpriceByNightTill').val();
-			  return  a.priceByNight >= startPrice && a.priceByNight <= endPrice;
+				startPrice = parseFloat(startPrice);
+				endPrice = parseFloat(endPrice);
+				var priceByNight = parseFloat(a.priceByNight);
+			  return  priceByNight >= startPrice && priceByNight <= endPrice;
 		  });
 	  }
 	  
