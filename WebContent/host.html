@@ -22,9 +22,14 @@
           </ul>
       
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#" id="edit-user" data-target="#editUserModal" data-toggle="modal" ><span class="glyphicon glyphicon-edit"></span>Izmenite profil</a></li>
-            <li><a id="userAccount"><span><span class="glyphicon glyphicon-user"></span><span id="usersName"></span></a></li>
-            <li><a id="logout"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>  
+            <li class="dropdown">
+			  <a class="dropdown-toggle" id="userAccount" data-toggle="dropdown">
+			  <span class="glyphicon glyphicon-user"></span><span id="usersName"></span></a>
+			  <ul class="dropdown-menu">
+				<li><a id="editUser" data-target="#editUserModal" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span>Izmena podataka</a></li>
+				<li><a id="logout"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>
+				</ul>
+			</li>
             </ul>
             <ul class="nav navbar-nav navbar-left">
               <li><a href="#" id ="openUsers" ><span class="glyphicon glyphicon-user"></span>Prikaz svih korisnika</a></li>
@@ -182,39 +187,44 @@
               <h4 class="modal-title">Izmenite lične podatke</h4>
               </div>
               <div class="modal-body">
-                  <form id = "formEditUser" method="POST">
+                  <form id = "formEditUser" method="PUT">
                       <div class="form-group">
-                          <input class ="form-control" placeholder="Unesite korisničko ime" readonly="true"; name="username" type="text" id="inputUserNameReg">
+                          <input class ="form-control" placeholder="Unesite korisničko ime" readonly="true"; name="username" type="text" id="inputUserNameEdit">
+						  <p id="errorUserNameEdit" style="color:red;"></p>
                       </div>
                       <div class="form-group">
-                          <input class ="form-control" placeholder="Unesite ime" name="firstname" type="text" id="inputFirstNameReg">
+                          <input class ="form-control" placeholder="Unesite ime" name="firstname" type="text" id="inputFirstNameEdit">
+						  <p id="errorFirstNameEdit" style="color:red;"></p>
                       </div>
                       <div class="form-group">
-                          <input class ="form-control" placeholder="Unesite prezime" name="lastname" type="text" id="inputLastNameReg">
+                          <input class ="form-control" placeholder="Unesite prezime" name="lastname" type="text" id="inputLastNameEdit">
+						  <p id="errorLastNameEdit" style="color:red;"></p>
                       </div>
                       <div class="form-group">
                           <label  style="font-size:13px;" class="label label-default"for="pol">Odaberite pol:</label>
-                          <select name="gender" id="genderReg">
+                          <select name="gender" id="genderEdit">
                               <option value="MALE">Muški</option>
                               <option value="FEMALE">Ženski</option>
-                <option value="UNDEFINED">Ne želim da odgovorim</option>
+							  <option value="UNDEFINED">Ne želim da odgovorim</option>
                         </select>
                       </div>
                       <div class="form-group">
-                          <input class="form-control" placeholder="Unesite lozinku" name="password" type="password" id="inputPasswordReg">
+                          <input class="form-control" placeholder="Unesite lozinku" name="password" type="password" id="inputPasswordEdit">
+						  <p id="errorPasswordEdit" style="color:red;"></p>
                       </div>
                       <div class="form-group">
-                          <input class="form-control" placeholder="Ponovite lozinku" type="password" id="confirmPasswordReg">
+                          <input class="form-control" placeholder="Ponovite lozinku" type="password" id="confirmPasswordEdit">
+						  <p id="errorConfirmPasswordEdit" style="color:red;"></p>
                       </div>    
                   </form>
               </div>
               <div class="modal-footer">
                   
                   <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
-                  <button  type="submit" form = "formRegisterUser" class="btn btn-secondary" id="buttonRegConf">Potvrda</button>
+                  <button  type="submit" form = "formEditUser" class="btn btn-secondary" id="buttonEditConf">Potvrda</button>
                   
               </div>
-        <p id="errorReg" style="color:red;"></p>
+        <p id="errorEdit" style="color:red;"></p>
             </div>
           </div>
        </div>
