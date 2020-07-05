@@ -1,5 +1,5 @@
 var currentUser = 'none';
-
+var allAmenities = 'none';
 var latinPatternws = new RegExp("^[A-Za-zČĆčćĐđŠšŽž0-9 ]+$");
 var latinPatterncity = new RegExp("^[A-Za-zČĆčćĐđŠšŽž ]+$");
 var latinPatternzip = new RegExp("^[0-9]+$");
@@ -309,6 +309,21 @@ $(document).ready(function() {
 		let longitudeedit = $('#inputEditLongitude').val();
 		let priceedit = $('#inputEditPriceByNight').val();
 		
+		var amenitiesIDs = $("#amenitiesInputEdit input:checkbox:checked").map(function(){
+			return $(this).val();
+		  }).get();
+		  console.log(amenitiesIDs);
+
+		var amenitiesList = [];
+
+		for(amenId of amenitiesIDs){
+			for(amen of allAmenities){
+				if(amenId == amen.id){
+					amenitiesList.push(amen);
+				}
+			}
+		}
+
 		
 		var addressedit = {
 			"street" : streetedit,
@@ -331,6 +346,7 @@ $(document).ready(function() {
 			"host" : currentUser,
 			"priceByNight" : priceedit,
 			"apartmentStatus" : 'INACTIVE',
+			"amenities" : amenitiesList,
 			"deleted" : 'false'
 		 }
 		 
@@ -341,9 +357,12 @@ $(document).ready(function() {
 			contentType : 'application/json',
 			success : function(response) {
 				$('#tableApartments tbody').empty();
+				apartments.length = 0;
 				for(var a of response) {
-					
-					addApartment(a);
+					if(a.host.username == currentUser.username){
+						apartments.push(a);
+						addApartment(a);
+					}
 				}
 				$('#addApartmentModal').modal('toggle');
 				alert('Uspešno ste izmenili apartman');
@@ -357,8 +376,7 @@ $(document).ready(function() {
 		});
 	});
 	$('#inputEditName').on('input', function() { 
-		validateEditName();
-		if(!validateEditApartmentInputs()){
+		if(!validateEditName()){
 			$('#buttonEditApartment').prop('disabled', true);
 
 		} else {
@@ -366,8 +384,7 @@ $(document).ready(function() {
 		}
 	});
 	$('#inputEditCity').on('input', function() { 
-		validateEditCity();
-		if(!validateEditApartmentInputs()){
+		if(!validateEditCity()){
 			$('#buttonEditApartment').prop('disabled', true);
 
 		} else {
@@ -375,8 +392,7 @@ $(document).ready(function() {
 		}
 	});
 	$('#inputEditStreet').on('input', function() { 
-		validateEditStreet();
-		if(!validateEditApartmentInputs()){
+		if(!validateEditStreet()){
 			$('#buttonEditApartment').prop('disabled', true);
 
 		} else {
@@ -384,8 +400,7 @@ $(document).ready(function() {
 		}
 	});
 	$('#inputEditZipCode').on('input', function() { 
-		validateEditZipcode();
-		if(!validateEditApartmentInputs()){
+		if(!validateEditZipcode()){
 			$('#buttonEditApartment').prop('disabled', true);
 
 		} else {
@@ -393,8 +408,7 @@ $(document).ready(function() {
 		}
 	});
 	$('#inputEditLatitude').on('input', function() { 
-		validateEditLatitude();
-		if(!validateEditApartmentInputs()){
+		if(!validateEditLatitude()){
 			$('#buttonEditApartment').prop('disabled', true);
 
 		} else {
@@ -402,8 +416,7 @@ $(document).ready(function() {
 		}
 	});
 	$('#inputEditLongitude').on('input', function() { 
-		validateEditLongitude();
-		if(!validateEditApartmentInputs()){
+		if(!validateEditLongitude()){
 			$('#buttonEditApartment').prop('disabled', true);
 
 		} else {
@@ -411,8 +424,7 @@ $(document).ready(function() {
 		}
 	});
 	$('#inputEditPriceByNight').on('input', function() { 
-		validateEditPrice();
-		if(!validateEditApartmentInputs()){
+		if(!validateEditPrice()){
 			$('#buttonEditApartment').prop('disabled', true);
 
 		} else {
@@ -563,8 +575,33 @@ $(document).ready(function() {
 	function validateEditApartmentInputs(){
 		return validateEditName() && validateEditCity() && validateEditStreet() + validateEditZipcode() && validateEditLatitude() && validateEditLongitude() && validateEditPrice();
 	}
+
+	$("#addApartmentModal").on('show.bs.modal', function(){
+		$.ajax({
+		type : "get",
+		url : "rest/amenities",
+		contentType : "application/json",
+		success : function(response){
+			$('#amenitiesInput').empty();
+		   allAmenities = response;
+		   for(var amenities of response){
+			   addAmenities(amenities);
+		   }
+		 },
+		error : function(message) {
+			alert(message.responseText);
+		}
+		});
+  });
+
 	$('form#formAddApratment').submit(function(event){
 		event.preventDefault();
+
+		if(!validateAddApartmentInputs()){
+			alert('Proverite unesene podatke');
+			return;
+		}
+
 		let id = $('input#inputId').val();
 		let name = $('#inputName').val();
 		let type = $('#apartmentTypeInput').val();
@@ -577,6 +614,21 @@ $(document).ready(function() {
 		let longitude = $('#inputLongitude').val();
 		let price = $('#inputPriceByNight').val();
 		
+		var amenitiesIDs = $("#amenitiesInput input:checkbox:checked").map(function(){
+			return $(this).val();
+		  }).get();
+		  console.log(amenitiesIDs);
+
+		var amenitiesList = [];
+
+		for(amenId of amenitiesIDs){
+			for(amen of allAmenities){
+				if(amenId == amen.id){
+					amenitiesList.push(amen);
+				}
+			}
+		}
+
 		var address = {
 			"street" : street,
 			"city" : city,
@@ -598,6 +650,7 @@ $(document).ready(function() {
 			"host" : currentUser,
 			"priceByNight" : price,
 			"apartmentStatus" : 'INACTIVE',
+			"amenities" : amenitiesList,
 			"deleted" : 'false'
 		 }
 		 $.ajax({
@@ -607,14 +660,15 @@ $(document).ready(function() {
 			contentType : 'application/json',
 			success : function(response) {
 				$('#tableApartments tbody').empty();
+				apartments.length = 0;
 				for(var a of response) {
+					if(apartment.host.username == currentUser.username){
 					apartments.push(a);
-					
 					addApartment(a);
+					}
 				}
 				$('#addApartmentModal').modal('toggle');
 				alert('Uspešno ste dodali apartman');
-				location.reload();
 			},
 			error : function(message) {
 				$('#errorReg').text(message.responseText);
@@ -626,8 +680,7 @@ $(document).ready(function() {
 
 });
 $('#inputId').on('input', function() { 
-	validateAddId();
-	if(!validateAddApartmentInputs()){
+	if(!validateAddId()){
 		$('#buttonRegConf').prop('disabled', true);
 
 	} else {
@@ -635,8 +688,7 @@ $('#inputId').on('input', function() {
 	}
 });
 $('#inputName').on('input', function() { 
-	validateAddName();
-	if(!validateAddApartmentInputs()){
+	if(!validateAddName()){
 		$('#buttonRegConf').prop('disabled', true);
 
 	} else {
@@ -644,8 +696,7 @@ $('#inputName').on('input', function() {
 	}
 });
 $('#inputCity').on('input', function() { 
-	validateAddCity();
-	if(!validateAddApartmentInputs()){
+	if(!validateAddCity()){
 		$('#buttonRegConf').prop('disabled', true);
 
 	} else {
@@ -653,8 +704,7 @@ $('#inputCity').on('input', function() {
 	}
 });
 $('#inputStreet').on('input', function() { 
-	validateAddStreet();
-	if(!validateAddApartmentInputs()){
+	if(!validateAddStreet()){
 		$('#buttonRegConf').prop('disabled', true);
 
 	} else {
@@ -662,8 +712,7 @@ $('#inputStreet').on('input', function() {
 	}
 });
 $('#inputZipCode').on('input', function() { 
-	validateAddZipcode();
-	if(!validateAddApartmentInputs()){
+	if(!validateAddZipcode()){
 		$('#buttonRegConf').prop('disabled', true);
 
 	} else {
@@ -671,8 +720,7 @@ $('#inputZipCode').on('input', function() {
 	}
 });
 $('#inputLatitude').on('input', function() { 
-	validateAddLatitude();
-	if(!validateAddApartmentInputs()){
+	if(!validateAddLatitude()){
 		$('#buttonRegConf').prop('disabled', true);
 
 	} else {
@@ -680,8 +728,7 @@ $('#inputLatitude').on('input', function() {
 	}
 });
 $('#inputLongitude').on('input', function() { 
-	validateAddLongitude();
-	if(!validateAddApartmentInputs()){
+	if(!validateAddLongitude()){
 		$('#buttonRegConf').prop('disabled', true);
 
 	} else {
@@ -689,8 +736,7 @@ $('#inputLongitude').on('input', function() {
 	}
 });
 $('#inputPriceByNight').on('input', function() { 
-	validateAddPrice();
-	if(!validateAddApartmentInputs()){
+	if(!validateAddPrice()){
 		$('#buttonRegConf').prop('disabled', true);
 
 	} else {
@@ -928,8 +974,9 @@ function validateAddApartmentInputs(){
         url : "rest/apartments",
         contentType : "application/json",
         success : function(response){
-            $('#tableApartments tbody').empty();
-            for(var apartment of response){				
+			$('#tableApartments tbody').empty();
+			apartments.length = 0;
+            for(var apartment of response){
                 if(apartment.host.username == currentUser.username){			
                 	apartments.push(apartment); 
                 	addApartment(apartment);
@@ -991,6 +1038,22 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 		event.preventDefault();	
 		let id = $(this).attr('id');
 		
+			$.ajax({
+			type : "get",
+			url : "rest/amenities",
+			contentType : "application/json",
+			success : function(response){
+				$('#amenitiesInputEdit').empty();
+			   allAmenities = response;
+			   for(var amenities of response){
+				   addAmenitiesEdit(amenities);
+			   }
+			 },
+			error : function(message) {
+				alert(message.responseText);
+			}
+			});
+
 		$.ajax({
 			type : "post",
 			url : "rest/editApartment",
@@ -1000,7 +1063,8 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 			contentType : 'application/json',
 			success : function(response) {				
 			var	editApartment= response;
-				 
+			var amenitiesListApartment = new Array(response.amenities);
+			
 			$('#inputEditId').val(editApartment.id);
 			$('#inputEditName').val(editApartment.name);
 			$('#apartmentTypeEditInput').val(editApartment.apartmentType);
@@ -1011,7 +1075,18 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 			$('#inputEditZipCode').val(editApartment.location.address.zipCode);
 			$('#inputEditLatitude').val(editApartment.location.latitude);	
 			$('#inputEditLongitude').val(editApartment.location.longitude);
-			$('#inputEditPriceByNight').val(editApartment.priceByNight);	
+			$('#inputEditPriceByNight').val(editApartment.priceByNight);
+
+			for(am of amenitiesListApartment){
+				for(amen of $("#amenitiesInputEdit input:checkbox")){
+					alert(amen.val());
+					if (amen.val() == am.id){
+						amen.prop('checked', true);
+					}
+				}
+			}
+
+			
 			}
 		});
 	});
@@ -1053,6 +1128,22 @@ $(document).on("click", "a.deleteApartmentLink", function(){
         $('#showComments').show();
     });
 });
+
+function addAmenities(amenities){
+	var labela =  $('<label></label>');
+	var inputAmenities = $('<input type="checkbox" value="'+amenities.id+'"/>');
+	   labela.append(inputAmenities);
+	   labela.append(amenities.name);
+	 $('#amenitiesInput').append(labela);
+}
+
+function addAmenitiesEdit(amenities){
+	var labela =  $('<label></label>');
+	var inputAmenities = $('<input type="checkbox" value="'+amenities.id+'"/>');
+	   labela.append(inputAmenities);
+	   labela.append(amenities.name);
+	 $('#amenitiesInputEdit').append(labela);
+}
 
 function addComment(comment){
     var tr = $('<tr class="tableRow"></tr>');	

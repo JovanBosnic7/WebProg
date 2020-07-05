@@ -130,7 +130,6 @@ public class ApartmentDAO {
 		Integer id = apartment.getId();
 		Apartment forUpdate = apartments.getOrDefault(id, null);
 		if (forUpdate != null && !forUpdate.isDeleted()) {
-			
 			forUpdate.setApartmentStatus(apartment.getApartmentStatus());
 			forUpdate.setApartmentType(apartment.getApartmentType());
 			forUpdate.setCheckInTime(apartment.getCheckInTime());
