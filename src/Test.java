@@ -50,14 +50,14 @@ public class Test {
 		a.setImagePaths(images);
 		a.setDeleted(false);
 		a.setApartmentStatus(ApartmentStatus.ACTIVE);
-		ApartmentDAO apartmentDAO = new ApartmentDAO("C:\\Users\\Stiven\\Desktop\\ProjekatWeb\\WebProg\\WebContent");
+		ApartmentDAO apartmentDAO = new ApartmentDAO("C:\\\\Users\\\\Jovan\\\\Desktop");
 		Apartment aaa = apartmentDAO.getById(1);
-		UserDAO userDAO = new UserDAO("C:\\Users\\Stiven\\Desktop\\ProjekatWeb\\WebProg\\WebContent");
+		UserDAO userDAO = new UserDAO("C:\\\\Users\\\\Jovan\\\\Desktop");
 		Host host =(Host) userDAO.getByUsername("jovan123");
-		aaa.setHost(host);
+		//aaa.setHost(host);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
 		Date datum = sdf.parse("03.07.2020.");
-		aaa.getRentDates().add(new ApartmentRentDate(datum, true));
+		//aaa.getRentDates().add(new ApartmentRentDate(datum, true));
 		//apartmentDAO.update(aaa);
 		User u = new User();
 		u.setId(1);
@@ -73,19 +73,19 @@ public class Test {
 		a.setHost(jovanUser);
 		ArrayList<Apartment> apartmani = new ArrayList<Apartment>();
 		apartmani.add(a);
-		jovanUser.setApartments(apartmani);
+		//jovanUser.setApartments(apartmani);
 		//apartmentDAO.update(a);
 		//userDAO.update(jovanUser);
 		
 		Guest aleksa255 = (Guest) userDAO.getByUsername("aleksa255");
-		aleksa255.setApartments(apartmani);
+		//aleksa255.setApartments(apartmani);
 		//userDAO.update(aleksa255);
-		
+		System.out.println(aleksa255.getFirstname());
 		Reservation r = new Reservation();
 		r.setId(1);
 		r.setApartment(a);
 		r.setDeleted(false);
-		//r.setGuest(g);
+		//r.setGuest(aleksa255);
 		r.setNightsNumber(4);
 		r.setTotalPrice(r.getNightsNumber()*a.getPriceByNight());
 		r.setStatus(ReservationStatus.ACCEPTED);
@@ -93,6 +93,8 @@ public class Test {
 		Date startDate = new Date(2020,07,20);
 		r.setStartDate(startDate);
 		r.setGuest(aleksa255);
+		System.out.println(r.getGuest().getFirstname());
+		System.out.println(r.getApartment().getHost().getUsername());
 		ReservationDAO reservationDAO = new ReservationDAO("C:\\Users\\Jovan\\Desktop");
 		//reservationDAO.add(r);
 		//reservationDAO.update(r);

@@ -3,7 +3,9 @@ var latinPattern = new RegExp("^[A-Za-zČĆčćĐđŠšŽž]+$");
 var usernamePattern =new RegExp("^[A-Za-zČĆčćĐđŠšŽž0-9-_]+$");
 var apartments = [];
 $(document).ready(function(){
-	
+	$('#showApartments').show();
+	$('#showReservations').hide();
+
 	 $.ajax({
 	        type : "get",
 	        url : "rest/currentUser",
@@ -31,7 +33,30 @@ $(document).ready(function(){
 	     	}
 	     }
 	  });
-	  
+	  $.ajax({
+		type : "get",
+		url : "rest/reservations",
+		contentType : "application/json",
+		success : function(response){
+			$('#tableReservations tbody').empty();
+			console.log(response);
+			for(var reservation of response){
+				
+				if(reservation.guest.username == currentUser.username){
+				addReservation(reservation);
+			   }
+		 }
+	 }
+	});
+	   $('#homePage').click(function(){
+        $('#showApartments').show();
+        $('#showReservations').hide();
+      
+	}); 
+	$('#openReservations').click(function(){
+        $('#showApartments').hide();
+        $('#showReservations').show();
+    });
 	  
 	  $('form#filterApartments').submit(function(event){
 		  	event.preventDefault();
@@ -302,7 +327,29 @@ $(document).ready(function(){
 	function validateEditInputs(){
 		return validateUsername() && validateFirstname() && validateLastname() && validatePassword() && validateConfirmPassword();
 	}
-	
+	$(document).on("click", "a.cancelReservationLink", function(){
+		event.preventDefault();
+		
+		let id = $(this).attr('id');	
+		
+		$.ajax({
+			type : "post",
+			url : "rest/cancelReservation",
+			data : JSON.stringify ({
+				"id" :id
+			}),
+			contentType : 'application/json',
+			success : function(response) {
+				alert("Rezervacija sa id: " + id + " je otkazana!");
+				$('#tableReservations tbody').empty();
+				for(var reservation of response) {
+					if(reservation.guest.username == currentUser.username){
+					addReservation(reservation);
+				}			
+			}
+		}
+	});
+});	
 	$('form#formEditUser').submit(function(event) {
 		event.preventDefault();
 		let username = $('input#inputUserNameEdit').val();
@@ -377,7 +424,48 @@ $(document).ready(function(){
 			}
 			});
 	  });
-	  
+	  function addReservation(reservation){
+		if(reservation.status == 'CREATED'){
+		var tr = $('<tr class="tableRow"></tr>');	
+		var id = $('<td class="tableData">'+reservation.id+'</td>');
+		var apartment = $('<td class="tableData">'+reservation.apartment.name+'</td>');
+		var startDate = $('<td class="tableData">'+reservation.startDate+'</td>');
+		var nightsNumber = $('<td class="tableData">'+reservation.nightsNumber +'</td>');     
+		var totalPrice = $('<td class="tableData">'+reservation.totalPrice+'</td>');
+		var guest = $('<td class="tableData">'+reservation.guest.firstname + '<br>' + reservation.guest.lastname +'</td>');
+		var status = $('<td class="tableData">'+reservation.status +'</td>');
+		var otkazivanje = $('<td class="tableData"><a class="cancelReservationLink" id="' + reservation.id + '" href="#" style="color: white;"><span class="glyphicon glyphicon-remove"></span>Otkazivanje</a></td> ');
+		tr.append(id).append(apartment).append(startDate).append(nightsNumber).append(totalPrice).append(guest).append(status).append(otkazivanje);
+		 $('#tableReservations tbody').append(tr);
+		}
+		else if(reservation.status == 'ACCEPTED' ){
+			var tr = $('<tr class="tableRow"></tr>');	
+			var id = $('<td class="tableData">'+reservation.id+'</td>');
+			var apartment = $('<td class="tableData">'+reservation.apartment.name+'</td>');
+			var startDate = $('<td class="tableData">'+reservation.startDate+'</td>');
+			var nightsNumber = $('<td class="tableData">'+reservation.nightsNumber +'</td>');     
+			var totalPrice = $('<td class="tableData">'+reservation.totalPrice+'</td>');
+			var guest = $('<td class="tableData">'+reservation.guest.firstname + '<br>' + reservation.guest.lastname +'</td>');
+			var status = $('<td class="tableData">'+reservation.status +'</td>');
+			var otkazivanje = $('<td class="tableData"><a class="cancelReservationLink" id="' + reservation.id + '" href="#" style="color: white;"><span class="glyphicon glyphicon-remove"></span>Otkazivanje</a></td> ');
+			tr.append(id).append(apartment).append(startDate).append(nightsNumber).append(totalPrice).append(guest).append(status).append(otkazivanje);
+			 $('#tableReservations tbody').append(tr);
+		}else {
+			var tr = $('<tr class="tableRow"></tr>');	
+			var id = $('<td class="tableData">'+reservation.id+'</td>');
+			var apartment = $('<td class="tableData">'+reservation.apartment.name+'</td>');
+			var startDate = $('<td class="tableData">'+reservation.startDate+'</td>');
+			var nightsNumber = $('<td class="tableData">'+reservation.nightsNumber +'</td>');     
+			var totalPrice = $('<td class="tableData">'+reservation.totalPrice+'</td>');
+			var guest = $('<td class="tableData">'+reservation.guest.firstname + '<br>' + reservation.guest.lastname +'</td>');
+			var status = $('<td class="tableData">'+reservation.status +'</td>');
+			var otkazivanje = $('<td class="tableData">' + " " + '</td> ');
+		 tr.append(id).append(apartment).append(startDate).append(nightsNumber).append(totalPrice).append(guest).append(status).append(otkazivanje);
+			 $('#tableReservations tbody').append(tr);
+		}
+	
+	
+	}
 	  function addApartment(apartment){
 		var tr = $('<tr class="tableRow"></tr>');	
 		var image = $('<td><a href="#" class="apartmentClick" id="apartmentClicked_'+apartment.id+'"><img class="img-fluid img-thumbnail" alt="Slika" src="'+apartment.imagePaths[0]+'"</img></a></td>');
