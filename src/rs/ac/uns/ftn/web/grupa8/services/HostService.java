@@ -4,27 +4,33 @@ import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentComment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
+import rs.ac.uns.ftn.web.grupa8.beans.enums.ReservationStatus;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
+import rs.ac.uns.ftn.web.grupa8.dao.ApartmentDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.CommentDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.ReservationDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.UserDAO;
 
 @Path("")
-public class AdministratorService {
+public class HostService {
+
 	
 	@Context
 	ServletContext ctx;
 
-	public AdministratorService() {
+	public HostService() {
 		super();
 	}
 
@@ -47,40 +53,22 @@ public class AdministratorService {
 		}
 	}
 	
-	@GET
-	@Path("/users")
+	
+	
+	
+	
+	@POST
+	@Path("/declineReservation")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<User> getAllUsers() {
-		
-		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
-		return userDAO.getAll();
-	}
-	@GET
-	@Path("/deleteuser")
-	@Produces(MediaType.APPLICATION_JSON)
-	public void deleteUser(@QueryParam("username") String username) {
-		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
-		User user = userDAO.getByUsername(username);
-		userDAO.delete(user);
-	}
-	@GET
-	@Path("/reservations")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Reservation> getallReservations() {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> declineReservation(Reservation r) {	
+		int id = r.getId();
+		System.out.println(id);
 		
 		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
-		return reservationDAO.getAll();
+		 Reservation updateReservation = reservationDAO.getById(id);
+		 updateReservation.setStatus(ReservationStatus.REFUSED);
+		reservationDAO.update(updateReservation);
+		 return reservationDAO.getAll();
 	}
-	@GET
-	@Path("/comments")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<ApartmentComment> getAllComments() {
-		
-		CommentDAO commentDAO = (CommentDAO) ctx.getAttribute("commentDAO");
-		return commentDAO.getAll();
-	}
-	
-
-	
-	
 }
