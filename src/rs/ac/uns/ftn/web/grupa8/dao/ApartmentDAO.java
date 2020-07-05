@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Amenities;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 
 public class ApartmentDAO {
@@ -101,6 +102,18 @@ public class ApartmentDAO {
 
 	}
 
+	public void removeAmenities(Amenities amenities) {
+		for(Apartment a : apartments.values()) {
+			if(a.getAmenities() != null) {
+				for(Amenities amen : a.getAmenities()) {
+					if(amenities.getId() == amen.getId()) {
+						a.getAmenities().remove(amen);
+					}
+				}
+			}
+		}
+	}
+	
 	public Apartment add(Apartment apartment) {
 		int maxId = 0;
 		for (int id : apartments.keySet()) {

@@ -12,7 +12,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -21,6 +20,7 @@ import javax.ws.rs.core.Response;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Amenities;
 import rs.ac.uns.ftn.web.grupa8.dao.AmenitiesDAO;
+import rs.ac.uns.ftn.web.grupa8.dao.ApartmentDAO;
 
 @Path("")
 public class AmenitiesService {
@@ -36,6 +36,10 @@ public class AmenitiesService {
 		if (ctx.getAttribute("amenitiesDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
 			ctx.setAttribute("amenitiesDAO", new AmenitiesDAO(contextPath));
+		}
+		if (ctx.getAttribute("apartmentDAO") == null) {
+			String contextPath = ctx.getRealPath("/");
+			ctx.setAttribute("apartmentDAO", new ApartmentDAO(contextPath));
 		}
 	}
 
@@ -114,12 +118,14 @@ public class AmenitiesService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteAmenities(Amenities amenities) throws ServletException, IOException {
 		AmenitiesDAO amenitiesDAO = (AmenitiesDAO) ctx.getAttribute("amenitiesDAO");
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		Amenities forDelete = (Amenities) amenitiesDAO.getById(amenities.getId());
 		if (forDelete == null)
 			return Response.status(400)
 					.entity("Stavka apartmana koju želite da obrišete ne postoji ili je već izbrisana").build();
 		else {
 			if (amenitiesDAO.delete(forDelete)) {
+				apartmentDAO.removeAmenities(forDelete);
 				return Response.status(200).build();
 			}
 			return Response.status(500).entity("Došlo je do interne serverske greške pri brisanju").build();
