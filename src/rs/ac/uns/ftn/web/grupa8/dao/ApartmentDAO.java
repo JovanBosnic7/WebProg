@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
-import rs.ac.uns.ftn.web.grupa8.beans.entities.*;
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 
 public class ApartmentDAO {
 
@@ -113,8 +114,10 @@ public class ApartmentDAO {
 	}
 
 	public Apartment update(Apartment apartment) {
-		Apartment forUpdate = apartments.getOrDefault(apartment.getId(), null);
+		Integer id = apartment.getId();
+		Apartment forUpdate = apartments.getOrDefault(id, null);
 		if (forUpdate != null && !forUpdate.isDeleted()) {
+			
 			forUpdate.setApartmentStatus(apartment.getApartmentStatus());
 			forUpdate.setApartmentType(apartment.getApartmentType());
 			forUpdate.setCheckInTime(apartment.getCheckInTime());
@@ -124,7 +127,7 @@ public class ApartmentDAO {
 			forUpdate.setId(apartment.getId());
 			forUpdate.setLocation(apartment.getLocation());
 			forUpdate.setPriceByNight(apartment.getPriceByNight());
-			forUpdate.setRoomNumber(apartment.getGuestNumber());
+			forUpdate.setRoomNumber(apartment.getRoomNumber());
 			forUpdate.setRentDates(apartment.getRentDates());
 			forUpdate.setAmenities(apartment.getAmenities());
 			forUpdate.setComments(apartment.getComments());
