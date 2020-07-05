@@ -13,8 +13,10 @@
       "zipCode" : 21000
     } ]
   } ],
-  "rentDates" : [ "java.util.ArrayList", [ ] ],
-  "availabilityByDate" : [ "java.util.HashMap", { } ],
+  "rentDates" : [ "java.util.ArrayList", [ [ "rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentRentDate", {
+    "date" : [ "java.util.Date", 1593727200000 ],
+    "available" : true
+  } ] ] ],
   "host" : [ "rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host", {
     "@id" : 1,
     "id" : 1,

@@ -127,7 +127,15 @@ public class ApartmentDAO {
 			forUpdate.setId(apartment.getId());
 			forUpdate.setLocation(apartment.getLocation());
 			forUpdate.setPriceByNight(apartment.getPriceByNight());
+<<<<<<< HEAD
 			forUpdate.setRoomNumber(apartment.getRoomNumber());
+=======
+			forUpdate.setRoomNumber(apartment.getGuestNumber());
+			forUpdate.setRentDates(apartment.getRentDates());
+			forUpdate.setAmenities(apartment.getAmenities());
+			forUpdate.setComments(apartment.getComments());
+			forUpdate.setImagePaths(apartment.getImagePaths());
+>>>>>>> 8468c65094556abe9d0aa7a2af06cad07eb8db3b
 			forUpdate.setName(apartment.getName());
 			saveApartments();
 			return forUpdate;

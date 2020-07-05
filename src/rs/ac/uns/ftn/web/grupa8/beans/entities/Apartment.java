@@ -3,8 +3,6 @@ package rs.ac.uns.ftn.web.grupa8.beans.entities;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -24,8 +22,7 @@ public class Apartment implements Serializable {
 	private int roomNumber;
 	private int guestNumber;
 	private Location location;
-	private List<Date> rentDates;
-	private HashMap<Date, Boolean> availabilityByDate;
+	private List<ApartmentRentDate> rentDates;
     @JsonIgnoreProperties(value = {"apartments"})
 	private Host host;
     @JsonIgnoreProperties(value = {"apartment"})
@@ -43,23 +40,22 @@ public class Apartment implements Serializable {
 	public Apartment() {
 		super();
 		this.deleted = false;
-		rentDates = new ArrayList<Date>();
-		availabilityByDate = new HashMap<Date, Boolean>();
+		rentDates = new ArrayList<ApartmentRentDate>();
 		comments = new ArrayList<ApartmentComment>();
 		imagePaths = new ArrayList<String>();
 	}
 
 	public Apartment(int id, ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
-			List<Date> rentDates, HashMap<Date, Boolean> availabilityByDate, Host host, List<ApartmentComment> comments,
+			List<ApartmentRentDate> rentDates, Host host, List<ApartmentComment> comments,
 			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities,
 			List<Reservation> reservations, Boolean deleted, String name) {
-		this(id, apartmentType, roomNumber, guestNumber, location, rentDates, availabilityByDate, host, comments,
+		this(id, apartmentType, roomNumber, guestNumber, location, rentDates, host, comments,
 				imagePaths, priceByNight, apartmentStatus, amenities, reservations, deleted, LocalTime.of(14, 0),
 				LocalTime.of(10, 0), name);
 	}
 
 	public Apartment(int id, ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
-			List<Date> rentDates, HashMap<Date, Boolean> availabilityByDate, Host host, List<ApartmentComment> comments,
+			List<ApartmentRentDate> rentDates, Host host, List<ApartmentComment> comments,
 			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities,
 			List<Reservation> reservations, Boolean deleted, LocalTime checkInTime, LocalTime checkOutTime, String name) {
 		this.id = id;
@@ -68,7 +64,6 @@ public class Apartment implements Serializable {
 		this.guestNumber = guestNumber;
 		this.location = location;
 		this.rentDates = rentDates;
-		this.availabilityByDate = availabilityByDate;
 		this.host = host;
 		this.comments = comments;
 		this.imagePaths = imagePaths;
@@ -133,20 +128,12 @@ public class Apartment implements Serializable {
 		this.location = location;
 	}
 
-	public List<Date> getRentDates() {
+	public List<ApartmentRentDate> getRentDates() {
 		return rentDates;
 	}
 
-	public void setRentDates(List<Date> rentDates) {
+	public void setRentDates(List<ApartmentRentDate> rentDates) {
 		this.rentDates = rentDates;
-	}
-
-	public HashMap<Date, Boolean> getAvailabilityByDate() {
-		return availabilityByDate;
-	}
-
-	public void setAvailabilityByDate(HashMap<Date, Boolean> availabilityByDate) {
-		this.availabilityByDate = availabilityByDate;
 	}
 
 	public Host getHost() {

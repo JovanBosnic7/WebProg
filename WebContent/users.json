@@ -24,7 +24,6 @@
       } ]
     } ],
     "rentDates" : [ "java.util.ArrayList", [ ] ],
-    "availabilityByDate" : [ "java.util.HashMap", { } ],
     "comments" : [ "java.util.ArrayList", [ ] ],
     "imagePaths" : [ "java.util.ArrayList", [ "apartment1.jpg" ] ],
     "priceByNight" : 5000.0,
@@ -61,7 +60,6 @@
       } ]
     } ],
     "rentDates" : [ "java.util.ArrayList", [ ] ],
-    "availabilityByDate" : [ "java.util.HashMap", { } ],
     "host" : 1,
     "comments" : [ "java.util.ArrayList", [ ] ],
     "imagePaths" : [ "java.util.ArrayList", [ "apartment1.jpg" ] ],

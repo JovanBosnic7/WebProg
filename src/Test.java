@@ -1,10 +1,16 @@
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Address;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentComment;
+import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentRentDate;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Location;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.AccountType;
@@ -22,7 +28,7 @@ import rs.ac.uns.ftn.web.grupa8.dao.UserDAO;
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		// TODO Auto-generated method stub
 		
 		Apartment a = new Apartment();
@@ -39,15 +45,20 @@ public class Test {
 		h.setFirstname("Aca");
 		h.setLastname("Simic");
 		
-		
 		ArrayList<String> images = new ArrayList<String>();
 		images.add("apartment1.jpg");
 		a.setImagePaths(images);
 		a.setDeleted(false);
 		a.setApartmentStatus(ApartmentStatus.ACTIVE);
-		ApartmentDAO apartmentDAO = new ApartmentDAO("C:\\\\Users\\\\Jovan\\\\Desktop\\\\WEBProjekat\\\\WebProg\\\\WebContent");
-		//apartmentDAO.add(a);
-		
+		ApartmentDAO apartmentDAO = new ApartmentDAO("C:\\Users\\Stiven\\Desktop\\ProjekatWeb\\WebProg\\WebContent");
+		Apartment aaa = apartmentDAO.getById(1);
+		UserDAO userDAO = new UserDAO("C:\\Users\\Stiven\\Desktop\\ProjekatWeb\\WebProg\\WebContent");
+		Host host =(Host) userDAO.getByUsername("jovan123");
+		aaa.setHost(host);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
+		Date datum = sdf.parse("03.07.2020.");
+		aaa.getRentDates().add(new ApartmentRentDate(datum, true));
+		//apartmentDAO.update(aaa);
 		User u = new User();
 		u.setId(1);
 		u.setUsername("Aco123");
@@ -57,10 +68,6 @@ public class Test {
 		u.setGender(Gender.MALE);
 		u.setAccountType(AccountType.GUEST);
 		u.setDeleted(false);
-		UserDAO userDAO = new UserDAO("C:\\Users\\Jovan\\Desktop\\WEBProjekat\\WebProg\\WebContent");
-		Guest g = new Guest();
-		g.setFirstname("Aca");
-		g.setLastname("Simic");
 		//userDAO.add(u);
 		Host jovanUser = (Host) userDAO.getByUsername("jovan123");
 		a.setHost(jovanUser);
@@ -78,7 +85,7 @@ public class Test {
 		r.setId(1);
 		r.setApartment(a);
 		r.setDeleted(false);
-		r.setGuest(g);
+		//r.setGuest(g);
 		r.setNightsNumber(4);
 		r.setTotalPrice(r.getNightsNumber()*a.getPriceByNight());
 		r.setStatus(ReservationStatus.ACCEPTED);
@@ -97,7 +104,7 @@ public class Test {
 		apc.setApartment(a);
 		apc.setCommentText("Vrlo lepo ");
 		apc.setGrade(8.0);
-		apc.setGuest(g);
+		//apc.setGuest(g);
 		CommentDAO commentDAO = new CommentDAO("C:\\Users\\Jovan\\Desktop");
 		apc.setDeleted(false);
 		commentDAO.update(apc);
