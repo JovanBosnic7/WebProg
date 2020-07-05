@@ -1063,7 +1063,7 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 			contentType : 'application/json',
 			success : function(response) {				
 			var	editApartment= response;
-			var amenitiesListApartment = new Array(response.amenities);
+			var amenitiesListApartment = editApartment.amenities;
 			
 			$('#inputEditId').val(editApartment.id);
 			$('#inputEditName').val(editApartment.name);
@@ -1077,15 +1077,18 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 			$('#inputEditLongitude').val(editApartment.location.longitude);
 			$('#inputEditPriceByNight').val(editApartment.priceByNight);
 
-			for(am of amenitiesListApartment){
-				for(amen of $("#amenitiesInputEdit input:checkbox")){
-					alert(amen.val());
-					if (amen.val() == am.id){
-						amen.prop('checked', true);
+
+			if(Array.isArray(amenitiesListApartment)){
+				for(var am of amenitiesListApartment){
+					var id = am.id;
+					for(amen of $("#amenitiesInputEdit input:checkbox")){
+						var tmp = $(amen).val();
+						if (tmp == id){
+							$(amen).prop("checked", true);
+						}
 					}
 				}
 			}
-
 			
 			}
 		});
