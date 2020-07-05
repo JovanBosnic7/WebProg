@@ -45,13 +45,29 @@ public class Test {
 		h.setFirstname("Aca");
 		h.setLastname("Simic");
 		
+		Apartment a2 = new Apartment();
+		a2.setId(2);
+		a2.setApartmentType(ApartmentType.WHOLE_APARTMENT);
+		a2.setRoomNumber(3);
+		a2.setGuestNumber(7);
+		a2.setName("Apartman 2");
+		a2.setPriceByNight(9000.00);
+		a2.setDeleted(false);
+		a2.setLocation(location);
+		
+		
 		ArrayList<String> images = new ArrayList<String>();
 		images.add("apartment1.jpg");
 		a.setImagePaths(images);
+		a2.setImagePaths(images);
 		a.setDeleted(false);
 		a.setApartmentStatus(ApartmentStatus.ACTIVE);
+		a2.setApartmentStatus(ApartmentStatus.ACTIVE);
+
 		ApartmentDAO apartmentDAO = new ApartmentDAO("C:\\\\Users\\\\Jovan\\\\Desktop");
-		Apartment aaa = apartmentDAO.getById(1);
+		//Apartment aaa = apartmentDAO.getById(1);
+	//	apartmentDAO.update(a2);
+		
 		UserDAO userDAO = new UserDAO("C:\\\\Users\\\\Jovan\\\\Desktop");
 		Host host =(Host) userDAO.getByUsername("jovan123");
 		//aaa.setHost(host);
@@ -71,8 +87,12 @@ public class Test {
 		//userDAO.add(u);
 		Host jovanUser = (Host) userDAO.getByUsername("jovan123");
 		a.setHost(jovanUser);
+		a2.setHost(jovanUser);
 		ArrayList<Apartment> apartmani = new ArrayList<Apartment>();
 		apartmani.add(a);
+		a.setHost(jovanUser);
+		//apartmentDAO.add(a2);
+		//apartmentDAO.add(a);
 		//jovanUser.setApartments(apartmani);
 		//apartmentDAO.update(a);
 		//userDAO.update(jovanUser);
@@ -104,7 +124,7 @@ public class Test {
 		//daoAmen.add(amenities);
 		ApartmentComment apc = new ApartmentComment();
 		apc.setId(1);
-		apc.setApartment(aaa);
+		//apc.setApartment(aaa);
 		apc.setCommentText("Vrlo lepo ");
 		apc.setGrade(8.0);
 		apc.setGuest(aleksa255);

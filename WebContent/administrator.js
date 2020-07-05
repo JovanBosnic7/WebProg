@@ -1,6 +1,14 @@
 var currentUser = 'none';
 var latinPatternWS = new RegExp("^[A-Za-zČĆčćĐđŠšŽž ]+$");
 var amenitiesToEdit;
+var allAmenities = 'none';
+var latinPatternws = new RegExp("^[A-Za-zČĆčćĐđŠšŽž0-9 ]+$");
+var latinPatterncity = new RegExp("^[A-Za-zČĆčćĐđŠšŽž ]+$");
+var latinPatternzip = new RegExp("^[0-9]+$");
+var latinPatternlonglat = new RegExp("^[0-9.]+$");
+var apartments = [];
+var status = 'none';
+var host = 'none';
 $(document).ready(function() {
 	 $.ajax({
 	        type : "get",
@@ -517,6 +525,368 @@ $(document).on("click", "a.deleteAmenitiesClick" , function(event) {
 			}
 		});
 	});
+	$(document).on("click", "a.deleteApartmentLink", function(){
+		event.preventDefault();
+		let id = $(this).attr('id');	
+		$.ajax({
+			type : "post",
+			url : "rest/deleteApartment",
+			data : JSON.stringify ({
+				"id" :id
+			}),
+			contentType : 'application/json',
+			success : function(response) {
+				alert("Aparmtan sa id: " + id + " je obrisan!");
+				$('#tableApartments tbody').empty();
+				for(var a of response) {
+					addApartment(a);
+				}			
+			}
+		});
+		});
+
+$(document).on("click", "a.editApartmentLink", function(){
+			event.preventDefault();	
+			let id = $(this).attr('id');
+			
+				$.ajax({
+				type : "get",
+				url : "rest/amenities",
+				contentType : "application/json",
+				success : function(response){
+					$('#amenitiesInputEdit').empty();
+				   allAmenities = response;
+				   for(var amenities of response){
+					   addAmenitiesEdit(amenities);
+				   }
+				 },
+				error : function(message) {
+					alert(message.responseText);
+				}
+				});
+	
+			$.ajax({
+				type : "post",
+				url : "rest/editApartment",
+				data : JSON.stringify ({
+					"id" :id
+				}),
+				contentType : 'application/json',
+				success : function(response) {				
+				var	editApartment= response;
+				var amenitiesListApartment = editApartment.amenities;
+				status = editApartment.apartmentStatus;
+				host = editApartment.host;
+				$('#inputEditId').val(editApartment.id);
+				$('#inputEditName').val(editApartment.name);
+				$('#apartmentTypeEditInput').val(editApartment.apartmentType);
+				$('#roomNumberEditInput').val(editApartment.roomNumber);
+				$('#guestNumberEditInput').val(editApartment.guestNumber);
+				$('#inputEditCity').val(editApartment.location.address.city);
+				$('#inputEditStreet').val(editApartment.location.address.street);		
+				$('#inputEditZipCode').val(editApartment.location.address.zipCode);
+				$('#inputEditLatitude').val(editApartment.location.latitude);	
+				$('#inputEditLongitude').val(editApartment.location.longitude);
+				$('#inputEditPriceByNight').val(editApartment.priceByNight);
+	
+	
+				if(Array.isArray(amenitiesListApartment)){
+					for(var am of amenitiesListApartment){
+						var id = am.id;
+						for(amen of $("#amenitiesInputEdit input:checkbox")){
+							var tmp = $(amen).val();
+							if (tmp == id){
+								$(amen).prop("checked", true);
+							}
+						}
+					}
+				}
+				
+				}
+			});
+		});
+		$('form#formEditApratment').submit(function(event){
+			event.preventDefault();
+			
+			
+			let idedit = $('input#inputEditId').val();
+			let nameedit = $('#inputEditName').val();
+			let typeedit = $('#apartmentTypeEditInput').val();
+			let roomsedit = $('#roomNumberEditInput').val();
+			let guestsedit = $('#guestNumberEditInput').val();
+			let cityedit = $('#inputEditCity').val();
+			let streetedit = $('#inputEditStreet').val();
+			let zipedit = $('#inputEditZipCode').val();
+			let latitudeedit = $('#inputEditLatitude').val();
+			let longitudeedit = $('#inputEditLongitude').val();
+			let priceedit = $('#inputEditPriceByNight').val();
+			
+			var amenitiesIDs = $("#amenitiesInputEdit input:checkbox:checked").map(function(){
+				return $(this).val();
+			  }).get();
+			  console.log(amenitiesIDs);
+	
+			var amenitiesList = [];
+	
+			for(amenId of amenitiesIDs){
+				for(amen of allAmenities){
+					if(amenId == amen.id){
+						amenitiesList.push(amen);
+					}
+				}
+			}
+	
+			
+			var addressedit = {
+				"street" : streetedit,
+				"city" : cityedit,
+				"zipCode": zipedit
+			}
+			var locationedit= {
+				"latitude":latitudeedit,
+				"longitude":longitudeedit,
+				"address" : addressedit
+			}
+			
+			var apartmentedit = {
+				"id": idedit,
+				"name": nameedit,
+				"apartmentType": typeedit,
+				"roomNumber" : roomsedit,
+				"guestNumber": guestsedit,
+				"location" : locationedit,
+				"priceByNight" : priceedit,
+				"host" : host,
+				"apartmentStatus" : status,
+				"amenities" : amenitiesList,
+				"deleted" : 'false'
+			 }
+			 
+			 $.ajax({
+				type : 'POST',
+				url : 'rest/updateApartment',
+				data : JSON.stringify(apartmentedit),
+				contentType : 'application/json',
+				success : function(response) {
+					$('#tableApartments tbody').empty();
+					apartments.length = 0;
+					for(var a of response) { 
+							apartments.push(a);
+							addApartment(a);
+						
+					}
+					$('#editApartmentModal').modal('toggle');
+					alert('Uspešno ste izmenili apartman');
+					location.reload();
+				},
+				error : function(message) {
+					$('#errorReg').text(message.responseText);
+					$('#errorReg').show();
+					$('#errorReg').delay(4000).fadeOut('slow');
+				}
+			});
+		});
+		$('#inputEditName').on('input', function() { 
+			if(!validateEditName()){
+				$('#buttonEditApartment').prop('disabled', true);
+	
+			} else {
+				$('#buttonEditApartment').prop('disabled', false);
+			}
+		});
+		$('#inputEditCity').on('input', function() { 
+			if(!validateEditCity()){
+				$('#buttonEditApartment').prop('disabled', true);
+	
+			} else {
+				$('#buttonEditApartment').prop('disabled', false);
+			}
+		});
+		$('#inputEditStreet').on('input', function() { 
+			if(!validateEditStreet()){
+				$('#buttonEditApartment').prop('disabled', true);
+	
+			} else {
+				$('#buttonEditApartment').prop('disabled', false);
+			}
+		});
+		$('#inputEditZipCode').on('input', function() { 
+			if(!validateEditZipcode()){
+				$('#buttonEditApartment').prop('disabled', true);
+	
+			} else {
+				$('#buttonEditApartment').prop('disabled', false);
+			}
+		});
+		$('#inputEditLatitude').on('input', function() { 
+			if(!validateEditLatitude()){
+				$('#buttonEditApartment').prop('disabled', true);
+	
+			} else {
+				$('#buttonEditApartment').prop('disabled', false);
+			}
+		});
+		$('#inputEditLongitude').on('input', function() { 
+			if(!validateEditLongitude()){
+				$('#buttonEditApartment').prop('disabled', true);
+	
+			} else {
+				$('#buttonEditApartment').prop('disabled', false);
+			}
+		});
+		$('#inputEditPriceByNight').on('input', function() { 
+			if(!validateEditPrice()){
+				$('#buttonEditApartment').prop('disabled', true);
+	
+			} else {
+				$('#buttonEditApartment').prop('disabled', false);
+			}
+		});
+	
+		function validateEditPrice(){
+			let editId = $('#inputEditPriceByNight').val();
+			
+			if(editId.length == 0){
+				$('#errorinputEditPrice').text('Morate uneti cenu');
+				$('#errorinputEditPrice').show();
+				return false;
+			}
+			
+			if(!latinPatternzip.test(editId)){
+				$('#errorinputEditPrice').text('Cena sme da sadrži samo brojeve');
+				$('#errorinputEditPrice').show();
+				return false;
+			}
+			
+			$('#errorinputEditPrice').text('');
+			$('#errorinputEditPrice').hide();
+			return true;
+				
+		}
+		function validateEditLongitude(){
+			let editId = $('#inputEditLongitude').val();
+			
+			if(editId.length == 0){
+				$('#errorinputEditLongitude').text('Morate uneti geografsku dužinu');
+				$('#errorinputEditLongitude').show();
+				return false;
+			}
+			
+			if(!latinPatternlonglat.test(editId)){
+				$('#errorinputEditLongitude').text('Geografska dužina sme da sadrži samo brojeve i .');
+				$('#errorinputEditLongitude').show();
+				return false;
+			}
+			
+			$('#errorinputEditLongitude').text('');
+			$('#errorinputEditLongitude').hide();
+			return true;
+				
+		}
+		function validateEditLatitude(){
+			let editId = $('#inputEditLatitude').val();
+			
+			if(editId.length == 0){
+				$('#errorinputEditLatitude').text('Morate uneti geografsku širinu');
+				$('#errorinputEditLatitude').show();
+				return false;
+			}
+			
+			if(!latinPatternlonglat.test(editId)){
+				$('#errorinputEditLatitude').text('Geografska širina sme da sadrži samo brojeve i .');
+				$('#errorinputEditLatitude').show();
+				return false;
+			}
+			
+			$('#errorinputEditLatitude').text('');
+			$('#errorinputEditLatitude').hide();
+			return true;
+				
+		}
+		function validateEditZipcode(){
+			let editId = $('#inputEditZipCode').val();
+			
+			if(editId.length == 0){
+				$('#errorinputEditZipCode').text('Morate uneti poštanski broj');
+				$('#errorinputEditZipCode').show();
+				return false;
+			}
+			
+			if(!latinPatternzip.test(editId)){
+				$('#errorinputEditZipCode').text('Poštanski broj sme da sadrži samo brojeve');
+				$('#errorinputEditZipCode').show();
+				return false;
+			}
+			
+			$('#errorinputEditZipCode').text('');
+			$('#errorinputEditZipCode').hide();
+			return true;
+				
+		}
+		function validateEditStreet(){
+			let editId = $('#inputEditStreet').val();
+			
+			if(editId.length == 0){
+				$('#errorinputEditStreet').text('Morate uneti ulicu');
+				$('#errorinputEditStreet').show();
+				return false;
+			}
+			
+			if(!latinPatternws.test(editId)){
+				$('#errorinputEditStreet').text('Ulica sme da sadrži samo slova i brojeve');
+				$('#errorinputEditStreet').show();
+				return false;
+			}
+			
+			$('#errorinputEditCity').text('');
+			$('#errorinputEditCity').hide();
+			return true;
+				
+		}
+		function validateEditCity(){
+			let editId = $('#inputEditCity').val();
+			
+			if(editId.length == 0){
+				$('#errorinputEditCity').text('Morate uneti grad');
+				$('#errorinputEditCity').show();
+				return false;
+			}
+			
+			if(!latinPatterncity.test(editId)){
+				$('#errorinputEditCity').text('Grad sme da sadrži samo slova');
+				$('#errorinputEditCity').show();
+				return false;
+			}
+			
+			$('#errorinputEditCity').text('');
+			$('#errorinputEditCity').hide();
+			return true;
+				
+		}
+		function validateEditName(){
+			let editId = $('#inputEditName').val();
+			
+			if(editId.length == 0){
+				$('#errorinputEditName').text('Morate uneti naziv apartmana');
+				$('#errorinputEditName').show();
+				return false;
+			}
+			
+			if(!latinPatternws.test(editId)){
+				$('#errorinputEditName').text('Naziv sme da sadrži samo slova i brojeve');
+				$('#errorinputEditName').show();
+				return false;
+			}
+			
+			$('#errorinputEditName').text('');
+			$('#errorinputEditName').hide();
+			return true;
+				
+		}
+		function validateEditApartmentInputs(){
+			return validateEditName() && validateEditCity() && validateEditStreet() + validateEditZipcode() && validateEditLatitude() && validateEditLongitude() && validateEditPrice();
+		}
+	
     
     $('#openApratments').click(function(event){
 		event.preventDefault();
@@ -594,6 +964,15 @@ function addAmenities(amenities){
      $('#tableAmenities tbody').append(tr);
 }
 
+
+function addAmenitiesEdit(amenities){
+	var labela =  $('<label></label>');
+	var inputAmenities = $('<input type="checkbox" value="'+amenities.id+'"/>');
+	   labela.append(inputAmenities);
+	   labela.append(amenities.name);
+	 $('#amenitiesInputEdit').append(labela);
+}
+
 function addUser(user){
     var tr = $('<tr class="tableRow"></tr>');	
     var id = $('<td class="tableData">'+user.id+'</td>');
@@ -624,8 +1003,8 @@ function addApartment(apartment){
     var apartmentType = $('<td class="tableData">'+apartment.apartmentType+'</td>');
     var price = $('<td class="tableData">'+apartment.priceByNight+'</td>');
     var host = $('<td class="tableData">'+apartment.host.firstname + '<br>' + apartment.host.lastname +'</td>');
-    var brisanje = $('<td class="tableData"><a href="#" style="color: white;"><span class="glyphicon glyphicon-trash"></span>Brisanje</a></td> ');
-    var izmena = $('<td class="tableData"><a href="#" style="color: white;"><span class="glyphicon glyphicon-edit"></span>Izmena</a></td> ');
+	var brisanje = $('<td class="tableData"><a class="deleteApartmentLink" id="' + apartment.id + '" style="color: white; cursor:pointer;"><span class="glyphicon glyphicon-trash"></span>Brisanje</a></td> ');
+    var izmena = $('<td class="tableData"><a  class="editApartmentLink" data-target="#editApartmentModal" data-toggle="modal" style="color: white;" id="' + apartment.id + '"><span class="glyphicon glyphicon-edit"></span>Izmena</a></td> ');
     tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host).append(brisanje).append(izmena);
      $('#tableApartments tbody').append(tr);
 }

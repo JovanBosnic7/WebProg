@@ -93,7 +93,6 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> deleteApartment(Apartment apart) {
-		System.out.println(apart.getId());
 		int id = apart.getId();
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		Apartment a = apartmentDAO.getById(id);
@@ -105,7 +104,6 @@ public class ApartmentService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Apartment editApartment(Apartment apart) {
-		System.out.println(apart.getId());
 		int id = apart.getId();
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		Apartment a = apartmentDAO.getById(id); 

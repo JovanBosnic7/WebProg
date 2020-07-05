@@ -39,17 +39,17 @@ public class HostService {
 		if (ctx.getAttribute("userDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
 			System.out.println(contextPath);
-			ctx.setAttribute("userDAO", new UserDAO("C:\\Users\\Jovan\\Desktop"));
+			ctx.setAttribute("userDAO", new UserDAO(contextPath));
 		}
 		if (ctx.getAttribute("reservationDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
 			System.out.println(contextPath);
-			ctx.setAttribute("reservationDAO", new ReservationDAO("C:\\Users\\Jovan\\Desktop"));
+			ctx.setAttribute("reservationDAO", new ReservationDAO(contextPath));
 		}
 		if (ctx.getAttribute("commentDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
 			System.out.println(contextPath);
-			ctx.setAttribute("commentDAO", new CommentDAO("C:\\Users\\Jovan\\Desktop"));
+			ctx.setAttribute("commentDAO", new CommentDAO(contextPath));
 		}
 	}
 	
@@ -63,7 +63,6 @@ public class HostService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Collection<Reservation> declineReservation(Reservation r) {	
 		int id = r.getId();
-		System.out.println(id);
 		
 		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
 		 Reservation updateReservation = reservationDAO.getById(id);
@@ -77,7 +76,6 @@ public class HostService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Collection<Reservation> accepReservation(Reservation r) {	
 		int id = r.getId();
-		System.out.println(id);
 		
 		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
 		 Reservation updateReservation = reservationDAO.getById(id);

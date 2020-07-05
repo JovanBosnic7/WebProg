@@ -4,7 +4,7 @@ var latinPatternws = new RegExp("^[A-Za-zČĆčćĐđŠšŽž0-9 ]+$");
 var latinPatterncity = new RegExp("^[A-Za-zČĆčćĐđŠšŽž ]+$");
 var latinPatternzip = new RegExp("^[0-9]+$");
 var latinPatternlonglat = new RegExp("^[0-9.]+$");
-
+var status = 'none';
 var apartments = [];
 $(document).ready(function() {
 
@@ -345,7 +345,7 @@ $(document).ready(function() {
 			"location" : locationedit,
 			"host" : currentUser,
 			"priceByNight" : priceedit,
-			"apartmentStatus" : 'INACTIVE',
+			"apartmentStatus" : status,
 			"amenities" : amenitiesList,
 			"deleted" : 'false'
 		 }
@@ -1030,8 +1030,11 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 			alert("Aparmtan sa id: " + id + " je obrisan!");
 			$('#tableApartments tbody').empty();
 			for(var a of response) {
-				addApartment(a);
-			}			
+				if(a.host.username == currentUser.username){
+					apartments.push(a);
+					addApartment(a);
+			}
+		}			
 		}
 	});
 	});
@@ -1120,7 +1123,7 @@ $(document).on("click", "a.acceptReservationLink", function(){
 			$('#inputEditLatitude').val(editApartment.location.latitude);	
 			$('#inputEditLongitude').val(editApartment.location.longitude);
 			$('#inputEditPriceByNight').val(editApartment.priceByNight);
-
+			 status = editApartment.apartmentStatus;
 
 			if(Array.isArray(amenitiesListApartment)){
 				for(var am of amenitiesListApartment){
