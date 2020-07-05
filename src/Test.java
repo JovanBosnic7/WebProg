@@ -104,13 +104,14 @@ public class Test {
 		//daoAmen.add(amenities);
 		ApartmentComment apc = new ApartmentComment();
 		apc.setId(1);
-		apc.setApartment(a);
+		apc.setApartment(aaa);
 		apc.setCommentText("Vrlo lepo ");
 		apc.setGrade(8.0);
-		//apc.setGuest(g);
+		apc.setGuest(aleksa255);
+		//apc.setGuest(aleksa255);
 		CommentDAO commentDAO = new CommentDAO("C:\\Users\\Jovan\\Desktop");
-		apc.setDeleted(false);
-		commentDAO.update(apc);
+		//apc.setDeleted(false);
+		//commentDAO.update(apc);
 	}
 	
 

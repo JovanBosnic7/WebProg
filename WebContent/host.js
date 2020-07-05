@@ -679,6 +679,8 @@ $(document).ready(function() {
 
 
 });
+
+
 $('#inputId').on('input', function() { 
 	if(!validateAddId()){
 		$('#buttonRegConf').prop('disabled', true);
@@ -1005,10 +1007,13 @@ $.ajax({
     url : "rest/comments",
     contentType : "application/json",
     success : function(response){
+		alert("pozvao je");
+		alert(currentUser.id);
         $('#tableComments tbody').empty();
         console.log(response);
         for(var comment of response){
-            if(comment.apartment.host.username == currentUser.username){
+			alert(comment.apartment.host.id);
+            if(comment.apartment.host.id == currentUser.id){
             addComment(comment);
            }
      }

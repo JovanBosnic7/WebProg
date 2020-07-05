@@ -75,7 +75,7 @@ public class AdministratorService {
 	@Path("/comments")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<ApartmentComment> getAllComments() {
-		
+		System.out.println("Usao u komentare");
 		CommentDAO commentDAO = (CommentDAO) ctx.getAttribute("commentDAO");
 		return commentDAO.getAll();
 	}
