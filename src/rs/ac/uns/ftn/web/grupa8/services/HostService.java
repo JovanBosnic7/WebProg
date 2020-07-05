@@ -71,4 +71,18 @@ public class HostService {
 		reservationDAO.update(updateReservation);
 		 return reservationDAO.getAll();
 	}
+	@POST
+	@Path("/acceptReservation")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> accepReservation(Reservation r) {	
+		int id = r.getId();
+		System.out.println(id);
+		
+		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
+		 Reservation updateReservation = reservationDAO.getById(id);
+		 updateReservation.setStatus(ReservationStatus.ACCEPTED);
+		reservationDAO.update(updateReservation);
+		 return reservationDAO.getAll();
+	}
 }

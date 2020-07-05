@@ -88,7 +88,7 @@ public class Test {
 		//r.setGuest(aleksa255);
 		r.setNightsNumber(4);
 		r.setTotalPrice(r.getNightsNumber()*a.getPriceByNight());
-		r.setStatus(ReservationStatus.ACCEPTED);
+		r.setStatus(ReservationStatus.CREATED);
 		@SuppressWarnings("deprecation")
 		Date startDate = new Date(2020,07,20);
 		r.setStartDate(startDate);
@@ -96,7 +96,7 @@ public class Test {
 		System.out.println(r.getGuest().getFirstname());
 		System.out.println(r.getApartment().getHost().getUsername());
 		ReservationDAO reservationDAO = new ReservationDAO("C:\\Users\\Jovan\\Desktop");
-		//reservationDAO.add(r);
+	//reservationDAO.add(r);
 		//reservationDAO.update(r);
 		
 		Amenities amenities = new Amenities(12, "wifi", "24h pristup bežičnom internetu.", AmenitiesCategory.BASIC, false);
