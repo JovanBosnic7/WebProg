@@ -33,17 +33,17 @@ public class AdministratorService {
 		if (ctx.getAttribute("userDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
 			System.out.println(contextPath);
-			ctx.setAttribute("userDAO", new UserDAO("C:\\Users\\Jovan\\Desktop"));
+			ctx.setAttribute("userDAO", new UserDAO(contextPath));
 		}
 		if (ctx.getAttribute("reservationDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
 			System.out.println(contextPath);
-			ctx.setAttribute("reservationDAO", new ReservationDAO("C:\\Users\\Jovan\\Desktop"));
+			ctx.setAttribute("reservationDAO", new ReservationDAO(contextPath));
 		}
 		if (ctx.getAttribute("commentDAO") == null) {
 			String contextPath = ctx.getRealPath("/");
 			System.out.println(contextPath);
-			ctx.setAttribute("commentDAO", new CommentDAO("C:\\Users\\Jovan\\Desktop"));
+			ctx.setAttribute("commentDAO", new CommentDAO(contextPath));
 		}
 	}
 	

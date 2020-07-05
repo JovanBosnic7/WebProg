@@ -26,6 +26,12 @@ $(document).ready(function(){
         }   
     });
 
+    $('#homepageApartments').click(function(event){
+        event.preventDefault();
+        window.location.href = "guest.html";
+      
+	}); 
+
     function addApartment(apartment){
         var div = $('<div class="flex-container" style="margin-left: 20px;"></div>');
         var divName = $('<div style="margin-left:10px; margin-right:10px;"></div>');

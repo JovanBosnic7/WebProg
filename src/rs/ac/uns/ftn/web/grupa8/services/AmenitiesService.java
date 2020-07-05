@@ -101,12 +101,14 @@ public class AmenitiesService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response editAmenities(Amenities amenities) throws ServletException, IOException {
 		AmenitiesDAO amenitiesDAO = (AmenitiesDAO) ctx.getAttribute("amenitiesDAO");
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		Amenities forEdit = (Amenities) amenitiesDAO.getById(amenities.getId());
 		if (forEdit == null)
 			return Response.status(400).entity("Stavka apartmana koju želite da izmenite ne postoji ili je izbrisana")
 					.build();
 		else {
-			amenitiesDAO.update(amenities);
+			Amenities ret = amenitiesDAO.update(amenities);
+			apartmentDAO.editAmenities(ret);
 			return Response.status(200).build();
 		}
 

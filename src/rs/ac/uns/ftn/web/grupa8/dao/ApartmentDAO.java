@@ -112,6 +112,20 @@ public class ApartmentDAO {
 				}
 			}
 		}
+		saveApartments();
+	}
+	
+	public void editAmenities(Amenities amenities) {
+		for(Apartment a : apartments.values()) {
+			if(a.getAmenities() != null) {
+				for(Amenities amen : a.getAmenities()) {
+					if(amenities.getId() == amen.getId()) {
+						a.getAmenities().remove(amen);
+						a.getAmenities().add(amenities);
+					}
+				}
+			}
+		}
 	}
 	
 	public Apartment add(Apartment apartment) {
