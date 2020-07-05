@@ -17,7 +17,7 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">   
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Početna stranica</a></li>
+      <li class="active"><a id="homePage" href="#">Početna stranica</a></li>
     </ul>
     
     <ul class="nav navbar-nav navbar-right">
@@ -31,6 +31,7 @@
     </li>
       </ul>
       <ul class="nav navbar-nav navbar-left">
+        <li><a href="#" id= "openReservations" ><span class="glyphicon glyphicon-calendar"></span>Prikaz svih rezervacija</a></li>
         <li><a href="#" data-target="#searchModal" data-toggle="modal"><span class="glyphicon glyphicon-search"></span>Pretražite apartmane</a></li>
       </ul>
 
@@ -115,7 +116,7 @@
         </div>
 
 		<!-- -----------------------------------------Prikaz aktivnih apartmana-------------------------------------------------------------------->
-        <div class="container">
+        <div class="container" id="showApartments">
             <div class="row">
               <div class="col-12">
                   <table id="tableApartmentsGuest" class="table table-image">
@@ -194,6 +195,33 @@
           </div>
        </div>
       </div>
+        <!-- -----------------------------------------ReservationTable -------------------------------------------------------------------->
+
+        <div class="container" id = "showReservations">
+            <div class="row">
+              <div class="col-12">
+                  <table id="tableReservations" class="table table-image">
+                    <thead style="background-color: black;">
+                    <tr style="font-weight: bold; color: lightgrey; " class="table-active">
+                      <th style="width: 100;" scope="col">Id</th>
+                      <th style="width: 200px;" scope="col"> Apartman</th>
+                      <th  style="width: 200px;"scope="col">Datum dolaska</th>
+                      <th style="width: 200px;" scope="col">Broj noćenja</th>
+                      <th style="width: 200px;" scope="col">Ukupna cena</th>
+                      <th style="width: 300px;" scope="col">Gost</th>
+                      <th style="width: 300px;" scope="col">Status rezervacije</th>
+                      <th style="width: 150px;" scope="col">Otkazivanje</th>
+                    
+                      
+                    </tr>
+                    </thead>
+                    <tbody>
+                     
+                    </tbody>
+                  </table>   
+              </div>
+            </div>
+          </div>
        
 </body>
 </html>

@@ -1033,6 +1033,48 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 		}
 	});
 	});
+	$(document).on("click", "a.declineReservationLink", function(){
+		event.preventDefault();
+		let id = $(this).attr('id');	
+		$.ajax({
+			type : "post",
+			url : "rest/declineReservation",
+			data : JSON.stringify ({
+				"id" :id
+			}),
+			contentType : 'application/json',
+			success : function(response) {
+				alert("Rezervacija sa id: " + id + " je odbijena!");
+				$('#tableReservations tbody').empty();
+				for(var reservation of response) {
+					if(reservation.apartment.host.username == currentUser.username){
+					addReservation(reservation);
+				}			
+			}
+		}
+	});
+});	
+$(document).on("click", "a.acceptReservationLink", function(){
+	event.preventDefault();
+	let id = $(this).attr('id');	
+	$.ajax({
+		type : "post",
+		url : "rest/acceptReservation",
+		data : JSON.stringify ({
+			"id" :id
+		}),
+		contentType : 'application/json',
+		success : function(response) {
+			alert("Rezervacija sa id: " + id + " je prihvaćena!");
+			$('#tableReservations tbody').empty();
+			for(var reservation of response) {
+				if(reservation.apartment.host.username == currentUser.username){
+				addReservation(reservation);
+			}			
+		}
+	}
+});
+});
  //EDIT APARTMENT *******************************************************
 	$(document).on("click", "a.editApartmentLink", function(){
 		event.preventDefault();	
@@ -1168,12 +1210,12 @@ function addReservation(reservation){
     var totalPrice = $('<td class="tableData">'+reservation.totalPrice+'</td>');
     var guest = $('<td class="tableData">'+reservation.guest.firstname + '<br>' + reservation.guest.lastname +'</td>');
 	var status = $('<td class="tableData">'+reservation.status +'</td>');
-	var prihvati = $('<td class="tableData"><a href="#" style="color: white;"><span class="glyphicon glyphicon-ok"></span>Prihvati</a></td> ');
-	var odbij = $('<td class="tableData"><a href="#" style="color: white;"><span class="glyphicon glyphicon-remove"></span>Odbij</a></td> ');	
-     tr.append(id).append(apartment).append(startDate).append(nightsNumber).append(totalPrice).append(guest).append(status).append(prihvati).append(odbij);
+	var prihvati = $('<td class="tableData"><a class="acceptReservationLink" id="' + reservation.id + '" href="#" style="color: white;"><span class="glyphicon glyphicon-ok"></span>Prihvati</a></td> ');
+	var odbij = $('<td class="tableData"><a class="declineReservationLink" id="' + reservation.id + '" href="#" style="color: white;"><span class="glyphicon glyphicon-remove"></span>Odbij</a></td> ');	
+	tr.append(id).append(apartment).append(startDate).append(nightsNumber).append(totalPrice).append(guest).append(status).append(prihvati).append(odbij);
 	 $('#tableReservations tbody').append(tr);
 	}
-	if(reservation.status == 'ACCEPTED' ){
+	else if(reservation.status == 'ACCEPTED' ){
 		var tr = $('<tr class="tableRow"></tr>');	
 		var id = $('<td class="tableData">'+reservation.id+'</td>');
 		var apartment = $('<td class="tableData">'+reservation.apartment.name+'</td>');
@@ -1183,7 +1225,20 @@ function addReservation(reservation){
 		var guest = $('<td class="tableData">'+reservation.guest.firstname + '<br>' + reservation.guest.lastname +'</td>');
 		var status = $('<td class="tableData">'+reservation.status +'</td>');
 		var prihvati = $('<td class="tableData">'+" "+'</td>');		
-		var odbij = $('<td class="tableData"><a href="#" style="color: white;"><span class="glyphicon glyphicon-remove"></span>Odbij</a></td> ');	
+		var odbij = $('<td class="tableData"><a class="declineReservationLink" id="' + reservation.id + '" href="#" style="color: white;"><span class="glyphicon glyphicon-remove"></span>Odbij</a></td> ');	
+		 tr.append(id).append(apartment).append(startDate).append(nightsNumber).append(totalPrice).append(guest).append(status).append(prihvati).append(odbij);
+		 $('#tableReservations tbody').append(tr);
+	}else {
+		var tr = $('<tr class="tableRow"></tr>');	
+		var id = $('<td class="tableData">'+reservation.id+'</td>');
+		var apartment = $('<td class="tableData">'+reservation.apartment.name+'</td>');
+		var startDate = $('<td class="tableData">'+reservation.startDate+'</td>');
+		var nightsNumber = $('<td class="tableData">'+reservation.nightsNumber +'</td>');     
+		var totalPrice = $('<td class="tableData">'+reservation.totalPrice+'</td>');
+		var guest = $('<td class="tableData">'+reservation.guest.firstname + '<br>' + reservation.guest.lastname +'</td>');
+		var status = $('<td class="tableData">'+reservation.status +'</td>');
+		var prihvati = $('<td class="tableData">'+" "+'</td>');		
+		var odbij = $('<td class="tableData">' + " " + '</td> ');	
 		 tr.append(id).append(apartment).append(startDate).append(nightsNumber).append(totalPrice).append(guest).append(status).append(prihvati).append(odbij);
 		 $('#tableReservations tbody').append(tr);
 	}
