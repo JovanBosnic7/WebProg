@@ -9,6 +9,53 @@
 width: 500px;
 
 }
+
+.div-glavni {
+  display: flex;
+  width: 100%;
+  height: 300px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 300px;
+}
+
+.flex-container-reverse{
+  display: flex;
+  flex-direction: column-reverse;
+  flex-wrap: wrap;
+  margin-left: 1%;
+  margin-right: 1%;
+  width: 48%;
+  height: 300px;
+}
+
+.div-desni{
+  margin-left: 1%;
+  margin-right: 1%;
+  width: 48%;
+  height: 360px;
+}
+
+.div-levi {
+  margin-left: 1%;
+  margin-right: 1%;
+  width: 48%;
+  height: 360px;
+}
+
+.carousel{
+  width : 400px;
+}
+
+.carousel-inner > .item > img {
+  width:400px;
+  height:auto;
+}
+
 .modal {
 display: none; /* Hidden by default */
 position: fixed; /* Stay in place */

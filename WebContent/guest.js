@@ -342,6 +342,25 @@ $(document).ready(function(){
 		});
 
 		});
+
+		$(document).on("click", "a.apartmentClick" , function(event) {
+			event.preventDefault();
+			var str = $(this).attr('id');
+			id_clicked = (str.split("_").pop());
+			console.log(id_clicked);
+			$.ajax({
+			type : "POST",
+			contentType : "application/json",
+			url : "rest/setApartmentClicked",
+			data : JSON.stringify({id : id_clicked}),
+			success : function(){
+				window.location.href = "apartmentShowGuest.html";
+			 },
+			error : function(message) {
+				alert(message.responseText);
+			}
+			});
+		});
 		
 		$('a#logout').click(function(event) {
 			event.preventDefault();
@@ -361,7 +380,7 @@ $(document).ready(function(){
 	  
 	  function addApartment(apartment){
 		var tr = $('<tr class="tableRow"></tr>');	
-		var image = $('<td><img class="img-fluid img-thumbnail" alt="Slika" src="'+apartment.imagePaths[0]+'"</img></td>');
+		var image = $('<td><a href="#" class="apartmentClick" id="apartmentClicked_'+apartment.id+'"><img class="img-fluid img-thumbnail" alt="Slika" src="'+apartment.imagePaths[0]+'"</img></a></td>');
 		var name = $('<td class="tableData">'+apartment.name+'</td>');
 		var roomNumber = $('<td class="tableData">'+apartment.roomNumber+'</td>');
 		var guestNumber = $('<td class="tableData">'+apartment.guestNumber+'</td>');

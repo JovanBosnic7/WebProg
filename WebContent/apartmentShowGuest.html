@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title> Rezervisanje smeštaja</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="userAccount.js"></script>
+  <script src="guestApartments.js"></script>
+  <script src="guest.js"></script>
+  <link rel="stylesheet" type="text/css" href="custom.css">
+ 
+</head>
+<body>
+<!-- -----------------------------------------NAVBAR -------------------------------------------------------------------->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">   
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Početna stranica</a></li>
+    </ul>
+    
+    <ul class="nav navbar-nav navbar-right">
+	<li class="dropdown">
+      <a class="dropdown-toggle" id="userAccount" data-toggle="dropdown">
+	  <span class="glyphicon glyphicon-user"></span><span id="usersName"></span></a>
+      <ul class="dropdown-menu">
+        <li><a id="editUser" data-target="#editUserModal" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span>Izmena podataka</a></li>
+        <li><a id="logout"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>
+		</ul>
+    </li>
+      </ul>
+  </div>
+</nav>
+<!-- --------------------------------------------------Apartment show----------------------------------------------------------->
+<div class="div-glavni">
+    <div class="div-levi" style="margin-left: 20px;">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators"></ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner"></div>
+            <!-- Controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div>
+    </div>
+    <div class="flex-container-reverse">
+        <button style="margin: 10px; width: 200px;" class="btn btn-secondary">Rezervacija</button>
+        <button style="margin: 10px; width: 200px;" class="btn btn-secondary">Ostavljanje komentara</button>
+    </div>
+</div>
+<div class="div-glavni">
+    <div class="div-levi" style="border-radius: 5px;
+    border: 2px solid #606060;" id="apartmentInfo">
+    </div>
+    <div class="div-desni" style="border-radius: 5px;
+    border: 2px solid #606060;" id="apartmentAmenities">
+    </div>
+</div>
+
+  
+<!-- -----------------------------------------EditUserModal -------------------------------------------------------------------->
+
+<div>
+   
+  <div id="editUserModal" class="modal" tabindex="-1" data-backdrop="false"> 
+      <!-- Modal content -->
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+              <button class="close" data-dismiss="modal">&times;</button>    
+              <h4 class="modal-title">Izmenite lične podatke</h4>
+              </div>
+              <div class="modal-body">
+                  <form id = "formEditUser" method="PUT">
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite korisničko ime" readonly="true"; name="username" type="text" id="inputUserNameEdit">
+						  <p id="errorUserNameEdit" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite ime" name="firstname" type="text" id="inputFirstNameEdit">
+						  <p id="errorFirstNameEdit" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite prezime" name="lastname" type="text" id="inputLastNameEdit">
+						  <p id="errorLastNameEdit" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <label  style="font-size:13px;" class="label label-default"for="pol">Odaberite pol:</label>
+                          <select name="gender" id="genderEdit">
+                              <option value="MALE">Muški</option>
+                              <option value="FEMALE">Ženski</option>
+							  <option value="UNDEFINED">Ne želim da odgovorim</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                          <input class="form-control" placeholder="Unesite lozinku" name="password" type="password" id="inputPasswordEdit">
+						  <p id="errorPasswordEdit" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <input class="form-control" placeholder="Ponovite lozinku" type="password" id="confirmPasswordEdit">
+						  <p id="errorConfirmPasswordEdit" style="color:red;"></p>
+                      </div>    
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  
+                  <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                  <button  type="submit" form = "formEditUser" class="btn btn-secondary" id="buttonEditConf">Potvrda</button>
+                  
+              </div>
+        <p id="errorEdit" style="color:red;"></p>
+            </div>
+          </div>
+       </div>
+      </div>
+       
+</body>
+</html>
+
+   
