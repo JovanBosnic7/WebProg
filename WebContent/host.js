@@ -1,4 +1,6 @@
 var currentUser = 'none';
+var latinPattern = new RegExp("^[A-Za-zČĆčćĐđŠšŽž]+$");
+var usernamePattern =new RegExp("^[A-Za-zČĆčćĐđŠšŽž0-9-_]+$");
 var apartments = [];
 $(document).ready(function() {
 
@@ -339,7 +341,7 @@ $(document).ready(function() {
 			success : function(response) {
 				$('#tableApartments tbody').empty();
 				for(var a of response) {
-					alert(a.name);
+					apartments.push(a);
 					addApartment(a);
 				}
 				$('#addApartmentModal').modal('toggle');

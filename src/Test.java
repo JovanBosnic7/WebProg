@@ -1,19 +1,18 @@
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.print.attribute.standard.DateTimeAtCompleted;
-
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Address;
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Amenities;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentComment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentRentDate;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Location;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.AccountType;
+import rs.ac.uns.ftn.web.grupa8.beans.enums.AmenitiesCategory;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.ApartmentStatus;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.ApartmentType;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.Gender;
@@ -21,6 +20,7 @@ import rs.ac.uns.ftn.web.grupa8.beans.enums.ReservationStatus;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
+import rs.ac.uns.ftn.web.grupa8.dao.AmenitiesDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.ApartmentDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.CommentDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.ReservationDAO;
@@ -97,8 +97,9 @@ public class Test {
 		//reservationDAO.add(r);
 		//reservationDAO.update(r);
 		
-		
-		
+		Amenities amenities = new Amenities(12, "wifi", "24h pristup bežičnom internetu.", AmenitiesCategory.BASIC, false);
+		AmenitiesDAO daoAmen = new AmenitiesDAO("C:\\Users\\Stiven\\Desktop\\ProjekatWeb\\WebProg\\WebContent");
+		//daoAmen.add(amenities);
 		ApartmentComment apc = new ApartmentComment();
 		apc.setId(1);
 		apc.setApartment(a);

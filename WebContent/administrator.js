@@ -1,6 +1,7 @@
 var currentUser = 'none';
+var latinPatternWS = new RegExp("^[A-Za-zČĆčćĐđŠšŽž ]+$");
+var amenitiesToEdit;
 $(document).ready(function() {
-
 	 $.ajax({
 	        type : "get",
 	        url : "rest/currentUser",
@@ -225,7 +226,8 @@ $(document).ready(function() {
     $('#showUsers').hide();
     $('#showApartments').show();
     $('#showReservations').hide();
-    $('#showComments').hide();
+	$('#showComments').hide();
+	$('#showAmenities').hide();
     
     $.ajax({
         type : "get",
@@ -251,10 +253,11 @@ $(document).ready(function() {
             for(var apartment of response){
                 if(apartment.apartmentStatus == 'ACTIVE'){
                 addApartment(apartment);
-            }   
-         }
-     }
-  });
+            	}   
+         	}
+     	}
+ 	 });
+
   $.ajax({
     type : "get",
     url : "rest/reservations",
@@ -263,12 +266,12 @@ $(document).ready(function() {
         $('#tableReservations tbody').empty();
         console.log(response);
         for(var reservation of response){
-            
             addReservation(reservation);
            
      }
  }
 });
+
 $.ajax({
     type : "get",
     url : "rest/comments",
@@ -283,38 +286,277 @@ $.ajax({
      }
  }
 });
- 
-    $('#openUsers').click(function(){
+
+loadAmenities();
+
+function loadAmenities(){
+	$.ajax({
+		type : "get",
+		url : "rest/amenities",
+		contentType : "application/json",
+		success : function(response){
+			$('#tableAmenities tbody').empty();
+			for(var amenities of response){
+				addAmenities(amenities);
+		 }
+	 }
+	});
+}
+
+    $('#openUsers').click(function(event){
     $('#showUsers').show();
     $('#showApartments').hide();
     $('#showReservations').hide();
-    $('#showComments').hide();
+	$('#showComments').hide();
+	$('#showAmenities').hide();
 });
+
+$(document).on("click", "a.editAmenitiesClick" , function(event) {
+	event.preventDefault();
+	$('#editAmenitiesModal').modal('show');
+	var str = $(this).attr('id');
+	id_edit = (str.split("_").pop());
+	$.ajax({
+	type : "get",
+	contentType : "application/json",
+	url : "rest/amenitiesById",
+	data : {id : id_edit},
+	success : function(response){
+		amenitiesToEdit = response;
+	   $('#categoryEdit').val(response.category);
+	   $('#amenitiesNameEdit').val(response.name);
+	   $('#amenitiesDescriptionEdit').val(response.description);
+	 },
+	error : function(message) {
+		alert(message.responseText);
+	}
+	});
+});
+
+function validateAmenitiesInputsEdit(){
+	return validateAmenitiesNameEdit() && validateAmenitiesDescriptionEdit();
+}
+
+$('#amenitiesNameEdit').on('input', function() { 
+	validateAmenitiesNameEdit();
+});
+
+function validateAmenitiesNameEdit(){
+	let name = $('#amenitiesNameEdit').val();
+	
+	if(name.length == 0){
+		$('#errorAmenitiesNameEdit').text('Morate uneti naziv stavke');
+		$('#errorAmenitiesNameEdit').show();
+		return false;
+	}
+	if(!latinPatternWS.test(name)){
+		$('#errorAmenitiesNameEdit').text('Naziv sme da sadrži samo slova');
+		$('#errorAmenitiesNameEdit').show();
+		return false;
+	}
+	$('#errorAmenitiesNameEdit').text('');
+	$('#errorAmenitiesNameEdit').hide();
+	return true;
+}
+
+$('#amenitiesDescriptionEdit').on('input', function() { 
+	validateAmenitiesDescriptionEdit();
+});
+
+function validateAmenitiesDescriptionEdit(){
+	let name = $('#amenitiesDescriptionEdit').val();
+	
+	if(name.length == 0){
+		$('#errorAmenitiesDescriptionEdit').text('Morate uneti opis stavke');
+		$('#errorAmenitiesDescriptionEdit').show();
+		return false;
+	}
+
+	$('#errorAmenitiesDescriptionEdit').text('');
+	$('#errorAmenitiesDescriptionEdit').hide();
+	return true;
+}
+
+$('#formEditAmenities').submit(function(event){
+	event.preventDefault();
+	let category = $('#categoryEdit').val();
+	let name = $('#amenitiesNameEdit').val();
+	let description = $('#amenitiesDescriptionEdit').val();
+
+	if(!validateAmenitiesInputsEdit()){
+		alert('Molimo proverite unete podatke');
+		return;
+	}
+	
+	var inputedData = {
+		"id" : amenitiesToEdit.id,
+		"category" : category,
+		"name" : name,
+		"description" : description
+	}
+
+	$.ajax({
+		type : "PUT",
+		url : "rest/editAmenities",
+		data : JSON.stringify(inputedData),
+		contentType : "application/json",
+		success : function(){
+			alert('Sadržaj apartmana uspešno izmenjen');
+			$('#editAmenitiesModal').modal('toggle');
+			loadAmenities();
+		 },
+		 error : function(message) {
+			$('#errorEditAmenities').text(message.responseText);
+			$('#errorEditAmenities').show();
+			$('#errorEditAmenities').delay(4000).fadeOut('slow');
+		}
+	 });
+	});
+
+$(document).on("click", "a.deleteAmenitiesClick" , function(event) {
+	event.preventDefault();
+	var str = $(this).attr('id');
+	id = (str.split("_").pop());
+	var amenities = {"id" : id};
+	$.ajax({
+		type : "DELETE",
+		url : "rest/deleteAmenities",
+		data : JSON.stringify(amenities),
+		contentType : "application/json",
+		success : function(){
+			alert('Sadržaj apartmana uspešno izbrisan');
+			loadAmenities();
+		 },
+		 error : function(message){
+			 alert(message);
+		 }
+	 });
+
+});
+
+	function validateAmenitiesInputs(){
+		return validateAmenitiesName() && validateAmenitiesDescription();
+	}
+
+	$('#amenitiesName').on('input', function() { 
+	    validateAmenitiesName();
+	});
+
+	function validateAmenitiesName(){
+		let name = $('#amenitiesName').val();
+		
+		if(name.length == 0){
+			$('#errorAmenitiesName').text('Morate uneti naziv stavke');
+			$('#errorAmenitiesName').show();
+			return false;
+		}
+		if(!latinPatternWS.test(name)){
+			$('#errorAmenitiesName').text('Naziv sme da sadrži samo slova');
+			$('#errorAmenitiesName').show();
+			return false;
+		}
+		$('#errorAmenitiesName').text('');
+		$('#errorAmenitiesName').hide();
+		return true;
+	}
+
+	$('#amenitiesDescription').on('input', function() { 
+	    validateAmenitiesDescription();
+	});
+
+	function validateAmenitiesDescription(){
+		let name = $('#amenitiesDescription').val();
+		
+		if(name.length == 0){
+			$('#errorAmenitieDescription').text('Morate uneti opis stavke');
+			$('#errorAmenitieDescription').show();
+			return false;
+		}
+		if(!latinPatternWS.test(name)){
+			$('#errorAmenitieDescription').text('Opis sme da sadrži samo slova');
+			$('#errorAmenitieDescription').show();
+			return false;
+		}
+		$('#errorAmenitieDescription').text('');
+		$('#errorAmenitieDescription').hide();
+		return true;
+	}
+
+	$('#formAddAmenities').submit(function(event){
+		event.preventDefault();
+		let category = $('#categoryAdd').val();
+		let name = $('#amenitiesName').val();
+		let description = $('#amenitiesDescription').val();
+
+		if(!validateAmenitiesInputs()){
+			alert('Molimo proverite unete podatke');
+			return;
+		}
+		
+		var inputedData = {
+			"id" : -1,
+			"category" : category,
+			"name" : name,
+			"description" : description
+		}
+
+		$.ajax({
+			type : 'POST',
+			url : 'rest/addAmenities',
+			data : JSON.stringify(inputedData),
+			contentType : 'application/json',
+			success : function(data) {
+				$('#addAmenitiesModal').modal('toggle');
+				alert('Stavka apartmana uspešno dodata');
+				loadAmenities();
+			},
+			error : function(message) {
+				$('#errorAddAmenities').text(message.responseText);
+				$('#errorAddAmenities').show();
+				$('#errorAddAmenities').delay(4000).fadeOut('slow');
+			}
+		});
+	});
     
-    $('#openApratments').click(function(){
+    $('#openApratments').click(function(event){
+		event.preventDefault();
         $('#showUsers').hide();
         $('#showApartments').show();
         $('#showReservations').hide();
         $('#showComments').hide();
-       
+		$('#showAmenities').hide();
         }); 
-    $('#homePage').click(function(){
+    $('#homePage').click(function(event){
+		event.preventDefault();
         $('#showUsers').hide();
         $('#showApartments').show();
         $('#showReservations').hide();
-        $('#showComments').hide();
+		$('#showComments').hide();
+		$('#showAmenities').hide();
     });
-    $('#openReservations').click(function(){
+    $('#openReservations').click(function(event){
+		event.preventDefault();
         $('#showUsers').hide();
         $('#showApartments').hide();
         $('#showReservations').show();
-        $('#showComments').hide();
+		$('#showComments').hide();
+		$('#showAmenities').hide();
     });
-    $('#openComments').click(function(){
+    $('#openComments').click(function(event){
+		event.preventDefault();
         $('#showUsers').hide();
         $('#showApartments').hide();
         $('#showReservations').hide();
-        $('#showComments').show();
+		$('#showComments').show();
+		$('#showAmenities').hide();
+	});
+	$('#openAmenities').click(function(event){
+		event.preventDefault();
+		$('#showAmenities').show();
+        $('#showUsers').hide();
+        $('#showApartments').hide();
+        $('#showReservations').hide();
+        $('#showComments').hide();
     });
 });
 
@@ -340,6 +582,18 @@ function addReservation(reservation){
      tr.append(id).append(apartment).append(startDate).append(nightsNumber).append(totalPrice).append(guest).append(status);
      $('#tableReservations tbody').append(tr);
 }
+
+function addAmenities(amenities){
+    var tr = $('<tr class="tableRow"></tr>');	
+    var category = $('<td class="tableData">'+amenities.category+'</td>');
+    var name = $('<td class="tableData">'+amenities.name+'</td>');
+    var description = $('<td class="tableData">'+amenities.description+'</td>');
+    var deleting = $('<td class="tableData"><a href="#" class="deleteAmenitiesClick" id="amenitiesDelete_'+amenities.id+'" style="color: white;"><span class="glyphicon glyphicon-trash"></span>Brisanje</a></td> ');
+    var editing = $('<td class="tableData"><a href="#" class="editAmenitiesClick" id="amenitiesEdit_'+amenities.id+'" style="color: white;"><span class="glyphicon glyphicon-edit"></span>Izmena</a></td> ');
+     tr.append(category).append(name).append(description).append(deleting).append(editing);
+     $('#tableAmenities tbody').append(tr);
+}
+
 function addUser(user){
     var tr = $('<tr class="tableRow"></tr>');	
     var id = $('<td class="tableData">'+user.id+'</td>');

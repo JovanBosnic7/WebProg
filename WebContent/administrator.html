@@ -36,6 +36,7 @@
               <li><a href="#" id="openApratments" ><span class="glyphicon glyphicon-bed"></span>Prikaz svih apartmana</a></li>
               <li><a href="#" id= "openReservations" ><span class="glyphicon glyphicon-calendar"></span>Prikaz svih rezervacija</a></li>
               <li><a href="#" id="openComments" ><span class="glyphicon glyphicon-comment"></span>Prikaz svih komentara</a></li>
+              <li><a href="#" id="openAmenities" ><span class="glyphicon glyphicon-pencil"></span>Održavanje sadržaja apartmana</a></li>
               
             </ul>
       
@@ -171,6 +172,120 @@
               </div>
             </div>
           </div>
+
+          <!-- -----------------------------------------AmenitiesTable -------------------------------------------------------------------->
+
+        <div class="container" id = "showAmenities">
+          <div class="row">
+            <div class="col-12">
+                <table id="tableAmenities" class="table table-image">
+                  <thead style="background-color: black;">
+                  <tr style="font-weight: bold; color: lightgrey; " class="table-active">
+                      <th style="width: 200px;" scope="col">Kategorija sadržaja</th>
+                      <th style="width: 200px;" scope="col">Naziv sadržaja</th>
+                      <th style="width: 200px;" scope="col">Opis sadržaja</th>
+                      <th style="width: 200px;" scope="col">Brisanje</th>
+                      <th style="width: 200px;" scope="col">Izmena</th>  
+                  </tr>
+                  </thead>
+                  <tbody>
+                   
+                  </tbody>
+                </table>   
+            </div>
+          </div>
+          <button class="btn btn-secondary" id="buttonAddAmenities" data-target="#addAmenitiesModal" data-toggle="modal">Dodaj stavku apartmana</button>
+        </div>
+
+        <!-- -----------------------------------------AddAmenitiesModal -------------------------------------------------------------------->
+
+<div>
+   
+  <div id="addAmenitiesModal" class="modal" tabindex="-1" data-backdrop="false"> 
+      <!-- Modal content -->
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+              <button class="close" data-dismiss="modal">&times;</button>    
+              <h4 class="modal-title">Dodajte stavku apartmana </h4>
+              </div>
+              <div class="modal-body">
+                  <form id = "formAddAmenities" method="POST">
+                    <div class="form-group">
+                      <label  style="font-size:13px;" class="label label-default"for="Kategorija">Odaberite kategoriju stavke:</label>
+                      <select name="category" id="categoryAdd">
+                          <option value="BASIC">Osnovno</option>
+                          <option value="FAMILY_FEATURES">Porodične pogodnosti</option>
+                          <option value="FACILITIES">Pogodnosti</option>
+                          <option value="DINING">Kuhinja</option>
+                    </select>
+                  </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite naziv stavke" name="name" type="text" id="amenitiesName">
+						  <p id="errorAmenitiesName" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite opis" name="description" type="text" id="amenitiesDescription">
+						  <p id="errorAmenitiesDescription" style="color:red;"></p>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  
+                  <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                  <button  type="submit" form = "formAddAmenities" class="btn btn-secondary" id="buttonAddAmenitiesConf">Potvrda</button>
+                  
+              </div>
+            <p id="errorAddAmenities" style="color:red;"></p>
+            </div>
+          </div>
+       </div>
+      </div>
+
+       <!-- -----------------------------------------EditAmenitiesModal -------------------------------------------------------------------->
+
+<div>
+   
+  <div id="editAmenitiesModal" class="modal" tabindex="-1" data-backdrop="false"> 
+      <!-- Modal content -->
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+              <button class="close" data-dismiss="modal">&times;</button>    
+              <h4 class="modal-title">Izmenite stavku apartmana</h4>
+              </div>
+              <div class="modal-body">
+                  <form id = "formEditAmenities" method="PUT">
+                    <div class="form-group">
+                      <label  style="font-size:13px;" class="label label-default"for="Kategorija">Odaberite kategoriju stavke:</label>
+                      <select name="category" id="categoryEdit">
+                          <option value="BASIC">Osnovno</option>
+                          <option value="FAMILY_FEATURES">Porodične pogodnosti</option>
+                          <option value="FACILITIES">Pogodnosti</option>
+                          <option value="DINING">Kuhinja</option>
+                    </select>
+                  </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite naziv stavke" name="name" type="text" id="amenitiesNameEdit">
+						  <p id="errorAmenitiesNameEdit" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite opis" name="description" type="text" id="amenitiesDescriptionEdit">
+						  <p id="errorAmenitiesDescriptionEdit" style="color:red;"></p>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  
+                  <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                  <button  type="submit" form = "formEditAmenities" class="btn btn-secondary" id="buttonEditAmenitiesConf">Potvrda</button>
+                  
+              </div>
+            <p id="errorEditAmenities" style="color:red;"></p>
+            </div>
+          </div>
+       </div>
+      </div>
 
 <!-- -----------------------------------------EditUserModal -------------------------------------------------------------------->
 

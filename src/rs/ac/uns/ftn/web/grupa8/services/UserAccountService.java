@@ -98,7 +98,7 @@ public class UserAccountService {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response login(User user, @Context HttpServletRequest request) {
+	public Response login(User user, @Context HttpServletRequest request) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		if (session.getAttribute("user") != null) {
 			return Response.status(400).entity("Već ste prijavljeni").build();

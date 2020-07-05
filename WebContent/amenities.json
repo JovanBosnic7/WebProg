@@ -1,0 +1,7 @@
+[ "java.util.ArrayList", [ [ "rs.ac.uns.ftn.web.grupa8.beans.entities.Amenities", {
+  "id" : 1,
+  "name" : "wifi",
+  "description" : "24h pristup bežičnom internetu.",
+  "category" : "BASIC",
+  "deleted" : false
+} ] ] ]
