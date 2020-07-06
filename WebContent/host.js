@@ -1215,6 +1215,8 @@ $(document).on("click", "a.acceptReservationLink", function(){
     $('#showApartments').hide();
     $('#showReservations').hide();
 	$('#showComments').hide();
+	$('#inputGenderSearch').val("MALE");
+	$('#inputUsernameSearch').val("");
 	$.ajax({
 		type : "get",
 		url : "rest/addUsersHost",

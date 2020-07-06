@@ -1,9 +1,12 @@
 package rs.ac.uns.ftn.web.grupa8.services;
 
-import java.util.Collection; 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -13,6 +16,9 @@ import javax.ws.rs.core.MediaType;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentComment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
+import rs.ac.uns.ftn.web.grupa8.beans.enums.AccountType;
+import rs.ac.uns.ftn.web.grupa8.beans.enums.Gender;
+import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
 import rs.ac.uns.ftn.web.grupa8.dao.CommentDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.ReservationDAO;
@@ -80,7 +86,22 @@ public class AdministratorService {
 		return commentDAO.getAll();
 	}
 	
-
+	@GET
+	@Path("/searchUsersAdministator")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<User> searchUsers(@QueryParam("accountType") AccountType accountType,@QueryParam("gender") Gender gen,
+			@QueryParam("username") String un) {
+		ArrayList<User> users = new ArrayList<User>();
+		System.out.println(gen + un  + accountType);
+		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
+		for(User u : userDAO.getAll()) {
+			if(u.getAccountType() == accountType || u.getGender() == gen || u.getUsername().contains(un)) {
+				users.add(u);
+			}
+		}
+			return users;
+	}
 	
 	
 }

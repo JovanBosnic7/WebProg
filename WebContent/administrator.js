@@ -317,6 +317,23 @@ function loadAmenities(){
     $('#showReservations').hide();
 	$('#showComments').hide();
 	$('#showAmenities').hide();
+	$('#inputGenderSearch').val("MALE");
+	$('#inputUsernameSearch').val("");
+	$('#inputTypeOfUserSearch').val("ADMINISTRATOR");
+	$.ajax({
+        type : "get",
+        url : "rest/users",
+        contentType : "application/json",
+        success : function(response){
+            $('#tableUsers tbody').empty();
+            console.log(response);
+            for(var user of response){
+               
+                addUser(user);
+              
+         }
+     }
+    }); 
 });
 
 $(document).on("click", "a.editAmenitiesClick" , function(event) {
@@ -544,6 +561,31 @@ $(document).on("click", "a.deleteAmenitiesClick" , function(event) {
 			}
 		});
 		});
+		$('form#formSearchUser').submit(function(event){
+			event.preventDefault();
+			var type =  $('#inputTypeOfUserSearch').val();
+			var genderOfUser =$('#inputGenderSearch').val();
+			var usernameSearch =  $('#inputUsernameSearch').val();
+			alert(type + genderOfUser + usernameSearch);
+			$.ajax ({
+				type : "get",
+				url : "rest/searchUsersAdministator",
+				data : {
+					accountType : type,
+					gender : genderOfUser,
+					username : usernameSearch
+				},
+				contentType : 'application/json',
+				success : function(response) {
+					$('#tableUsers tbody').empty();
+					for(var user of response) {
+						
+						addUser(user);
+					}
+				}
+			});
+	
+		});	
 
 $(document).on("click", "a.editApartmentLink", function(){
 			event.preventDefault();	
