@@ -122,26 +122,33 @@
         <div class="container" id="showApartments">
             <div class="row">
               <div class="col-12">
+               
                   <table id="tableApartmentsGuest" class="table table-image">
                     <thead style="background-color: black;">
                     <tr style="font-weight: bold; color: lightgrey; " class="table-active">
                         <th style="width: 400px;" scope="col">Prikaz smeštaja</th>
-						<th style="width: 200px;" scope="col">Naziv</th>			
+					            	<th style="width: 200px;" scope="col">Naziv</th>			
                         <th style="width: 200px;" scope="col"> Broj soba</th>
                         <th  style="width: 200px;"scope="col">Broj gostiju</th>
                         <th style="width: 200px;" scope="col">Lokacija</th>
                         <th style="width: 200px;" scope="col">Tip smeštaja</th>
-                        <th style="width: 250px;" scope="col">Cena po noćenju</th>
-                        <th style="width: 200px;" scope="col">Domaćin</th>  
+                        <th style="width: 300px;" scope="col">Cena po noćenju</th>
+                       <th style="width: 100;" scope="col">Domaćin</th>  
+                      
                     </tr>
                     </thead>
                     <tbody>
                      
                     </tbody>
-                  </table>   
+                  </table>  
               </div>
             </div>
+            <div class = "form-inline">
+              <p><button id = "sortApartments" title="Sortiraj po ceni rastuće"  class= "glyphicon glyphicon-arrow-up" > </button></p>                 
+              <p><button id = "sortApartmentsDescending" title ="Sortiraj po ceni opadajuće"  class= "glyphicon glyphicon-arrow-down" > </button></p>    
+            </div>   
           </div>
+          
 
 <!-- -----------------------------------------EditUserModal -------------------------------------------------------------------->
 
@@ -224,6 +231,10 @@
                   </table>   
               </div>
             </div>
+            <div class = "form-inline">
+              <p><button id = "sortReservations" title="Sortiraj po ceni rastuće"  class= "glyphicon glyphicon-arrow-up" > </button></p>                 
+              <p><button id = "sortReservationsDescending" title ="Sortiraj po ceni opadajuće"  class= "glyphicon glyphicon-arrow-down" > </button></p>    
+            </div> 
           </div>
           <!-- -----------------------------------------CommentsTable -------------------------------------------------------------------->
 
@@ -248,6 +259,7 @@
               </div>
             </div>
           </div>
+      
        
 </body>
 </html>

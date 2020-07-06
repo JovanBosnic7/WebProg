@@ -586,6 +586,31 @@ $(document).on("click", "a.deleteAmenitiesClick" , function(event) {
 			});
 	
 		});	
+		$('form#formSearchReservations').submit(function(event){
+			event.preventDefault();
+			
+			var usernameSearch =  $('#inputUsernameSearchGuest').val();
+			$.ajax ({
+				type : "get",
+				url : "rest/searchReservations",
+				data : {
+					
+					username : usernameSearch
+					
+				},
+				contentType : 'application/json',
+				success : function(response) {
+					$('#tableReservations tbody').empty();
+					for(var reservation of response) {
+						
+							addReservation(reservation);
+							
+						
+					}
+				}
+			});
+	
+		});	
 
 $(document).on("click", "a.editApartmentLink", function(){
 			event.preventDefault();	
@@ -1128,7 +1153,17 @@ $(document).on("click", "a.editApartmentLink", function(){
         $('#showReservations').hide();
 		$('#showComments').hide();
 		$('#showAmenities').hide();
-    });
+	});
+	$('#sortApartments').click(function(event) {
+			
+		sortTable();
+
+	});
+	$('#sortApartmentsDescending').click(function(event) {
+		
+		sortTableDescending();
+
+	});
     $('#openReservations').click(function(event){
 		event.preventDefault();
         $('#showUsers').hide();
@@ -1136,7 +1171,23 @@ $(document).on("click", "a.editApartmentLink", function(){
         $('#showReservations').show();
 		$('#showComments').hide();
 		$('#showAmenities').hide();
-    });
+		$('#inputUsernameSearchGuest').val("");
+		$.ajax({
+			type : "get",
+			url : "rest/reservations",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableReservations tbody').empty();
+				console.log(response);
+				for(var reservation of response){
+						
+							addReservation(reservation);
+						
+					}    
+			 }
+		
+	});
+});
     $('#openComments').click(function(event){
 		event.preventDefault();
         $('#showUsers').hide();
@@ -1144,6 +1195,16 @@ $(document).on("click", "a.editApartmentLink", function(){
         $('#showReservations').hide();
 		$('#showComments').show();
 		$('#showAmenities').hide();
+	});
+	$('#sortReservations').click(function(event) {
+			
+		sortReservations();
+
+	});
+	$('#sortReservationsDescending').click(function(event) {
+		
+		sortReservationsDescending();
+
 	});
 	$('#openAmenities').click(function(event){
 		event.preventDefault();
@@ -1232,3 +1293,139 @@ function addApartment(apartment){
      $('#tableApartments tbody').append(tr);
 }
 
+function sortTable() {
+	var table, rows, switching, i, x, y, shouldSwitch;
+	table = document.getElementById("tableApartments");
+	switching = true;
+	/*Make a loop that will continue until
+	no switching has been done:*/
+	while (switching) {
+	  //start by saying: no switching is done:
+	  switching = false;
+	  rows = table.rows;
+	  /*Loop through all table rows (except the
+	  first, which contains table headers):*/
+	  for (i = 1; i < (rows.length - 1); i++) {
+		//start by saying there should be no switching:
+		shouldSwitch = false;
+		/*Get the two elements you want to compare,
+		one from current row and one from the next:*/
+		x = rows[i].getElementsByTagName("td")[6];
+		y = rows[i + 1].getElementsByTagName("td")[6];
+		//check if the two rows should switch place:
+		if (Number(x.innerHTML) > Number(y.innerHTML)) {
+		  //if so, mark as a switch and break the loop:
+		  shouldSwitch = true;
+		  break;
+		}
+	  }
+	  if (shouldSwitch) {
+		/*If a switch has been marked, make the switch
+		and mark that a switch has been done:*/
+		rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+		switching = true;
+	  }
+	}
+  }
+  function sortTableDescending() {
+	var table, rows, switching, i, x, y, shouldSwitch;
+	table = document.getElementById("tableApartments");
+	switching = true;
+	/*Make a loop that will continue until
+	no switching has been done:*/
+	while (switching) {
+	  //start by saying: no switching is done:
+	  switching = false;
+	  rows = table.rows;
+	  /*Loop through all table rows (except the
+	  first, which contains table headers):*/
+	  for (i = 1; i < (rows.length - 1); i++) {
+		//start by saying there should be no switching:
+		shouldSwitch = false;
+		/*Get the two elements you want to compare,
+		one from current row and one from the next:*/
+		x = rows[i].getElementsByTagName("td")[6];
+		y = rows[i + 1].getElementsByTagName("td")[6];
+		//check if the two rows should switch place:
+		if (Number(x.innerHTML) < Number(y.innerHTML)) {
+		  //if so, mark as a switch and break the loop:
+		  shouldSwitch = true;
+		  break;
+		}
+	  }
+	  if (shouldSwitch) {
+		/*If a switch has been marked, make the switch
+		and mark that a switch has been done:*/
+		rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+		switching = true;
+	  }
+	}
+  }
+  function sortReservations() {
+	var table, rows, switching, i, x, y, shouldSwitch;
+	table = document.getElementById("tableReservations");
+	switching = true;
+	/*Make a loop that will continue until
+	no switching has been done:*/
+	while (switching) {
+	  //start by saying: no switching is done:
+	  switching = false;
+	  rows = table.rows;
+	  /*Loop through all table rows (except the
+	  first, which contains table headers):*/
+	  for (i = 1; i < (rows.length - 1); i++) {
+		//start by saying there should be no switching:
+		shouldSwitch = false;
+		/*Get the two elements you want to compare,
+		one from current row and one from the next:*/
+		x = rows[i].getElementsByTagName("td")[4];
+		y = rows[i + 1].getElementsByTagName("td")[4];
+		//check if the two rows should switch place:
+		if (Number(x.innerHTML) > Number(y.innerHTML)) {
+		  //if so, mark as a switch and break the loop:
+		  shouldSwitch = true;
+		  break;
+		}
+	  }
+	  if (shouldSwitch) {
+		/*If a switch has been marked, make the switch
+		and mark that a switch has been done:*/
+		rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+		switching = true;
+	  }
+	}
+  }
+  function sortReservationsDescending() {
+	var table, rows, switching, i, x, y, shouldSwitch;
+	table = document.getElementById("tableReservations");
+	switching = true;
+	/*Make a loop that will continue until
+	no switching has been done:*/
+	while (switching) {
+	  //start by saying: no switching is done:
+	  switching = false;
+	  rows = table.rows;
+	  /*Loop through all table rows (except the
+	  first, which contains table headers):*/
+	  for (i = 1; i < (rows.length - 1); i++) {
+		//start by saying there should be no switching:
+		shouldSwitch = false;
+		/*Get the two elements you want to compare,
+		one from current row and one from the next:*/
+		x = rows[i].getElementsByTagName("td")[4];
+		y = rows[i + 1].getElementsByTagName("td")[4];
+		//check if the two rows should switch place:
+		if (Number(x.innerHTML) < Number(y.innerHTML)) {
+		  //if so, mark as a switch and break the loop:
+		  shouldSwitch = true;
+		  break;
+		}
+	  }
+	  if (shouldSwitch) {
+		/*If a switch has been marked, make the switch
+		and mark that a switch has been done:*/
+		rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+		switching = true;
+	  }
+	}
+  }
