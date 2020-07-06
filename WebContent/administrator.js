@@ -586,6 +586,31 @@ $(document).on("click", "a.deleteAmenitiesClick" , function(event) {
 			});
 	
 		});	
+		$('form#formSearchReservations').submit(function(event){
+			event.preventDefault();
+			
+			var usernameSearch =  $('#inputUsernameSearchGuest').val();
+			$.ajax ({
+				type : "get",
+				url : "rest/searchReservations",
+				data : {
+					
+					username : usernameSearch
+					
+				},
+				contentType : 'application/json',
+				success : function(response) {
+					$('#tableReservations tbody').empty();
+					for(var reservation of response) {
+						
+							addReservation(reservation);
+							
+						
+					}
+				}
+			});
+	
+		});	
 
 $(document).on("click", "a.editApartmentLink", function(){
 			event.preventDefault();	
@@ -1136,7 +1161,23 @@ $(document).on("click", "a.editApartmentLink", function(){
         $('#showReservations').show();
 		$('#showComments').hide();
 		$('#showAmenities').hide();
-    });
+		$('#inputUsernameSearchGuest').val("");
+		$.ajax({
+			type : "get",
+			url : "rest/reservations",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableReservations tbody').empty();
+				console.log(response);
+				for(var reservation of response){
+						
+							addReservation(reservation);
+						
+					}    
+			 }
+		
+	});
+});
     $('#openComments').click(function(event){
 		event.preventDefault();
         $('#showUsers').hide();

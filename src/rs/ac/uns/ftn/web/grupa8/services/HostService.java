@@ -21,6 +21,7 @@ import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.Gender;
 import rs.ac.uns.ftn.web.grupa8.beans.enums.ReservationStatus;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
+import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
 import rs.ac.uns.ftn.web.grupa8.dao.ApartmentDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.CommentDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.ReservationDAO;
@@ -107,6 +108,23 @@ public class HostService {
 			}
 		}
 			return users;
+	}
+	@GET
+	@Path("/searchReservations")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> searchUsers(@QueryParam("username") String un) {
+		System.out.println(un);
+		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
+		
+		for(Reservation r : reservationDAO.getAll()) {
+			if(r.getGuest().getUsername().contains(un)) {
+				reservations.add(r);
+			}
+		}
+		return reservations;
+	
 	}
 	@GET
 	@Path("/addUsersHost")

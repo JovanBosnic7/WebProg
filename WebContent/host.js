@@ -45,6 +45,31 @@ $(document).ready(function() {
 		});
 
 	});	
+	$('form#formSearchReservations').submit(function(event){
+		event.preventDefault();
+		
+		var usernameSearch =  $('#inputUsernameSearchGuest').val();
+		$.ajax ({
+			type : "get",
+			url : "rest/searchReservations",
+			data : {
+				
+				username : usernameSearch
+				
+			},
+			contentType : 'application/json',
+			success : function(response) {
+				$('#tableReservations tbody').empty();
+				for(var reservation of response) {
+					if(reservation.apartment.host.username == currentUser.username){
+						addReservation(reservation);
+					}	
+					
+				}
+			}
+		});
+
+	});	
 	
 	$('form#filterApartments').submit(function(event){
 		  	event.preventDefault();
@@ -1330,7 +1355,22 @@ $(document).on("click", "a.acceptReservationLink", function(){
         $('#showUsers').hide();
         $('#showApartments').hide();
         $('#showReservations').show();
-        $('#showComments').hide();
+		$('#showComments').hide();
+		$('#inputUsernameSearchGuest').val("");
+		$.ajax({
+			type : "get",
+			url : "rest/reservations",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableReservations tbody').empty();
+				console.log(response);
+				for(var reservation of response){
+						if(reservation.apartment.host.username == currentUser.username){
+							addReservation(reservation);
+						}
+					}    
+			 }
+		});
     });
     $('#openComments').click(function(){
         $('#showUsers').hide();
