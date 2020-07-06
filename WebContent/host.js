@@ -99,6 +99,10 @@ $(document).ready(function() {
             }
 			
 			$('#searchModal').modal('toggle');
+			$('#showUsers').hide();
+       		 $('#showApartments').show();
+       	 	$('#showReservations').hide();
+			$('#showComments').hide();
         });
 	  
 	  function searchByGuestNumber(apartmentList){
@@ -1239,14 +1243,44 @@ $(document).on("click", "a.acceptReservationLink", function(){
         $('#showUsers').hide();
         $('#showApartments').show();
         $('#showReservations').hide();
-        $('#showComments').hide();
+		$('#showComments').hide();
+		$.ajax({
+			type : "get",
+			url : "rest/apartments",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableApartments tbody').empty();
+				apartments.length = 0;
+				for(var apartment of response){
+					if(apartment.host.username == currentUser.username){			
+						apartments.push(apartment); 
+						addApartment(apartment);
+					}   
+				}	
+		 }
+	  });
        
         }); 
     $('#homePage').click(function(){
         $('#showUsers').hide();
         $('#showApartments').show();
         $('#showReservations').hide();
-        $('#showComments').hide();
+		$('#showComments').hide();
+		$.ajax({
+			type : "get",
+			url : "rest/apartments",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableApartments tbody').empty();
+				apartments.length = 0;
+				for(var apartment of response){
+					if(apartment.host.username == currentUser.username){			
+						apartments.push(apartment); 
+						addApartment(apartment);
+					}   
+				}	
+		 }
+	  });
     });
     $('#openReservations').click(function(){
         $('#showUsers').hide();

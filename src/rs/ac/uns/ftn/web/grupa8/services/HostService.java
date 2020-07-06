@@ -89,7 +89,7 @@ public class HostService {
 	public Collection<Guest> searchUsers(@QueryParam("gender") Gender gen,
 			@QueryParam("username") String un, @QueryParam("hostid") int hostid) {
 		ArrayList<Guest> users = new ArrayList<Guest>();
-		System.out.println(gen + un );
+		
 		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
 		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
 		Collection<Reservation> reservations = reservationDAO.getByHost(hostid);
@@ -113,7 +113,7 @@ public class HostService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Collection<Guest> getUsersHost(@QueryParam("hostid") int hostid) {
 		ArrayList<Guest> users = new ArrayList<Guest>();
-		System.out.println(hostid);
+		
 		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
 		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
 		Collection<Reservation> reservations = reservationDAO.getByHost(hostid);

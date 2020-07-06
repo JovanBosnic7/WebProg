@@ -68,6 +68,21 @@ $(document).ready(function(){
         $('#showApartments').show();
 		$('#showReservations').hide();
 		$('#showComments').hide();
+		$.ajax({
+	        type : "get",
+	        url : "rest/apartments",
+	        contentType : "application/json",
+	        success : function(response){
+	            $('#tableApartmentsGuest tbody').empty();
+	            for(var apartment of response){
+					if(apartment.apartmentStatus == 'ACTIVE'){
+					apartments.push(apartment);
+	            	addApartment(apartment);
+	            }   
+	     	}
+	     }
+	  });
+
       
 	}); 
 	$('#openReservations').click(function(){
@@ -137,6 +152,10 @@ $(document).ready(function(){
             }
 			
 			$('#searchModal').modal('toggle');
+			$('#showApartments').show();
+			$('#showReservations').hide();
+			$('#showComments').hide();
+
         });
 	  
 	  function searchByGuestNumber(apartmentList){

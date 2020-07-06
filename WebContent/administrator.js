@@ -566,7 +566,7 @@ $(document).on("click", "a.deleteAmenitiesClick" , function(event) {
 			var type =  $('#inputTypeOfUserSearch').val();
 			var genderOfUser =$('#inputGenderSearch').val();
 			var usernameSearch =  $('#inputUsernameSearch').val();
-			alert(type + genderOfUser + usernameSearch);
+		
 			$.ajax ({
 				type : "get",
 				url : "rest/searchUsersAdministator",
@@ -1106,6 +1106,20 @@ $(document).on("click", "a.editApartmentLink", function(){
         $('#showReservations').hide();
         $('#showComments').hide();
 		$('#showAmenities').hide();
+		$.ajax({
+			type : "get",
+			url : "rest/apartments",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableApartments tbody').empty();
+				console.log(response);
+				for(var apartment of response){
+					
+					addApartment(apartment);
+					 
+				 }
+			 }
+		  });
         }); 
     $('#homePage').click(function(event){
 		event.preventDefault();

@@ -93,7 +93,7 @@ public class AdministratorService {
 	public Collection<User> searchUsers(@QueryParam("accountType") AccountType accountType,@QueryParam("gender") Gender gen,
 			@QueryParam("username") String un) {
 		ArrayList<User> users = new ArrayList<User>();
-		System.out.println(gen + un  + accountType);
+		
 		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
 		for(User u : userDAO.getAll()) {
 			if(u.getAccountType() == accountType || u.getGender() == gen || u.getUsername().contains(un)) {
