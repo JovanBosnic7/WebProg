@@ -44,10 +44,10 @@ $(document).ready(function() {
 	  });
 
 	  $('#inputUserNameEdit').on('input', function() { 
-	    validateUsername();
+	    validateUsernameEdit();
 	});
 
-	function validateUsername(){
+	function validateUsernameEdit(){
 		let username = $('#inputUserNameEdit').val();
 		
 		if(username.length == 0){
@@ -74,10 +74,10 @@ $(document).ready(function() {
 	}
 	
 	$('#inputFirstNameEdit').on('input', function() { 
-	    validateFirstname();
+	    validateFirstnameEdit();
 	});
 
-	function validateFirstname(){
+	function validateFirstnameEdit(){
 		let firstname = $('#inputFirstNameEdit').val();
 		
 		if(firstname.length == 0){
@@ -99,10 +99,10 @@ $(document).ready(function() {
 	}
 	
 	$('#inputLastNameEdit').on('input', function() { 
-	    validateLastname();
+	    validateLastnameEdit();
 	});
 
-	function validateLastname(){
+	function validateLastnameEdit(){
 		let lastname = $('#inputLastNameEdit').val();
 		
 		if(lastname.length == 0){
@@ -124,10 +124,10 @@ $(document).ready(function() {
 	}
 	
 	$('#inputPasswordEdit').on('input', function() { 
-		validatePassword();
+		validatePasswordEdit();
 	});
 
-	function validatePassword(){
+	function validatePasswordEdit(){
 		let password = $('#inputPasswordEdit').val();
 		
 		if(password.length == 0){
@@ -154,10 +154,10 @@ $(document).ready(function() {
 	}
 	
 	$('#confirmPasswordEdit').on('input', function() { 
-		validateConfirmPassword();
+		validateConfirmPasswordEdit();
 	});
 
-	function validateConfirmPassword(){
+	function validateConfirmPasswordEdit(){
 		let confirmPassword = $('#confirmPasswordEdit').val();
 		let password = $('#inputPasswordEdit').val();
 		if(password != confirmPassword){
@@ -172,7 +172,7 @@ $(document).ready(function() {
 	}
 	
 	function validateEditInputs(){
-		return validateUsername() && validateFirstname() && validateLastname() && validatePassword() && validateConfirmPassword();
+		return validateUsernameEdit() && validateFirstnameEdit() && validateLastnameEdit() && validatePasswordEdit() && validateConfirmPasswordEdit();
 	}
 	
 	$('form#filterApartments').submit(function(event){
