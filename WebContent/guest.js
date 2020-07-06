@@ -552,24 +552,7 @@ $(document).ready(function(){
 			filterAparments();
 
 		});
-		$('#cancelFilter').click(function(event) {
-			
-			$.ajax({
-				type : "get",
-				url : "rest/apartments",
-				contentType : "application/json",
-				success : function(response){
-					$('#tableApartmentsGuest tbody').empty();
-					for(var apartment of response){
-						if(apartment.apartmentStatus == 'ACTIVE'){
-						apartments.push(apartment);
-						addApartment(apartment);
-					}   
-				 }
-			 }
-		  });
-
-		});
+	
 		$('a#logout').click(function(event) {
 			event.preventDefault();
 			$.ajax({

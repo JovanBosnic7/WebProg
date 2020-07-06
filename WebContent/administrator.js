@@ -1314,6 +1314,29 @@ $(document).on("click", "a.editApartmentLink", function(){
 		sortReservationsDescending();
 
 	});
+	$('#apartmentTypeInput').change(function(event) {
+			
+		filterAparments();
+
+	});
+	$('#cancelFilterApartment').click(function(event) {
+			
+		$.ajax({
+			type : "get",
+			url : "rest/apartments",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableApartments tbody').empty();
+				console.log(response);
+				for(var apartment of response){
+					
+					addApartment(apartment);
+					 
+				 }
+			 }
+		  });
+
+	});
 	$('#openAmenities').click(function(event){
 		event.preventDefault();
 		$('#showAmenities').show();
@@ -1490,6 +1513,28 @@ function sortTable() {
 	  }
 	}
   }
+  function filterAparments() {
+	// Declare variables
+	var input, filter, table, tr, td, i, txtValue;
+	input = document.getElementById("apartmentTypeInput");
+	filter = input.value.toUpperCase();
+	table = document.getElementById("tableApartments");
+	tr = table.getElementsByTagName("tr");
+  
+	// Loop through all table rows, and hide those who don't match the search query
+	for (i = 0; i < tr.length; i++) {
+	  td = tr[i].getElementsByTagName("td")[5];
+	  if (td) {
+		txtValue = td.textContent || td.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		  tr[i].style.display = "";
+		} else {
+		  tr[i].style.display = "none";
+		}
+	  }
+	}
+  }
+
   function sortReservations() {
 	var table, rows, switching, i, x, y, shouldSwitch;
 	table = document.getElementById("tableReservations");
