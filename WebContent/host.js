@@ -1491,7 +1491,51 @@ $(document).on("click", "a.acceptReservationLink", function(){
 			 }
 		});
 	});
+	$('#apartmentTypeFilter').change(function(event) {
+			
+		filterAparments();
 
+	});
+	$('#apartmentStatusFilter').change(function(event) {
+			
+		filterAparmentsStatus();
+
+	});
+
+	$.ajax({
+		type : "get",
+		url : "rest/amenities",
+		contentType : "application/json",
+		success : function(response){
+			$('#amenitiesInputFilter').empty();
+		   allAmenities = response;
+		   for(var amenities of response){
+			   addAmenitiesFilter(amenities);
+		   }
+		 },
+		error : function(message) {
+			alert(message.responseText);
+		}
+		});
+
+	$('#cancelFilterApartment').click(function(event) {
+			
+		$.ajax({
+			type : "get",
+			url : "rest/apartments",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableApartments tbody').empty();
+				console.log(response);
+				for(var apartment of response){
+					
+					addApartment(apartment);
+					 
+				 }
+			 }
+		  });
+
+		});
     $('#openComments').click(function(){
         $('#showUsers').hide();
 		$('#showApartments').hide();
@@ -1513,8 +1557,11 @@ $(document).on("click", "a.acceptReservationLink", function(){
 		 }
 		});
     });
-});
-});
+
+
+ });
+ });
+ 
 
 function filterReservations() {
 	// Declare variables
@@ -1537,6 +1584,49 @@ function filterReservations() {
 	  }
 	}
   }
+  function filterAparments() {
+	// Declare variables
+	var input, filter, table, tr, td, i, txtValue;
+	input = document.getElementById("apartmentTypeFilter");
+	filter = input.value.toUpperCase();
+	table = document.getElementById("tableApartments");
+	tr = table.getElementsByTagName("tr");
+  
+	// Loop through all table rows, and hide those who don't match the search query
+	for (i = 0; i < tr.length; i++) {
+	  td = tr[i].getElementsByTagName("td")[5];
+	  if (td) {
+		txtValue = td.textContent || td.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		  tr[i].style.display = "";
+		} else {
+		  tr[i].style.display = "none";
+		}
+	  }
+	}
+  }
+  function filterAparmentsStatus() {
+	// Declare variables
+	var input, filter, table, tr, td, i, txtValue;
+	input = document.getElementById("apartmentStatusFilter");
+	filter = input.value.toUpperCase();
+	table = document.getElementById("tableApartments");
+	tr = table.getElementsByTagName("tr");
+  
+	// Loop through all table rows, and hide those who don't match the search query
+	for (i = 0; i < tr.length; i++) {
+	  td = tr[i].getElementsByTagName("td")[7];
+	  if (td) {
+		txtValue = td.textContent || td.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		  tr[i].style.display = "";
+		} else {
+		  tr[i].style.display = "none";
+		}
+	  }
+	}
+  }
+
 
 function addAmenities(amenities){
 	var labela =  $('<label></label>');
@@ -1545,7 +1635,13 @@ function addAmenities(amenities){
 	   labela.append(amenities.name);
 	 $('#amenitiesInput').append(labela);
 }
-
+function addAmenitiesFilter(amenities){
+	var labela =  $('<label></label>');
+	var inputAmenities = $('<input type="checkbox" value="'+amenities.id+'"/>');
+	   labela.append(inputAmenities);
+	   labela.append(amenities.name);
+	 $('#amenitiesInputFilter').append(labela);
+}
 function addAmenitiesEdit(amenities){
 	var labela =  $('<label></label>');
 	var inputAmenities = $('<input type="checkbox" value="'+amenities.id+'"/>');
@@ -1654,11 +1750,12 @@ function addApartment(apartment){
         apartment.location.longitude +'</td>');
         
     var apartmentType = $('<td class="tableData">'+apartment.apartmentType+'</td>');
-    var price = $('<td class="tableData">'+apartment.priceByNight+'</td>');
+	var price = $('<td class="tableData">'+apartment.priceByNight+'</td>');
+	var status = $('<td class="tableData">'+apartment.apartmentStatus+'</td>');
     var host = $('<td class="tableData">'+apartment.host.firstname + '<br>' + apartment.host.lastname +'</td>');
     var brisanje = $('<td class="tableData"><a class="deleteApartmentLink" id="' + apartment.id + '" style="color: white; cursor:pointer;"><span class="glyphicon glyphicon-trash"></span>Brisanje</a></td> ');
     var izmena = $('<td class="tableData"><a  class="editApartmentLink" data-target="#editApartmentModal" data-toggle="modal" style="color: white;" id="' + apartment.id + '"><span class="glyphicon glyphicon-edit"></span>Izmena</a></td> ');
-    tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host).append(brisanje).append(izmena);
+    tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(status).append(host).append(brisanje).append(izmena);
 	if(apartment.apartmentStatus == 'ACTIVE'){
 		$('#tableApartments tbody').append(tr);
 	}
@@ -1802,5 +1899,5 @@ function sortTable() {
 		switching = true;
 	  }
 	}
-  }
+  } 
 
