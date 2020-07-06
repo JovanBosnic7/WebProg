@@ -102,7 +102,7 @@ public class HostService {
 			}
 		}
 		for (Guest g : guests.values()) {
-			if (g.getGender() == gen || g.getUsername().contains(un)) {
+			if (g.getGender() == gen && g.getUsername().contains(un)) {
 				users.add(g);
 			}
 		}

@@ -92,6 +92,15 @@ public class ReservationDAO {
 		});
 		return reservationList;
 	}
+	
+	public Collection<Reservation> getAllByGuest(String username) {
+		List<Reservation> reservationList = new ArrayList<Reservation>();
+		reservations.values().forEach(a -> {
+			if (!a.isDeleted() && a.getGuest().getUsername().equals(username))
+				reservationList.add(a);
+		});
+		return reservationList;
+	}
 
 	public Collection<Reservation> getByApartment(int id, String username) {
 		List<Reservation> reservationList = new ArrayList<Reservation>();

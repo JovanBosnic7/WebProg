@@ -2,7 +2,7 @@ var apartments = [];
 $(document).ready(function(){ 
 	 $.ajax({
 	        type : "get",
-	        url : "rest/apartments",
+	        url : "rest/apartmentsActive",
 	        contentType : "application/json",
 	        success : function(response){
 	            $('#tableApartments tbody').empty();
@@ -20,18 +20,21 @@ $(document).ready(function(){
 		  	event.preventDefault();
 			var startDate = new Date($('#inputcheckInDate').val());
 			var endDate = new Date($('#inputcheckOutDate').val());
-			var filteredApartments = apartments;
+			//var filteredApartments = apartments;
 			if(!isNaN(startDate) && !isNaN(endDate)){
 				if(startDate > endDate){
 				alert('Datum odlaska ne može biti pre datuma dolaska! Molimo proverite Vaš unos.');
 				return;
 				}
-				filteredApartments = searchByDate(filteredApartments);
+				//filteredApartments = searchByDate(filteredApartments);
+				startDate = startDate.getTime();
+				endDate = endDate.getTime();	
 			}
+			
 			var location = $('#inputLocation').val();
-			if(location.length > 0){
+			/*if(location.length > 0){
 				filteredApartments = searchByLocation(filteredApartments);
-			}
+			}*/
 			
 			var startPrice = $('#inputpriceByNightFrom').val();
 			var endPrice = $('#inputpriceByNightTill').val();
@@ -42,7 +45,8 @@ $(document).ready(function(){
 					alert('Neispravno unet cenovni rang');
 					return;
 				}
-				filteredApartments = searchByPrice(filteredApartments);
+
+				//filteredApartments = searchByPrice(filteredApartments);
 			}
 			
 			var roomNumberFrom = $('#inputroomNumberFrom').val();
@@ -54,21 +58,51 @@ $(document).ready(function(){
 					alert('Neispravno unet broj soba');
 					return;
 				}
-				filteredApartments = searchByRoomNumber(filteredApartments);
+				//filteredApartments = searchByRoomNumber(filteredApartments);
 			}
 			
 			var guestNumber = $('#inputguestNumber').val();
-			
-			if(guestNumber.length > 0){
-				filteredApartments = searchByGuestNumber(filteredApartments);
+			if(guestNumber == '6plus'){
+				guestNumber = 7;
 			}
+			else{
+				guestNumber = parseInt(guestNumber);
+			}
+			/*if(guestNumber.length > 0){
+				filteredApartments = searchByGuestNumber(filteredApartments);
+			}*/
+
+			var searchParams = {
+				startDate : startDate,
+				endDate : endDate,
+				location : location,
+				startPrice : startPrice,
+				endPrice : endPrice,
+				roomNumberFrom : roomNumberFrom,
+				roomNumberTill : roomNumberTill,
+				guestNumber : guestNumber
+			};
 			
-			$('#tableApartments tbody').empty();
-			for(var filteredA of filteredApartments){
-            	addApartment(filteredA);
-            }
-			
-			$('#searchModal').modal('toggle');
+			$.ajax({
+				type : "POST",
+				url : "rest/searchActiveApartments",
+				contentType : "application/json",
+				data : JSON.stringify(searchParams),
+				success : function(response){
+					$('#tableApartments tbody').empty();
+					for(var apartment of response){
+						if(apartment.apartmentStatus == 'ACTIVE'){
+						addApartment(apartment);
+						}
+					}
+					$('#searchModal').modal('toggle');
+				 },
+				 error: function(message){
+					$('#tableApartments tbody').empty();
+					$('#searchModal').modal('toggle');
+					alert(message.responseText);
+				 }
+			 });
         });
 	  
 	  function searchByGuestNumber(apartmentList){
@@ -135,8 +169,12 @@ $(document).ready(function(){
 	  }
 });
 function addApartment(apartment){
-		var tr = $('<tr class="tableRow"></tr>');	
-		var image = $('<td><img class="img-fluid img-thumbnail" alt="Slika" src="'+apartment.imagePaths[0]+'"</img></td>');
+		var tr = $('<tr class="tableRow"></tr>');
+		var imgPath ="placeholder-img.jpg";
+		if(apartment.imagePaths.length > 0){
+			imgPath=apartment.imagePaths[0];
+		}
+		var image = $('<td><img class="img-fluid img-thumbnail" alt="Slika" src="'+imgPath+'"</img></td>');
 		var name = $('<td class="tableData">'+apartment.name+'</td>');
 		var roomNumber = $('<td class="tableData">'+apartment.roomNumber+'</td>');
 		var guestNumber = $('<td class="tableData">'+apartment.guestNumber+'</td>');

@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.web.grupa8.services;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
@@ -8,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -37,6 +39,16 @@ public class ReservationService {
 			String contextPath = ctx.getRealPath("/");
 			ctx.setAttribute("reservationDAO", new ReservationDAO(contextPath));
 		}
+	}
+	
+	@GET
+	@Path("/reservationsGuest")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> getallGuestReservations(@Context HttpServletRequest request) throws ServletException, IOException{
+		HttpSession session = request.getSession();
+		Guest g = (Guest) session.getAttribute("user");
+		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
+		return reservationDAO.getAllByGuest(g.getFirstname());
 	}
 	
 	@POST

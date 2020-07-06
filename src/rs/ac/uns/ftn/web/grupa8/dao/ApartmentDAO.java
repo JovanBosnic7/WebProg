@@ -3,12 +3,12 @@ package rs.ac.uns.ftn.web.grupa8.dao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Amenities;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
+import rs.ac.uns.ftn.web.grupa8.beans.enums.ApartmentStatus;
 
 public class ApartmentDAO {
 
@@ -91,7 +92,54 @@ public class ApartmentDAO {
 		});
 		return allApartments;
 	}
+	
+	public Collection<Apartment> getAllActive() {
+		List<Apartment> allApartments = new ArrayList<Apartment>();
+		apartments.values().forEach(a -> {
+			if (!a.isDeleted() && a.getApartmentStatus() == ApartmentStatus.ACTIVE)
+				allApartments.add(a);
+		});
+		return allApartments;
+	}
 
+	public Collection<Apartment> searchActiveApartments(Date startDate, Date endDate, String location, double startPrice, double endPrice, int roomNumberFrom, int roomNumberTill, int guestNumber){
+		Collection<Apartment> activeApartments = getAllActive();
+		Boolean flag = false;
+		if(startDate != null && endDate != null) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(
+					a -> a.getRentDates().stream().anyMatch(r -> r.getDate().compareTo(startDate) >= 0)
+					&& a.getRentDates().stream().anyMatch(r -> r.getDate().compareTo(endDate) < 0)).collect(Collectors.toList());
+		}
+		
+		if(!location.equals("")) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(a-> a.getLocation().getAddress().getCity().toLowerCase().contains(location)
+					|| a.getLocation().getAddress().getStreet().toLowerCase().contains(location)).collect(Collectors.toList());
+		}
+		
+		if(startPrice != 0 || endPrice != 0) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(a-> a.getPriceByNight() >= startPrice
+					&& a.getPriceByNight() <= endPrice).collect(Collectors.toList());
+		}
+		
+		if(roomNumberFrom != 0 || roomNumberTill != 0) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(a-> a.getRoomNumber() >= roomNumberFrom
+					&& a.getRoomNumber() <= roomNumberTill).collect(Collectors.toList());
+		}
+		
+		if(guestNumber != 0) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(a-> a.getGuestNumber() >= guestNumber).collect(Collectors.toList());
+		}
+		if(flag)
+			return activeApartments;
+		else
+			return new ArrayList<Apartment>();
+	}
+	
 	public Apartment getById(int id) {
 		Apartment apartment = apartments.getOrDefault(id, null);
 

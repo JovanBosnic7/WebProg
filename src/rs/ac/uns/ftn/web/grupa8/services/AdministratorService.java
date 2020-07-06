@@ -96,7 +96,7 @@ public class AdministratorService {
 		
 		UserDAO userDAO = (UserDAO) ctx.getAttribute("userDAO");
 		for(User u : userDAO.getAll()) {
-			if(u.getAccountType() == accountType || u.getGender() == gen || u.getUsername().contains(un)) {
+			if(u.getAccountType() == accountType && u.getGender() == gen && u.getUsername().contains(un)) {
 				users.add(u);
 			}
 		}

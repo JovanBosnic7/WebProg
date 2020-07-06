@@ -51,7 +51,7 @@ $(document).ready(function(){
 	});
 	  $.ajax({
 		type : "get",
-		url : "rest/reservations",
+		url : "rest/reservationsGuest",
 		contentType : "application/json",
 		success : function(response){
 			$('#tableReservations tbody').empty();

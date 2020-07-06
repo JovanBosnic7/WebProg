@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
-
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -16,13 +16,15 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import rs.ac.uns.ftn.web.grupa8.beans.entities.Amenities;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentComment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
@@ -66,6 +68,15 @@ public class ApartmentService {
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		return apartmentDAO.getAll();
 	}
+	
+	@GET
+	@Path("/apartmentsActive")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> getAllActiveApartments() {
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
+		return apartmentDAO.getAllActive();
+	}
 
 	@POST
 	@Path("/addApartment")
@@ -75,6 +86,40 @@ public class ApartmentService {
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		apartmentDAO.add(a);
 		return apartmentDAO.getAll();
+	}
+	
+	@POST
+	@Path("/searchActiveApartments")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchActiveApartments(JsonNode obj) throws ServletException, IOException {
+		long start = obj.get("startDate").asLong(0);
+		Date startDate = null;
+		if(start != 0) {
+			startDate = new Date(start);
+		}
+		Date endDate = null;
+		long end = obj.get("endDate").asLong(0);
+		if(end != 0) {
+			endDate = new Date(end);
+		}
+		String location = obj.get("location").asText("");
+		location = location.trim();
+		location = location.toLowerCase();
+		double startPrice = obj.get("startPrice").asDouble(0);
+		double endPrice = obj.get("endPrice").asDouble(0);
+		int roomNumberFrom = obj.get("roomNumberFrom").asInt(0);
+		int roomNumberTill = obj.get("roomNumberTill").asInt(0);
+		int guestNumber = obj.get("guestNumber").asInt(0);
+		System.out.println(startDate +"\n" + endDate + "\n" + location + "\n" +
+				+ startPrice + "\n" + endPrice + "\n" + roomNumberFrom + "\n" + roomNumberTill + "\n"+ guestNumber);
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
+		Collection<Apartment> searched = apartmentDAO.searchActiveApartments(startDate, endDate, location, startPrice, endPrice, roomNumberFrom, roomNumberTill, guestNumber);
+		if(searched.isEmpty()) {
+			return Response.status(400).entity("Ne postoje apartmani koji zadovoljavaju kriterijume pretrage")
+					.build();
+		}
+		return Response.ok(searched).status(200).build();
 	}
 	
 	@GET

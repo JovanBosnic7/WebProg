@@ -54,6 +54,7 @@ width: 500px;
 .carousel-inner > .item > img {
   width:400px;
   height:auto;
+  max-height: 300px;
 }
 
 .modal {
