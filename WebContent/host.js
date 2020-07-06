@@ -72,63 +72,107 @@ $(document).ready(function() {
 	});	
 	
 	$('form#filterApartments').submit(function(event){
-		  	event.preventDefault();
-			var startDate = new Date($('#inputcheckInDate').val());
-			var endDate = new Date($('#inputcheckOutDate').val());
-			var filteredApartments = apartments;
-			if(!isNaN(startDate) && !isNaN(endDate)){
-				if(startDate > endDate){
-				alert('Datum odlaska ne može biti pre datuma dolaska! Molimo proverite Vaš unos.');
-				return;
-				}
-				filteredApartments = searchByDate(filteredApartments);
-			}
-			var location = $('#inputLocation').val();
-			if(location.length > 0){
-				filteredApartments = searchByLocation(filteredApartments);
-			}
-			
-			var startPrice = $('#inputpriceByNightFrom').val();
-			var endPrice = $('#inputpriceByNightTill').val();
-			startPrice = parseFloat(startPrice);
-			endPrice = parseFloat(endPrice);
-			if(!isNaN(startPrice) && !isNaN(endPrice)){
-				if(startPrice > endPrice){
-					alert('Neispravno unet cenovni rang');
-					return;
-				}
-				filteredApartments = searchByPrice(filteredApartments);
-			}
-			
-			var roomNumberFrom = $('#inputroomNumberFrom').val();
-			var roomNumberTill = $('#inputroomNumberTill').val();
-			roomNumberFrom = parseInt(roomNumberFrom);
-			roomNumberTill = parseInt(roomNumberTill);
-			if(!isNaN(roomNumberFrom) && !isNaN(roomNumberTill)){
-				if(roomNumberFrom > roomNumberTill){
-					alert('Neispravno unet broj soba');
-					return;
-				}
-				filteredApartments = searchByRoomNumber(filteredApartments);
-			}
-			
-			var guestNumber = $('#inputguestNumber').val();
-			
-			if(guestNumber.length > 0){
-				filteredApartments = searchByGuestNumber(filteredApartments);
-			}
-			
-			$('#tableApartments tbody').empty();
-			for(var filteredA of filteredApartments){
-            	addApartment(filteredA);
-            }
-			
+		event.preventDefault();
+	  var startDate = new Date($('#inputcheckInDate').val());
+	  var endDate = new Date($('#inputcheckOutDate').val());
+	  //var filteredApartments = apartments;
+	  if(!isNaN(startDate) && !isNaN(endDate)){
+		  if(startDate > endDate){
+		  alert('Datum odlaska ne može biti pre datuma dolaska! Molimo proverite Vaš unos.');
+		  return;
+		  }
+		  //filteredApartments = searchByDate(filteredApartments);
+		  startDate = startDate.getTime();
+		  endDate = endDate.getTime();	
+	  }
+	  
+	  var location = $('#inputLocation').val();
+	  /*if(location.length > 0){
+		  filteredApartments = searchByLocation(filteredApartments);
+	  }*/
+	  
+	  var startPrice = $('#inputpriceByNightFrom').val();
+	  var endPrice = $('#inputpriceByNightTill').val();
+	  startPrice = parseFloat(startPrice);
+	  endPrice = parseFloat(endPrice);
+	  if(!isNaN(startPrice) && !isNaN(endPrice)){
+		  if(startPrice > endPrice){
+			  alert('Neispravno unet cenovni rang');
+			  return;
+		  }
+
+		  //filteredApartments = searchByPrice(filteredApartments);
+	  }
+	  
+	  var roomNumberFrom = $('#inputroomNumberFrom').val();
+	  var roomNumberTill = $('#inputroomNumberTill').val();
+	  roomNumberFrom = parseInt(roomNumberFrom);
+	  roomNumberTill = parseInt(roomNumberTill);
+	  if(!isNaN(roomNumberFrom) && !isNaN(roomNumberTill)){
+		  if(roomNumberFrom > roomNumberTill){
+			  alert('Neispravno unet broj soba');
+			  return;
+		  }
+		  //filteredApartments = searchByRoomNumber(filteredApartments);
+	  }
+	  
+	  var guestNumber = $('#inputguestNumber').val();
+	  if(guestNumber == '6plus'){
+		  guestNumber = 7;
+	  }
+	  else{
+		  guestNumber = parseInt(guestNumber);
+	  }
+	  /*if(guestNumber.length > 0){
+		  filteredApartments = searchByGuestNumber(filteredApartments);
+	  }*/
+
+	  var searchParams = {
+		  startDate : startDate,
+		  endDate : endDate,
+		  location : location,
+		  startPrice : startPrice,
+		  endPrice : endPrice,
+		  roomNumberFrom : roomNumberFrom,
+		  roomNumberTill : roomNumberTill,
+		  guestNumber : guestNumber
+	  };
+	  
+	  $.ajax({
+		  type : "POST",
+		  url : "rest/searchActiveApartments",
+		  contentType : "application/json",
+		  data : JSON.stringify(searchParams),
+		  success : function(response){
+			  $('#tableApartments tbody').empty();
+			  $('#tableApartmentsInactive tbody').empty();
+			  for(var apartment of response){
+				  if(apartment.apartmentStatus == 'ACTIVE'){
+				  addApartment(apartment);
+				  }
+			  }
 			$('#searchModal').modal('toggle');
 			$('#showUsers').hide();
-       		 $('#showApartments').show();
+			$('#showApartmentsInactive').hide();
+       		$('#showApartments').show();
        	 	$('#showReservations').hide();
 			$('#showComments').hide();
-        });
+		   },
+		   error: function(message){
+			  $('#tableApartments tbody').empty();
+			  $('#tableApartmentsInactive tbody').empty();
+			  $('#searchModal').modal('toggle');
+			  $('#showUsers').hide();
+			  $('#showApartmentsInactive').hide();
+			  $('#showApartments').show();
+			  $('#showReservations').hide();
+			  $('#showComments').hide();
+			  alert(message.responseText);
+		   }
+	   });
+  });
+			
+			
 	  
 	  function searchByGuestNumber(apartmentList){
 		  return apartmentList.filter(function (a) {
@@ -420,11 +464,12 @@ $(document).ready(function() {
 		 
 		 $.ajax({
 			type : 'POST',
-			url : 'rest/updateApartment',
+			url : 'rest/updateApartmentHost',
 			data : JSON.stringify(apartmentedit),
 			contentType : 'application/json',
 			success : function(response) {
 				$('#tableApartments tbody').empty();
+				$('#tableApartmentsInactive tbody').empty();
 				apartments.length = 0;
 				for(var a of response) {
 					if(a.host.username == currentUser.username){
@@ -1054,17 +1099,19 @@ function validateAddApartmentInputs(){
 			});
 	  });
 
-    $('#showUsers').hide();
+	$('#showUsers').hide();
+	$('#showApartmentsInactive').hide();
     $('#showApartments').show();
     $('#showReservations').hide();
     $('#showComments').hide();
     
     $.ajax({
         type : "get",
-        url : "rest/apartments",
+        url : "rest/apartmentsByHost",
         contentType : "application/json",
         success : function(response){
 			$('#tableApartments tbody').empty();
+			$('#tableApartmentsInactive tbody').empty();
 			apartments.length = 0;
             for(var apartment of response){
                 if(apartment.host.username == currentUser.username){			
@@ -1116,6 +1163,7 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 		success : function(response) {
 			alert("Aparmtan sa id: " + id + " je obrisan!");
 			$('#tableApartments tbody').empty();
+			$('#tableApartmentsInactive tbody').empty();
 			for(var a of response) {
 				if(a.host.username == currentUser.username){
 					apartments.push(a);
@@ -1285,7 +1333,8 @@ $(document).on("click", "a.acceptReservationLink", function(){
  
     $('#openUsers').click(function(){
     $('#showUsers').show();
-    $('#showApartments').hide();
+	$('#showApartments').hide();
+	$('#showApartmentsInactive').hide();
     $('#showReservations').hide();
 	$('#showComments').hide();
 	$('#inputGenderSearch').val("MALE");
@@ -1311,14 +1360,39 @@ $(document).on("click", "a.acceptReservationLink", function(){
     $('#openApratments').click(function(){
         $('#showUsers').hide();
         $('#showApartments').show();
+		$('#showReservations').hide();
+		$('#showApartmentsInactive').hide();
+		$('#showComments').hide();
+		$.ajax({
+			type : "get",
+			url : "rest/apartmentsByHost",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableApartments tbody').empty();
+				$('#tableApartmentsInactive tbody').empty();
+				apartments.length = 0;
+				for(var apartment of response){
+					if(apartment.host.username == currentUser.username){			
+						apartments.push(apartment); 
+						addApartment(apartment);
+					}   
+				}	
+		 }
+	  });
+
+	  $('#openApratmentsInactive').click(function(){
+        $('#showUsers').hide();
+		$('#showApartments').hide();
+		$('#showApartmentsInactive').show();
         $('#showReservations').hide();
 		$('#showComments').hide();
 		$.ajax({
 			type : "get",
-			url : "rest/apartments",
+			url : "rest/apartmentsByHost",
 			contentType : "application/json",
 			success : function(response){
 				$('#tableApartments tbody').empty();
+				$('#tableApartmentsInactive tbody').empty();
 				apartments.length = 0;
 				for(var apartment of response){
 					if(apartment.host.username == currentUser.username){			
@@ -1332,15 +1406,17 @@ $(document).on("click", "a.acceptReservationLink", function(){
         }); 
     $('#homePage').click(function(){
         $('#showUsers').hide();
-        $('#showApartments').show();
+		$('#showApartments').show();
+		$('#showApartmentsInactive').hide();
         $('#showReservations').hide();
 		$('#showComments').hide();
 		$.ajax({
 			type : "get",
-			url : "rest/apartments",
+			url : "rest/apartmentsByHost",
 			contentType : "application/json",
 			success : function(response){
 				$('#tableApartments tbody').empty();
+				$('#tableApartmentsInactive tbody').empty();
 				apartments.length = 0;
 				for(var apartment of response){
 					if(apartment.host.username == currentUser.username){			
@@ -1353,7 +1429,8 @@ $(document).on("click", "a.acceptReservationLink", function(){
     });
     $('#openReservations').click(function(){
         $('#showUsers').hide();
-        $('#showApartments').hide();
+		$('#showApartments').hide();
+		$('#showApartmentsInactive').hide();
         $('#showReservations').show();
 		$('#showComments').hide();
 		$('#inputUsernameSearchGuest').val("");
@@ -1394,7 +1471,8 @@ $(document).on("click", "a.acceptReservationLink", function(){
 	});
     $('#openComments').click(function(){
         $('#showUsers').hide();
-        $('#showApartments').hide();
+		$('#showApartments').hide();
+		$('#showApartmentsInactive').hide();
         $('#showReservations').hide();
 		$('#showComments').show();
 		$.ajax({
@@ -1412,6 +1490,7 @@ $(document).on("click", "a.acceptReservationLink", function(){
 		 }
 		});
     });
+});
 });
 
 function addAmenities(amenities){
@@ -1514,8 +1593,12 @@ function addUser(user){
     
 
 function addApartment(apartment){
-    var tr = $('<tr class="tableRow"></tr>');	
-    var image = $('<td><img class="img-fluid img-thumbnail" alt="Slika" src="'+apartment.imagePaths[0]+'"</img></td>');
+    var tr = $('<tr class="tableRow"></tr>');
+    var imgPath ="placeholder-img.jpg";
+	if(apartment.imagePaths.length > 0){
+		imgPath=apartment.imagePaths[0];
+	}
+	var image = $('<td><img class="img-fluid img-thumbnail" alt="Slika" src="'+imgPath+'"</img></td>');
     var name = $('<td class="tableData">'+apartment.name+'</td>');
     var roomNumber = $('<td class="tableData">'+apartment.roomNumber+'</td>');
     var guestNumber = $('<td class="tableData">'+apartment.guestNumber+'</td>');
@@ -1531,7 +1614,12 @@ function addApartment(apartment){
     var brisanje = $('<td class="tableData"><a class="deleteApartmentLink" id="' + apartment.id + '" style="color: white; cursor:pointer;"><span class="glyphicon glyphicon-trash"></span>Brisanje</a></td> ');
     var izmena = $('<td class="tableData"><a  class="editApartmentLink" data-target="#editApartmentModal" data-toggle="modal" style="color: white;" id="' + apartment.id + '"><span class="glyphicon glyphicon-edit"></span>Izmena</a></td> ');
     tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host).append(brisanje).append(izmena);
-     $('#tableApartments tbody').append(tr);
+	if(apartment.apartmentStatus == 'ACTIVE'){
+		$('#tableApartments tbody').append(tr);
+	}
+	else{
+		$('#tableApartmentsInactive tbody').append(tr);
+	}
 }
 function sortTable() {
 	var table, rows, switching, i, x, y, shouldSwitch;
@@ -1635,6 +1723,7 @@ function sortTable() {
 	  }
 	}
   }
+  
   function sortReservationsDescending() {
 	var table, rows, switching, i, x, y, shouldSwitch;
 	table = document.getElementById("tableReservations");

@@ -88,6 +88,15 @@ public class CommentDAO {
 		});
 		return allComments;
 	}
+	
+	public Collection<ApartmentComment> getAllByUser(String username) {
+		List<ApartmentComment> allComments = new ArrayList<ApartmentComment>();
+		comments.values().forEach(c -> {
+			if (!c.isDeleted() && c.getGuest().getUsername().equals(username))
+				allComments.add(c);
+		});
+		return allComments;
+	}
 
 	public ApartmentComment getById(int id) {
 		ApartmentComment comment = comments.getOrDefault(id, null);

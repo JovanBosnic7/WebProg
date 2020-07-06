@@ -23,17 +23,24 @@
       
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-			  <a class="dropdown-toggle" id="userAccount" data-toggle="dropdown">
-			  <span class="glyphicon glyphicon-user"></span><span id="usersName"></span></a>
-			  <ul class="dropdown-menu">
-				<li><a id="editUser" data-target="#editUserModal" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span>Izmena podataka</a></li>
-				<li><a id="logout"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>
-				</ul>
-			</li>
+              <a class="dropdown-toggle" id="userAccount" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-user"></span><span id="usersName"></span></a>
+              <ul class="dropdown-menu">
+                <li><a id="editUser" data-target="#editUserModal" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span>Izmena podataka</a></li>
+                <li><a id="logout"><span class="glyphicon glyphicon-log-out"></span>Odjava</a></li>
+              </ul>
+			      </li>
             </ul>
             <ul class="nav navbar-nav navbar-left">
               <li><a href="#" id ="openUsers" ><span class="glyphicon glyphicon-user"></span>Prikaz svih korisnika</a></li>
-              <li><a href="#" id="openApratments" ><span class="glyphicon glyphicon-bed"></span>Prikaz svih apartmana</a></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" id="apartmentShow" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-bed"><span style="font-size: 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">Prikaz apartmana</span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#" id="openApratments" ><span class="glyphicon glyphicon-bed"></span>Prikaz aktivnih apartmana</a></li>
+                  <li><a href="#" id="openApratmentsInactive" ><span class="glyphicon glyphicon-bed"></span>Prikaz neaktivnih apartmana</a></li>
+                </ul>
+              </li>
               <li><a href="#" id= "openReservations" ><span class="glyphicon glyphicon-calendar"></span>Prikaz svih rezervacija</a></li>
               <li><a href="#" id="openComments" ><span class="glyphicon glyphicon-comment"></span>Prikaz svih komentara</a></li>
               <li><a href="#" id="openAddApartment" data-target="#addApartmentModal" data-toggle="modal" ><span class="glyphicon glyphicon-plus"></span>Dodavanje novog apartmana</a></li>
@@ -117,6 +124,36 @@
             <p><button id = "sortApartments" title="Sortiraj po ceni rastuće"  class= "glyphicon glyphicon-arrow-up" > </button></p>                 
             <p><button id = "sortApartmentsDescending" title ="Sortiraj po ceni opadajuće"  class= "glyphicon glyphicon-arrow-down" > </button></p>    
           </div> 
+        </div>
+
+        <!-- -----------------------------------------InactiveApartmentTable -------------------------------------------------------------------->
+
+        <div class="container" id = "showApartmentsInactive">
+          <div class="row">
+            <div class="col-12">
+                <table id="tableApartmentsInactive" class="table table-image">
+                  <thead style="background-color: black;">
+                  <tr style="font-weight: bold; color: lightgrey; " class="table-active">
+                      <th style="width: 400px;" scope="col">Prikaz smeštaja</th>
+                      <th style="width: 200px;" scope="col">Naziv</th>
+                      <th style="width: 200px;" scope="col"> Broj soba</th>
+                      <th  style="width: 200px;"scope="col">Broj gostiju</th>
+                      <th style="width: 400px;" scope="col">Lokacija</th>
+                      <th style="width: 200px;" scope="col">Tip smeštaja</th>
+                      <th style="width: 350px;" scope="col">Cena po noćenju</th>
+                      <th style="width: 300px;" scope="col">Domaćin</th>  
+                      <th style="width: 200px;" scope="col">Brisanje</th>
+                      <th style="width: 200px;" scope="col">Izmena</th>  
+                        
+                      
+                  </tr>
+                  </thead>
+                  <tbody>
+                   
+                  </tbody>
+                </table>   
+            </div>
+          </div>
         </div>
           <!-- -----------------------------------------ReservationTable -------------------------------------------------------------------->
 

@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -16,7 +18,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -29,6 +30,7 @@ import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentComment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
+import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
 import rs.ac.uns.ftn.web.grupa8.dao.ApartmentDAO;
 import rs.ac.uns.ftn.web.grupa8.dao.CommentDAO;
@@ -241,6 +243,29 @@ public class ApartmentService {
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		apartmentDAO.update(a);
 		return apartmentDAO.getAll();
+	}
+	
+	@GET
+	@Path("/apartmentsByHost")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> apartmentsByHost(@Context HttpServletRequest request) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		Host h = (Host) session.getAttribute("user");
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
+		return apartmentDAO.getAll().stream().filter(a -> a.getHost().getUsername().equals(h.getUsername())).collect(Collectors.toList());
+	}
+	
+	@POST
+	@Path("/updateApartmentHost")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> updateApartmentHost(Apartment ap, @Context HttpServletRequest request) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		Host h = (Host) session.getAttribute("user");
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
+		apartmentDAO.update(ap);
+		return apartmentDAO.getAll().stream().filter(a -> a.getHost().getUsername().equals(h.getUsername())).collect(Collectors.toList());
 	}
 
 }

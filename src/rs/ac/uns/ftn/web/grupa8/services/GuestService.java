@@ -1,9 +1,13 @@
 package rs.ac.uns.ftn.web.grupa8.services;
 
+import java.io.IOException;
 import java.util.Collection; 
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -51,6 +55,16 @@ public class GuestService {
 			System.out.println(contextPath);
 			ctx.setAttribute("commentDAO", new CommentDAO(contextPath));
 		}
+	}
+	
+	@GET
+	@Path("/commentsByUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<ApartmentComment> getAllUserComments(@Context HttpServletRequest request) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		CommentDAO commentDAO = (CommentDAO) ctx.getAttribute("commentDAO");
+		return commentDAO.getAllByUser(user.getUsername());
 	}
 	
 	@POST

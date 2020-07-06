@@ -37,7 +37,7 @@ $(document).ready(function(){
 	  });
 	  $.ajax({
 		type : "get",
-		url : "rest/comments",
+		url : "rest/commentsByUser",
 		contentType : "application/json",
 		success : function(response){
 			$('#tableComments tbody').empty();
