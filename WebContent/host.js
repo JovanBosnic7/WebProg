@@ -7,6 +7,7 @@ var latinPatternlonglat = new RegExp("^[0-9.]+$");
 var status = 'none';
 var apartments = [];
 var guests = [];
+var images = [];
 $(document).ready(function() {
 
 	$.ajax({
@@ -324,7 +325,20 @@ $(document).ready(function() {
 				}
 			}
 		}
-
+		
+		var f = $('#formImageEdit');
+		var fileNames=[];
+		var inputedFiles = f[0].files;
+		for(var i=0; i<inputedFiles.length; i++){
+			uploadImage(f[0].files[i]);
+			fileNames.push(inputedFiles[i].name);
+		}
+		
+		var paths = fileNames;
+		console.log(images);
+		for(img of images){
+			paths.push(img);
+		}
 		
 		var addressedit = {
 			"street" : streetedit,
@@ -348,7 +362,8 @@ $(document).ready(function() {
 			"priceByNight" : priceedit,
 			"apartmentStatus" : status,
 			"amenities" : amenitiesList,
-			"deleted" : 'false'
+			"deleted" : 'false',
+			"imagePaths" : paths
 		 }
 		 
 		 $.ajax({
@@ -595,6 +610,16 @@ $(document).ready(function() {
 		});
   });
 
+  function uploadImage(file) {
+	$.ajax({
+		url : 'rest/imageUpload?name='+file.name,
+		type : "POST",
+		contentType : "multipart/form-data",
+		data : file,
+		processData : false
+	});
+}
+
 	$('form#formAddApratment').submit(function(event){
 		event.preventDefault();
 
@@ -603,6 +628,13 @@ $(document).ready(function() {
 			return;
 		}
 
+		var f = $('#formImage');
+		var fileNames=[];
+		var inputedFiles = f[0].files;
+		for(var i=0; i<inputedFiles.length; i++){
+			uploadImage(f[0].files[i]);
+			fileNames.push(inputedFiles[i].name);
+		}
 		let id = $('input#inputId').val();
 		let name = $('#inputName').val();
 		let type = $('#apartmentTypeInput').val();
@@ -641,6 +673,8 @@ $(document).ready(function() {
 			"address" : address
 		}
 		
+		console.log(fileNames);
+		
 		var apartment = {
 			"id": id,
 			"name": name,
@@ -652,7 +686,8 @@ $(document).ready(function() {
 			"priceByNight" : price,
 			"apartmentStatus" : 'INACTIVE',
 			"amenities" : amenitiesList,
-			"deleted" : 'false'
+			"deleted" : 'false',
+			"imagePaths" : fileNames
 		 }
 		 $.ajax({
 			type : 'POST',
@@ -1110,7 +1145,14 @@ $(document).on("click", "a.acceptReservationLink", function(){
 				"id" :id
 			}),
 			contentType : 'application/json',
-			success : function(response) {				
+			success : function(response) {	
+			
+			if(Array.isArray(response.imagePaths)){
+				for(im of response.imagePaths){
+					images.push(im);
+				}
+			}	
+
 			var	editApartment= response;
 			var amenitiesListApartment = editApartment.amenities;
 			

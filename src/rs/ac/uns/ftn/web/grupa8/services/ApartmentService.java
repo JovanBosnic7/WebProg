@@ -1,6 +1,10 @@
 package rs.ac.uns.ftn.web.grupa8.services;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
@@ -8,7 +12,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -57,6 +60,29 @@ public class ApartmentService {
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		 apartmentDAO.add(a);
 		 return apartmentDAO.getAll();
+	}
+	
+	@POST
+	@Path("/imageUpload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public void upload(@Context HttpServletRequest request,
+			InputStream fileInputStream, @QueryParam("name") String name) throws Exception {
+		String imageName = name;
+		System.out.println(imageName);
+		try {
+			System.out.println(ctx.getRealPath(""));
+			OutputStream outpuStream = new FileOutputStream(new File(
+					ctx.getRealPath("/") + imageName));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			while ((read = fileInputStream.read(bytes)) != -1) {
+				outpuStream.write(bytes, 0, read);
+			}
+			outpuStream.flush();
+			outpuStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@POST

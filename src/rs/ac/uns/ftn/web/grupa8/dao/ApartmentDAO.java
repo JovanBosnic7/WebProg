@@ -135,8 +135,8 @@ public class ApartmentDAO {
 			if (id > maxId)
 				maxId = id;
 		}
-		apartment.setCheckInTime(LocalTime.of(14, 0));
-		apartment.setCheckOutTime(LocalTime.of(10, 0));
+		apartment.setCheckInTime(14);
+		apartment.setCheckOutTime(10);
 		apartment.setId(++maxId);
 		apartments.put(apartment.getId(), apartment);
 		saveApartments();

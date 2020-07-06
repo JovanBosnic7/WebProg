@@ -29,8 +29,8 @@ public class Apartment implements Serializable {
 	private List<ApartmentComment> comments;
 	private List<String> imagePaths;
 	private double priceByNight;
-	private LocalTime checkInTime;
-	private LocalTime checkOutTime;
+	private int checkInTime;
+	private int checkOutTime;
 	private ApartmentStatus apartmentStatus;
 	private List<Amenities> amenities;
 	@JsonIgnoreProperties(value = {"apartment"})
@@ -50,14 +50,14 @@ public class Apartment implements Serializable {
 			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities,
 			List<Reservation> reservations, Boolean deleted, String name) {
 		this(id, apartmentType, roomNumber, guestNumber, location, rentDates, host, comments,
-				imagePaths, priceByNight, apartmentStatus, amenities, reservations, deleted, LocalTime.of(14, 0),
-				LocalTime.of(10, 0), name);
+				imagePaths, priceByNight, apartmentStatus, amenities, reservations, deleted, 14,
+				10, name);
 	}
 
 	public Apartment(int id, ApartmentType apartmentType, int roomNumber, int guestNumber, Location location,
 			List<ApartmentRentDate> rentDates, Host host, List<ApartmentComment> comments,
 			List<String> imagePaths, double priceByNight, ApartmentStatus apartmentStatus, List<Amenities> amenities,
-			List<Reservation> reservations, Boolean deleted, LocalTime checkInTime, LocalTime checkOutTime, String name) {
+			List<Reservation> reservations, Boolean deleted, int checkInTime, int checkOutTime, String name) {
 		this.id = id;
 		this.apartmentType = apartmentType;
 		this.roomNumber = roomNumber;
@@ -168,19 +168,19 @@ public class Apartment implements Serializable {
 		this.priceByNight = priceByNight;
 	}
 
-	public LocalTime getCheckInTime() {
+	public int getCheckInTime() {
 		return checkInTime;
 	}
 
-	public void setCheckInTime(LocalTime checkInTime) {
+	public void setCheckInTime(int checkInTime) {
 		this.checkInTime = checkInTime;
 	}
 
-	public LocalTime getCheckOutTime() {
+	public int getCheckOutTime() {
 		return checkOutTime;
 	}
 
-	public void setCheckOutTime(LocalTime checkOutTime) {
+	public void setCheckOutTime(int checkOutTime) {
 		this.checkOutTime = checkOutTime;
 	}
 
