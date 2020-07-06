@@ -71,20 +71,14 @@
             <label style="font-size:17px;" class="label label-default">Pretraga korisnika</label>
             <div class="form-group"></div>
             <form id="formSearchUser">
-              <div class="form-inline">
-                  <label style="font-size:15px;" class="label label-default">Odaberite ulogu korisnika:</label>
-                  <select class="form-control" name="typeOfUser" id="inputTypeOfUser">
-                    <option value="ADMINISTRATOR">Administrator</option>
-                    <option value="GUEST">Gost</option>
-                    <option value="HOST">Domaćin</option>                  
-                  </select>             
+              <div class="form-inline">             
                 <label style="font-size:15px;" class="label label-default">Odaberite pol korisnika:</label>
-                <select class="form-control" name="gender" id="inputGender">
+                <select class="form-control" name="gender" id="inputGenderSearch">
                   <option value="MALE">Muški</option>
                   <option value="FEMALE">Ženski</option>
                   <option value="UNDEFINED">Ne želim da odgovorim</option>                
                 </select>          
-              <input style="width: 200px;" class="form-control" placeholder="Unesite korisničko ime" name="username" type="text" id="inputUsername">          
+              <input style="width: 200px;" class="form-control" placeholder="Unesite korisničko ime" name="username" type="text" id="inputUsernameSearch">          
               <button style="height: 35px;" type="submit" form = "formSearchUser"  id="buttonSearchUser"><span class="glyphicon glyphicon-search"></span>Pretraga</button>
               </div>
               </form>

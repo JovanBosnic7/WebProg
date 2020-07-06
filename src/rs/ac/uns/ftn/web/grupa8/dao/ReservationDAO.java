@@ -91,6 +91,14 @@ public class ReservationDAO {
 		});
 		return reservationList;
 	}
+	public Collection<Reservation> getByHost(int id) {
+		List<Reservation> reservationList = new ArrayList<Reservation>();
+		reservations.values().forEach(a -> {
+			if (!a.isDeleted() && a.getApartment().getHost().getId() == id)
+				reservationList.add(a);
+		});
+		return reservationList;
+	}
 
 	public Reservation getById(int id) {
 		Reservation reservation = reservations.getOrDefault(id, null);
