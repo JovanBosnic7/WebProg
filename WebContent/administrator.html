@@ -171,7 +171,8 @@
                       <th style="width: 200px;" scope="col">Lokacija</th>
                       <th style="width: 200px;" scope="col">Tip smeštaja</th>
                       <th style="width: 250px;" scope="col">Cena po noćenju</th>
-                      <th style="width: 200px;" scope="col">Domaćin</th>  
+                      <th style="width: 200px;" scope="col">Status</th>
+                      <th style="width: 200px;" scope="col">Domaćin</th>   
                       <th style="width: 200px;" scope="col">Brisanje</th>
                       <th style="width: 200px;" scope="col">Izmena</th>  
                         
@@ -195,6 +196,14 @@
                 <option value="ROOM">Soba</option>
             </select>
         </div>
+        <div class="form-group">
+          <label  style="font-size:13px;" class="label label-default"for="apartmentStatus">Odaberite status:</label>
+          <select name="apartmentStatus" id="apartmentStatusInput">
+              <option value="ACTIVE">Aktivan</option>
+              <option value="INACTIVE">Neaktivan</option>
+          </select>
+      </div>
+      
         <div class="form-group" id="amenitiesInputFilter">
           
         </div>
