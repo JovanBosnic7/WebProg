@@ -22,7 +22,30 @@ $(document).ready(function() {
 				alert(message.responseText);
 			}
 	  });
+	$('form#formSearchUser').submit(function(event){
+		event.preventDefault();
+		var genderOfUser =$('#inputGenderSearch').val();
+		var usernameSearch =  $('#inputUsernameSearch').val();
+		$.ajax ({
+			type : "get",
+			url : "rest/searchUsers",
+			data : {
+				gender : genderOfUser,
+				username : usernameSearch,
+				hostid : currentUser.id
+			},
+			contentType : 'application/json',
+			success : function(response) {
+				$('#tableUsers tbody').empty();
+				for(var user of response) {
+					
+					addUser(user);
+				}
+			}
+		});
 
+	});	
+	
 	$('form#filterApartments').submit(function(event){
 		  	event.preventDefault();
 			var startDate = new Date($('#inputcheckInDate').val());
@@ -1032,8 +1055,6 @@ function validateAddApartmentInputs(){
 		console.log(response);
         for(var reservation of response){
 				if(reservation.apartment.host.username == currentUser.username){
-					
-					addUser(reservation.guest);
 					addReservation(reservation);
 				}
 			}    
@@ -1193,7 +1214,25 @@ $(document).on("click", "a.acceptReservationLink", function(){
     $('#showUsers').show();
     $('#showApartments').hide();
     $('#showReservations').hide();
-    $('#showComments').hide();
+	$('#showComments').hide();
+	$('#inputGenderSearch').val("MALE");
+	$('#inputUsernameSearch').val("");
+	$.ajax({
+		type : "get",
+		url : "rest/addUsersHost",
+		data : {
+			hostid : currentUser.id
+		},
+		contentType : "application/json",
+		success : function(response){
+			$('#tableUsers tbody').empty();
+			console.log(response);
+			for(var user of response){
+				addUser(user);      
+		}
+	 }
+	});
+
 });
     
     $('#openApratments').click(function(){
@@ -1296,7 +1335,6 @@ function addReservation(reservation){
 }
 function addUser(user){
 	
-				
 	var tr = $('<tr class="tableRow"></tr>');	
     var id = $('<td class="tableData">'+user.id+'</td>');
     var username = $('<td class="tableData">'+user.username+'</td>');

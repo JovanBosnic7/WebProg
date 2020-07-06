@@ -43,7 +43,7 @@ public class ReservationDAO {
 			File f = new File(contextPath + sr + "reservations.json");
 
 			if (!f.exists())
-				if(!f.createNewFile())
+				if (!f.createNewFile())
 					return;
 
 			mapper.writerWithDefaultPrettyPrinter().writeValue(f, new ArrayList<Reservation>(reservations.values()));
@@ -92,15 +92,24 @@ public class ReservationDAO {
 		});
 		return reservationList;
 	}
-	
+
 	public Collection<Reservation> getByApartment(int id, String username) {
 		List<Reservation> reservationList = new ArrayList<Reservation>();
 		reservations.values().forEach(a -> {
 			if (!a.isDeleted() && a.getApartment().getId() == id && a.getGuest().getUsername().equals(username)) {
-				if(a.getStatus() == ReservationStatus.COMPLETED || a.getStatus() == ReservationStatus.REFUSED) {
+				if (a.getStatus() == ReservationStatus.COMPLETED || a.getStatus() == ReservationStatus.REFUSED) {
 					reservationList.add(a);
 				}
 			}
+		});
+		return reservationList;
+	}
+
+	public Collection<Reservation> getByHost(int id) {
+		List<Reservation> reservationList = new ArrayList<Reservation>();
+		reservations.values().forEach(a -> {
+			if (!a.isDeleted() && a.getApartment().getHost().getId() == id)
+				reservationList.add(a);
 		});
 		return reservationList;
 	}
@@ -122,7 +131,7 @@ public class ReservationDAO {
 			if (id > maxId)
 				maxId = id;
 		}
-		
+
 		Date startDate = new Date(reservation.getStartDate().getTime());
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(startDate);
@@ -131,16 +140,16 @@ public class ReservationDAO {
 		cal.setTime(startDate);
 		Date d = cal.getTime();
 		System.out.println(startDate.toString() + ' ' + endDate.toString());
-		for(ApartmentRentDate rentDate : reservation.getApartment().getRentDates()) {
-			while(d.compareTo(endDate) < 0) {
+		for (ApartmentRentDate rentDate : reservation.getApartment().getRentDates()) {
+			while (d.compareTo(endDate) < 0) {
 				int flag = rentDate.getDate().compareTo(d);
 				System.out.println(flag);
-				if(flag >= 0 && flag < 1) {
-					if(!rentDate.getAvailable()) {
+				if (flag >= 0 && flag < 1) {
+					if (!rentDate.getAvailable()) {
 						return null;
 					}
 				}
-				
+
 				cal.add(Calendar.DATE, 1);
 				d = cal.getTime();
 			}
