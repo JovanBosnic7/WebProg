@@ -259,9 +259,9 @@ $(document).ready(function() {
             $('#tableApartments tbody').empty();
             console.log(response);
             for(var apartment of response){
-                if(apartment.apartmentStatus == 'ACTIVE'){
+                
                 addApartment(apartment);
-            	}   
+            	 
          	}
      	}
  	 });
@@ -588,7 +588,7 @@ $(document).on("click", "a.editApartmentLink", function(){
 				$('#inputEditLatitude').val(editApartment.location.latitude);	
 				$('#inputEditLongitude').val(editApartment.location.longitude);
 				$('#inputEditPriceByNight').val(editApartment.priceByNight);
-	
+				$('#apartmentStatusEditInput').val(editApartment.apartmentStatus);
 	
 				if(Array.isArray(amenitiesListApartment)){
 					for(var am of amenitiesListApartment){
@@ -620,7 +620,7 @@ $(document).on("click", "a.editApartmentLink", function(){
 			let latitudeedit = $('#inputEditLatitude').val();
 			let longitudeedit = $('#inputEditLongitude').val();
 			let priceedit = $('#inputEditPriceByNight').val();
-			
+			var statusEdit = $('#apartmentStatusEditInput').val();
 			var amenitiesIDs = $("#amenitiesInputEdit input:checkbox:checked").map(function(){
 				return $(this).val();
 			  }).get();
@@ -657,7 +657,7 @@ $(document).on("click", "a.editApartmentLink", function(){
 				"location" : locationedit,
 				"priceByNight" : priceedit,
 				"host" : host,
-				"apartmentStatus" : status,
+				"apartmentStatus" : statusEdit,
 				"amenities" : amenitiesList,
 				"deleted" : 'false'
 			 }

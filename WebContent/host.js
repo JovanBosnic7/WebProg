@@ -310,7 +310,7 @@ $(document).ready(function() {
 		let latitudeedit = $('#inputEditLatitude').val();
 		let longitudeedit = $('#inputEditLongitude').val();
 		let priceedit = $('#inputEditPriceByNight').val();
-		
+		var statusEdit = $('#apartmentStatusEditInput').val();
 		var amenitiesIDs = $("#amenitiesInputEdit input:checkbox:checked").map(function(){
 			return $(this).val();
 		  }).get();
@@ -360,7 +360,7 @@ $(document).ready(function() {
 			"location" : locationedit,
 			"host" : currentUser,
 			"priceByNight" : priceedit,
-			"apartmentStatus" : status,
+			"apartmentStatus" : statusEdit,
 			"amenities" : amenitiesList,
 			"deleted" : 'false',
 			"imagePaths" : paths
@@ -380,7 +380,7 @@ $(document).ready(function() {
 						addApartment(a);
 					}
 				}
-				$('#addApartmentModal').modal('toggle');
+				$('#editApartmentModal').modal('toggle');
 				alert('Uspešno ste izmenili apartman');
 				location.reload();
 			},
@@ -1167,7 +1167,7 @@ $(document).on("click", "a.acceptReservationLink", function(){
 			$('#inputEditLatitude').val(editApartment.location.latitude);	
 			$('#inputEditLongitude').val(editApartment.location.longitude);
 			$('#inputEditPriceByNight').val(editApartment.priceByNight);
-			 status = editApartment.apartmentStatus;
+			$('#apartmentStatusEditInput').val(editApartment.apartmentStatus);
 
 			if(Array.isArray(amenitiesListApartment)){
 				for(var am of amenitiesListApartment){
