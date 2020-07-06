@@ -471,15 +471,17 @@ $(document).ready(function(){
 	  });
 
 	  function addComment(comment){
+		
 		var tr = $('<tr class="tableRow"></tr>');	
 		var id = $('<td class="tableData">'+comment.id+'</td>');
 		var guest = $('<td class="tableData">'+comment.guest.firstname+ '<br>' + comment.guest.lastname + '</td>');
 		var apartment = $('<td class="tableData">'+comment.apartment.name+'</td>');
 		var content = $('<td class="tableData">'+comment.commentText +'</td>');     
-		var grade = $('<td class="tableData">'+comment.grade+'</td>');  
+		var grade = $('<td class="tableData">'+comment.grade+'</td>');  	
 		 tr.append(id).append(guest).append(apartment).append(content).append(grade);
 		 $('#tableComments tbody').append(tr);
-	}
+	
+}
 
 	  function addReservation(reservation){
 		if(reservation.status == 'CREATED'){

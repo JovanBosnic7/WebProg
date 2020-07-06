@@ -1100,6 +1100,50 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 		}
 	});
 	});
+	$(document).on("click", "a.setVisibilityFalse", function(){
+		event.preventDefault();
+		let id = $(this).attr('id');	
+		$.ajax({
+			type : "post",
+			url : "rest/removeComment",
+			data : JSON.stringify ({
+				"id" :id
+			}),
+			contentType : 'application/json',
+			success : function(response) {
+				alert("Komentar sa id: " + id + " je uklonjen iz prikaza apartmana!");
+					$('#tableComments tbody').empty();
+					console.log(response);
+					for(var comment of response){
+						if(comment.apartment.host.username == currentUser.username){
+						addComment(comment); 
+				}
+			}			
+			}
+		});
+		});
+		$(document).on("click", "a.setVisibilityTrue", function(){
+			event.preventDefault();
+			let id = $(this).attr('id');	
+			$.ajax({
+				type : "post",
+				url : "rest/addComment",
+				data : JSON.stringify ({
+					"id" :id
+				}),
+				contentType : 'application/json',
+				success : function(response) {
+					alert("Komentar sa id: " + id + " je dodat u prikaz apartmana!");
+					$('#tableComments tbody').empty();
+					console.log(response);
+					for(var comment of response){
+						if(comment.apartment.host.username == currentUser.username){
+						addComment(comment);      
+				  }
+				}
+				}
+			});
+			});
 	$(document).on("click", "a.declineReservationLink", function(){
 		event.preventDefault();
 		let id = $(this).attr('id');	
@@ -1292,7 +1336,21 @@ $(document).on("click", "a.acceptReservationLink", function(){
         $('#showUsers').hide();
         $('#showApartments').hide();
         $('#showReservations').hide();
-        $('#showComments').show();
+		$('#showComments').show();
+		$.ajax({
+			type : "get",
+			url : "rest/comments",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableComments tbody').empty();
+				console.log(response);
+				for(var comment of response){
+					if(comment.apartment.host.username == currentUser.username){
+					addComment(comment);      
+			  }
+			}
+		 }
+		});
     });
 });
 
@@ -1313,14 +1371,28 @@ function addAmenitiesEdit(amenities){
 }
 
 function addComment(comment){
-    var tr = $('<tr class="tableRow"></tr>');	
-    var id = $('<td class="tableData">'+comment.id+'</td>');
-    var guest = $('<td class="tableData">'+comment.guest.firstname+ '<br>' + comment.guest.lastname + '</td>');
-    var apartment = $('<td class="tableData">'+comment.apartment.name+'</td>');
-    var content = $('<td class="tableData">'+comment.commentText +'</td>');     
-    var grade = $('<td class="tableData">'+comment.grade+'</td>');  
-     tr.append(id).append(guest).append(apartment).append(content).append(grade);
-     $('#tableComments tbody').append(tr);
+	if(comment.visible) {
+	var tr = $('<tr class="tableRow"></tr>');	
+	var id = $('<td class="tableData">'+comment.id+'</td>');
+	var guest = $('<td class="tableData">'+comment.guest.firstname+ '<br>' + comment.guest.lastname + '</td>');
+	var apartment = $('<td class="tableData">'+comment.apartment.name+'</td>');
+	var content = $('<td class="tableData">'+comment.commentText +'</td>');     
+	var grade = $('<td class="tableData">'+comment.grade+'</td>');  
+	var visibility = $('<td class="tableData"><a class="setVisibilityFalse" id="' + comment.id + '" href="#" style="color: white;"><span class="glyphicon glyphicon-remove"></span>Ukloni komentar</a></td> ');
+	 tr.append(id).append(guest).append(apartment).append(content).append(grade).append(visibility);
+	 $('#tableComments tbody').append(tr);
+}else if(!comment.visible){
+		var tr = $('<tr class="tableRow"></tr>');	
+		var id = $('<td class="tableData">'+comment.id+'</td>');
+		var guest = $('<td class="tableData">'+comment.guest.firstname+ '<br>' + comment.guest.lastname + '</td>');
+		var apartment = $('<td class="tableData">'+comment.apartment.name+'</td>');
+		var content = $('<td class="tableData">'+comment.commentText +'</td>');     
+		var grade = $('<td class="tableData">'+comment.grade+'</td>');  
+		var visibility = $('<td class="tableData"><a class="setVisibilityTrue" id="' + comment.id + '" href="#" style="color: white;"><span class="glyphicon glyphicon-plus"></span>Prikaži komentar</a></td> ');
+		 tr.append(id).append(guest).append(apartment).append(content).append(grade).append(visibility);
+		 $('#tableComments tbody').append(tr);
+}
+
 }
 function addReservation(reservation){
 	if(reservation.status == 'CREATED'){
