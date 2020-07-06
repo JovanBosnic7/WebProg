@@ -191,6 +191,17 @@
                 <p><button id = "sortReservations" title="Sortiraj po ceni rastuće"  class= "glyphicon glyphicon-arrow-up" > </button></p>                 
                 <p><button id = "sortReservationsDescending" title ="Sortiraj po ceni opadajuće"  class= "glyphicon glyphicon-arrow-down" > </button></p>    
               </div> 
+              <div class="form-group">
+                <label  style="font-size:13px;" class="label label-default"for="apartmentType">Odaberite status:</label>
+                <select name="status" id="statusInput">
+                    <option value="CREATED">Kreirana</option>
+                    <option value="REFUSED">Odbijena</option>
+                    <option value="CANCELED">Otkazana</option>
+                    <option value="ACCEPTED">Prihvaćena</option>
+                    <option value="COMPLETED">Završena</option>
+                </select>
+            </div>
+            <button class= "button-secondary" id ="cancelFilter">Poništavanje filtera</button>
 
           </div>
            <!-- -----------------------------------------CommentsTable -------------------------------------------------------------------->
