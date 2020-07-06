@@ -1,6 +1,8 @@
 var currentUser = 'none';
 var currentApartment = 'none';
 var enabledDates = [];
+var reservations = [];
+var currentId = 'none';
 
 $(document).ready(function(){
 	enabledDates.push(new Date());
@@ -21,12 +23,59 @@ $(document).ready(function(){
     type : "get",
     url : "rest/getApartmentClicked",
     contentType : "application/json",
+    async:false,
     success : function(response){
         currentApartment = response;
+        currentId = Number(response.id);
         $('#apartmentInfo').empty();
             addApartment(response);
         }   
     });
+
+    $('#formAddComment').submit(function(event){
+        event.preventDefault();
+        var comment = $('#inputComment').val();
+        var grade = $('#inputGrade').val();
+        var inputedData = {
+            comment : comment,
+            grade : grade,
+            apartment : currentId
+        };
+        $.ajax({
+			type : 'get',
+			url : 'rest/giveComment',
+			data : inputedData,
+			contentType : 'application/json',
+			success : function() {
+				$('#giveFeedbackModal').modal('toggle');
+				alert('Komentar uspešno ostavljen');
+			},
+			error : function(message) {
+				$('#errorCom').text(message.responseText);
+				$('#errorCom').show();
+				$('#errorCom').delay(4000).fadeOut('slow');
+			}
+		});
+    });
+
+    $.ajax({
+        type : "get",
+        contentType : "application/json",
+        url : "rest/reservationsByApartmentGuest",
+        data : {id : currentId},
+        success : function(response){
+            for(res of response){
+                reservations.push(res);
+            }
+            console.log(response);
+            if(reservations.length == 0){
+                $('#buttonFeedback').prop("disabled",true);
+            }
+         },
+        error : function(message) {
+            alert(message.responseText);
+        }
+        });
 
     $('#formAddReservation').submit(function(event){
         event.preventDefault();

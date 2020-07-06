@@ -18,20 +18,23 @@ public class ApartmentComment implements Serializable {
 	private String commentText;
 	private double grade;
 	private Boolean deleted;
-
+	private Boolean visible;
+	
 	public ApartmentComment() {
 		super();
 		this.deleted = false;
+		this.visible = false;
 	}
 
 	public ApartmentComment(int id, Guest guest, Apartment apartment, String commentText, double grade,
-			Boolean deleted) {
+			Boolean deleted, Boolean visible) {
 		this.id = id;
 		this.guest = guest;
 		this.apartment = apartment;
 		this.commentText = commentText;
 		this.grade = grade;
 		this.deleted = deleted;
+		this.visible = visible;
 	}
 
 	public int getId() {
@@ -80,6 +83,14 @@ public class ApartmentComment implements Serializable {
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public Boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
 	}
 
 }

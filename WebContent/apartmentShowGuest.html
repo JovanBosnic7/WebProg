@@ -100,7 +100,7 @@
     </div>
     <div class="flex-container-reverse">
         <button style="margin: 10px; width: 200px;"  data-target="#addReservationModal" data-toggle="modal" class="btn btn-secondary">Rezervacija</button>
-        <button style="margin: 10px; width: 200px;" class="btn btn-secondary">Ostavljanje komentara</button>
+        <button style="margin: 10px; width: 200px;" id="buttonFeedback" data-target="#giveFeedbackModal" data-toggle="modal" class="btn btn-secondary">Ostavljanje komentara</button>
     </div>
 </div>
 <div class="div-glavni">
@@ -111,6 +111,42 @@
     border: 2px solid #606060;" id="apartmentAmenities">
     </div>
 </div>
+
+<!-- -----------------------------------------Comment modal -------------------------------------------------------------------->
+
+<div>
+   
+    <div id="giveFeedbackModal" class="modal" tabindex="-1" data-backdrop="false"> 
+        <!-- Modal content -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>    
+                <h4 class="modal-title">Rezervacija apartmana</h4>
+                </div>
+                <div class="modal-body">
+                    <form id = "formAddComment" method="POST">
+                        <div class="form-group">
+                            <label style="font-size:15px;" class="label label-default">Unesite Vaše utiske:</label>
+                            <input class ="form-control" placeholder="" name="comment" type="text" id="inputComment">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:15px;" class="label label-default">Unesite ocenu:</label>
+                            <input class ="form-control" placeholder="" name="grade" type="number" min ="0" max="10" step="0.1" id="inputGrade">
+                        </div> 
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    
+                    <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                    <button  type="submit" form = "formAddComment" class="btn btn-secondary" id="buttonAddComment">Potvrda</button>
+                    
+                </div>
+          <p id="errorCom" style="color:red;"></p>
+              </div>
+            </div>
+         </div>
+        </div>
 
   
 <!-- -----------------------------------------EditUserModal -------------------------------------------------------------------->

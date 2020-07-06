@@ -22,8 +22,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Amenities;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
+import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentComment;
+import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
+import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
+import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
 import rs.ac.uns.ftn.web.grupa8.dao.ApartmentDAO;
+import rs.ac.uns.ftn.web.grupa8.dao.CommentDAO;
+import rs.ac.uns.ftn.web.grupa8.dao.ReservationDAO;
 
 @Path("")
 public class ApartmentService {
@@ -41,8 +48,16 @@ public class ApartmentService {
 			System.out.println(contextPath);
 			ctx.setAttribute("apartmentDAO", new ApartmentDAO(contextPath));
 		}
+		if (ctx.getAttribute("reservationDAO") == null) {
+			String contextPath = ctx.getRealPath("/");
+			ctx.setAttribute("reservationDAO", new ReservationDAO(contextPath));
+		}
+		if (ctx.getAttribute("commentDAO") == null) {
+			String contextPath = ctx.getRealPath("/");
+			ctx.setAttribute("commentDAO", new CommentDAO(contextPath));
+		}
 	}
-	
+
 	@GET
 	@Path("/apartments")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -51,28 +66,52 @@ public class ApartmentService {
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		return apartmentDAO.getAll();
 	}
-	
+
 	@POST
 	@Path("/addApartment")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> addApartment(Apartment a) {
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
-		 apartmentDAO.add(a);
-		 return apartmentDAO.getAll();
+		apartmentDAO.add(a);
+		return apartmentDAO.getAll();
 	}
 	
+	@GET
+	@Path("/giveComment")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response giveComment(@QueryParam("comment") String comment, @QueryParam("grade") double grade, @QueryParam("apartment") int apartment, @Context HttpServletRequest request) throws ServletException, IOException {
+		System.out.println("Komentar: " + comment + " ocena: " + grade + " apartman: " + apartment);
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
+		CommentDAO commentDAO = (CommentDAO) ctx.getAttribute("commentDAO");
+		Apartment a = apartmentDAO.getById(apartment);
+		HttpSession session = request.getSession();
+		Guest g = (Guest) session.getAttribute("user");
+		ApartmentComment apComment = new ApartmentComment();
+		if (a == null)
+			return Response.status(400).entity("Apartman za koji želite da ostavite komentar, ne postoji")
+					.build();
+		else {
+			apComment.setApartment(a);
+			apComment.setCommentText(comment);
+			apComment.setGrade(grade);
+			apComment.setGuest(g);
+			commentDAO.add(apComment);
+			return Response.status(200).build();
+		}
+	}
+
 	@POST
 	@Path("/imageUpload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public void upload(@Context HttpServletRequest request,
-			InputStream fileInputStream, @QueryParam("name") String name) throws Exception {
+	public void upload(@Context HttpServletRequest request, InputStream fileInputStream,
+			@QueryParam("name") String name) throws Exception {
 		String imageName = name;
 		System.out.println(imageName);
 		try {
 			System.out.println(ctx.getRealPath(""));
-			OutputStream outpuStream = new FileOutputStream(new File(
-					ctx.getRealPath("/") + imageName));
+			OutputStream outpuStream = new FileOutputStream(new File(ctx.getRealPath("/") + imageName));
 			int read = 0;
 			byte[] bytes = new byte[1024];
 			while ((read = fileInputStream.read(bytes)) != -1) {
@@ -84,12 +123,13 @@ public class ApartmentService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@POST
 	@Path("/setApartmentClicked")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response setApartmentClicked(Apartment a, @Context HttpServletRequest request) throws ServletException, IOException {
+	public Response setApartmentClicked(Apartment a, @Context HttpServletRequest request)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		Apartment test = apartmentDAO.getById(a.getId());
@@ -99,7 +139,7 @@ public class ApartmentService {
 		session.setAttribute("apartmentClicked", test);
 		return Response.status(200).build();
 	}
-	
+
 	@GET
 	@Path("/getApartmentClicked")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -112,7 +152,7 @@ public class ApartmentService {
 		}
 		return Response.ok(test).status(200).build();
 	}
-	
+
 	@POST
 	@Path("/deleteApartment")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -121,9 +161,10 @@ public class ApartmentService {
 		int id = apart.getId();
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
 		Apartment a = apartmentDAO.getById(id);
-		 apartmentDAO.delete(a);
-		 return apartmentDAO.getAll();
+		apartmentDAO.delete(a);
+		return apartmentDAO.getAll();
 	}
+
 	@POST
 	@Path("/editApartment")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -131,17 +172,30 @@ public class ApartmentService {
 	public Apartment editApartment(Apartment apart) {
 		int id = apart.getId();
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
-		Apartment a = apartmentDAO.getById(id); 
-		 return a;
+		Apartment a = apartmentDAO.getById(id);
+		return a;
 	}
+
+	@GET
+	@Path("/reservationsByApartmentGuest")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Reservation> getReservationsByApartment(@QueryParam("id") int id, @Context HttpServletRequest request) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		User current = (User) session.getAttribute("user");
+		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
+		Collection<Reservation> retVal = reservationDAO.getByApartment(id, current.getUsername());
+		return retVal;
+	}
+
 	@POST
 	@Path("/updateApartment")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Collection<Apartment> updateApartment(Apartment a) {	
+	public Collection<Apartment> updateApartment(Apartment a) {
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
-		 apartmentDAO.update(a);
-		 return apartmentDAO.getAll();
+		apartmentDAO.update(a);
+		return apartmentDAO.getAll();
 	}
-	
+
 }

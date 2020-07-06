@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentRentDate;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
+import rs.ac.uns.ftn.web.grupa8.beans.enums.ReservationStatus;
 
 public class ReservationDAO {
 
@@ -88,6 +89,18 @@ public class ReservationDAO {
 		reservations.values().forEach(a -> {
 			if (!a.isDeleted())
 				reservationList.add(a);
+		});
+		return reservationList;
+	}
+	
+	public Collection<Reservation> getByApartment(int id, String username) {
+		List<Reservation> reservationList = new ArrayList<Reservation>();
+		reservations.values().forEach(a -> {
+			if (!a.isDeleted() && a.getApartment().getId() == id && a.getGuest().getUsername().equals(username)) {
+				if(a.getStatus() == ReservationStatus.COMPLETED || a.getStatus() == ReservationStatus.REFUSED) {
+					reservationList.add(a);
+				}
+			}
 		});
 		return reservationList;
 	}
