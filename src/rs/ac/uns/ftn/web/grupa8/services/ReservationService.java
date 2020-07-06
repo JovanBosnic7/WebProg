@@ -48,7 +48,7 @@ public class ReservationService {
 		HttpSession session = request.getSession();
 		Guest g = (Guest) session.getAttribute("user");
 		ReservationDAO reservationDAO = (ReservationDAO) ctx.getAttribute("reservationDAO");
-		return reservationDAO.getAllByGuest(g.getFirstname());
+		return reservationDAO.getAllByGuest(g.getUsername());
 	}
 	
 	@POST

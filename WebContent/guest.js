@@ -70,7 +70,7 @@ $(document).ready(function(){
 		$('#showComments').hide();
 		$.ajax({
 	        type : "get",
-	        url : "rest/apartments",
+	        url : "rest/apartmentsActive",
 	        contentType : "application/json",
 	        success : function(response){
 	            $('#tableApartmentsGuest tbody').empty();
@@ -86,12 +86,41 @@ $(document).ready(function(){
       
 	}); 
 	$('#openReservations').click(function(){
+		$.ajax({
+			type : "get",
+			url : "rest/reservationsGuest",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableReservations tbody').empty();
+				console.log(response);
+				for(var reservation of response){
+					
+					if(reservation.guest.username == currentUser.username){
+					addReservation(reservation);
+				   }
+			 }
+		 }
+		});
         $('#showApartments').hide();
 		$('#showReservations').show();
 		$('#showComments').hide();
 	});
 	$('#openComments').click(function(){
-       
+        $.ajax({
+			type : "get",
+			url : "rest/reservationsGuest",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableReservations tbody').empty();
+				console.log(response);
+				for(var reservation of response){
+					
+					if(reservation.guest.username == currentUser.username){
+					addReservation(reservation);
+				   }
+			 }
+		 }
+		});
         $('#showApartments').hide();
         $('#showReservations').hide();
         $('#showComments').show();
@@ -99,64 +128,94 @@ $(document).ready(function(){
 	
 
 	  
-	  $('form#filterApartments').submit(function(event){
-		  	event.preventDefault();
-			var startDate = new Date($('#inputcheckInDate').val());
-			var endDate = new Date($('#inputcheckOutDate').val());
-			var filteredApartments = apartments;
-			if(!isNaN(startDate) && !isNaN(endDate)){
-				if(startDate > endDate){
-				alert('Datum odlaska ne može biti pre datuma dolaska! Molimo proverite Vaš unos.');
-				return;
-				}
-				filteredApartments = searchByDate(filteredApartments);
-			}
-			var location = $('#inputLocation').val();
-			if(location.length > 0){
-				filteredApartments = searchByLocation(filteredApartments);
-			}
-			
-			var startPrice = $('#inputpriceByNightFrom').val();
-			var endPrice = $('#inputpriceByNightTill').val();
-			startPrice = parseFloat(startPrice);
-			endPrice = parseFloat(endPrice);
-			if(!isNaN(startPrice) && !isNaN(endPrice)){
-				if(startPrice > endPrice){
-					alert('Neispravno unet cenovni rang');
-					return;
-				}
-				filteredApartments = searchByPrice(filteredApartments);
-			}
-			
-			var roomNumberFrom = $('#inputroomNumberFrom').val();
-			var roomNumberTill = $('#inputroomNumberTill').val();
-			roomNumberFrom = parseInt(roomNumberFrom);
-			roomNumberTill = parseInt(roomNumberTill);
-			if(!isNaN(roomNumberFrom) && !isNaN(roomNumberTill)){
-				if(roomNumberFrom > roomNumberTill){
-					alert('Neispravno unet broj soba');
-					return;
-				}
-				filteredApartments = searchByRoomNumber(filteredApartments);
-			}
-			
-			var guestNumber = $('#inputguestNumber').val();
-			
-			if(guestNumber.length > 0){
-				filteredApartments = searchByGuestNumber(filteredApartments);
-			}
-			
-			$('#tableApartmentsGuest tbody').empty();
-			for(var filteredA of filteredApartments){
-            	addApartment(filteredA);
-            }
-			
-			$('#searchModal').modal('toggle');
-			$('#showApartments').show();
-			$('#showReservations').hide();
-			$('#showComments').hide();
+	$('form#filterApartments').submit(function(event){
+		event.preventDefault();
+	  var startDate = new Date($('#inputcheckInDate').val());
+	  var endDate = new Date($('#inputcheckOutDate').val());
+	  //var filteredApartments = apartments;
+	  if(!isNaN(startDate) && !isNaN(endDate)){
+		  if(startDate > endDate){
+		  alert('Datum odlaska ne može biti pre datuma dolaska! Molimo proverite Vaš unos.');
+		  return;
+		  }
+		  //filteredApartments = searchByDate(filteredApartments);
+		  startDate = startDate.getTime();
+		  endDate = endDate.getTime();	
+	  }
+	  
+	  var location = $('#inputLocation').val();
+	  /*if(location.length > 0){
+		  filteredApartments = searchByLocation(filteredApartments);
+	  }*/
+	  
+	  var startPrice = $('#inputpriceByNightFrom').val();
+	  var endPrice = $('#inputpriceByNightTill').val();
+	  startPrice = parseFloat(startPrice);
+	  endPrice = parseFloat(endPrice);
+	  if(!isNaN(startPrice) && !isNaN(endPrice)){
+		  if(startPrice > endPrice){
+			  alert('Neispravno unet cenovni rang');
+			  return;
+		  }
 
-        });
+		  //filteredApartments = searchByPrice(filteredApartments);
+	  }
+	  
+	  var roomNumberFrom = $('#inputroomNumberFrom').val();
+	  var roomNumberTill = $('#inputroomNumberTill').val();
+	  roomNumberFrom = parseInt(roomNumberFrom);
+	  roomNumberTill = parseInt(roomNumberTill);
+	  if(!isNaN(roomNumberFrom) && !isNaN(roomNumberTill)){
+		  if(roomNumberFrom > roomNumberTill){
+			  alert('Neispravno unet broj soba');
+			  return;
+		  }
+		  //filteredApartments = searchByRoomNumber(filteredApartments);
+	  }
+	  
+	  var guestNumber = $('#inputguestNumber').val();
+	  if(guestNumber == '6plus'){
+		  guestNumber = 7;
+	  }
+	  else{
+		  guestNumber = parseInt(guestNumber);
+	  }
+	  /*if(guestNumber.length > 0){
+		  filteredApartments = searchByGuestNumber(filteredApartments);
+	  }*/
+
+	  var searchParams = {
+		  startDate : startDate,
+		  endDate : endDate,
+		  location : location,
+		  startPrice : startPrice,
+		  endPrice : endPrice,
+		  roomNumberFrom : roomNumberFrom,
+		  roomNumberTill : roomNumberTill,
+		  guestNumber : guestNumber
+	  };
+	  
+	  $.ajax({
+		  type : "POST",
+		  url : "rest/searchActiveApartments",
+		  contentType : "application/json",
+		  data : JSON.stringify(searchParams),
+		  success : function(response){
+			  $('#tableApartmentsGuest tbody').empty();
+			  for(var apartment of response){
+				  if(apartment.apartmentStatus == 'ACTIVE'){
+				  addApartment(apartment);
+				  }
+			  }
+			  $('#searchModal').modal('toggle');
+		   },
+		   error: function(message){
+			  $('#tableApartmentsGuest tbody').empty();
+			  $('#searchModal').modal('toggle');
+			  alert(message.responseText);
+		   }
+	   });
+  });
 	  
 	  function searchByGuestNumber(apartmentList){
 		  return apartmentList.filter(function (a) {
@@ -545,8 +604,12 @@ $(document).ready(function(){
 	
 	}
 	  function addApartment(apartment){
-		var tr = $('<tr class="tableRow"></tr>');	
-		var image = $('<td><a href="#" class="apartmentClick" id="apartmentClicked_'+apartment.id+'"><img class="img-fluid img-thumbnail" alt="Slika" src="'+apartment.imagePaths[0]+'"</img></a></td>');
+		var tr = $('<tr class="tableRow"></tr>');
+		var imgPath ="placeholder-img.jpg";
+		if(apartment.imagePaths.length > 0){
+			imgPath=apartment.imagePaths[0];
+		}
+		var image = $('<td><a href="#" class="apartmentClick" id="apartmentClicked_'+apartment.id+'"><img class="img-fluid img-thumbnail" alt="Slika" src="'+imgPath+'"</img></a></td>');
 		var name = $('<td class="tableData">'+apartment.name+'</td>');
 		var roomNumber = $('<td class="tableData">'+apartment.roomNumber+'</td>');
 		var guestNumber = $('<td class="tableData">'+apartment.guestNumber+'</td>');
@@ -613,8 +676,8 @@ $(document).ready(function(){
 			shouldSwitch = false;
 			/*Get the two elements you want to compare,
 			one from current row and one from the next:*/
-			x = rows[i].getElementsByTagName("td")[4];
-			y = rows[i + 1].getElementsByTagName("td")[4];
+			x = rows[i].getElementsByTagName("td")[6];
+			y = rows[i + 1].getElementsByTagName("td")[6];
 			//check if the two rows should switch place:
 			if (Number(x.innerHTML) < Number(y.innerHTML)) {
 			  //if so, mark as a switch and break the loop:
