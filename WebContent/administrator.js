@@ -175,6 +175,93 @@ $(document).ready(function() {
 		return validateUsername() && validateFirstname() && validateLastname() && validatePassword() && validateConfirmPassword();
 	}
 	
+	$('form#filterApartments').submit(function(event){
+		event.preventDefault();
+	  var startDate = new Date($('#inputcheckInDate').val());
+	  var endDate = new Date($('#inputcheckOutDate').val());
+	  //var filteredApartments = apartments;
+	  if(!isNaN(startDate) && !isNaN(endDate)){
+		  if(startDate > endDate){
+		  alert('Datum odlaska ne može biti pre datuma dolaska! Molimo proverite Vaš unos.');
+		  return;
+		  }
+		  //filteredApartments = searchByDate(filteredApartments);
+		  startDate = startDate.getTime();
+		  endDate = endDate.getTime();	
+	  }
+	  
+	  var location = $('#inputLocation').val();
+	  /*if(location.length > 0){
+		  filteredApartments = searchByLocation(filteredApartments);
+	  }*/
+	  
+	  var startPrice = $('#inputpriceByNightFrom').val();
+	  var endPrice = $('#inputpriceByNightTill').val();
+	  startPrice = parseFloat(startPrice);
+	  endPrice = parseFloat(endPrice);
+	  if(!isNaN(startPrice) && !isNaN(endPrice)){
+		  if(startPrice > endPrice){
+			  alert('Neispravno unet cenovni rang');
+			  return;
+		  }
+
+		  //filteredApartments = searchByPrice(filteredApartments);
+	  }
+	  
+	  var roomNumberFrom = $('#inputroomNumberFrom').val();
+	  var roomNumberTill = $('#inputroomNumberTill').val();
+	  roomNumberFrom = parseInt(roomNumberFrom);
+	  roomNumberTill = parseInt(roomNumberTill);
+	  if(!isNaN(roomNumberFrom) && !isNaN(roomNumberTill)){
+		  if(roomNumberFrom > roomNumberTill){
+			  alert('Neispravno unet broj soba');
+			  return;
+		  }
+		  //filteredApartments = searchByRoomNumber(filteredApartments);
+	  }
+	  
+	  var guestNumber = $('#inputguestNumber').val();
+	  if(guestNumber == '6plus'){
+		  guestNumber = 7;
+	  }
+	  else{
+		  guestNumber = parseInt(guestNumber);
+	  }
+	  /*if(guestNumber.length > 0){
+		  filteredApartments = searchByGuestNumber(filteredApartments);
+	  }*/
+
+	  var searchParams = {
+		  startDate : startDate,
+		  endDate : endDate,
+		  location : location,
+		  startPrice : startPrice,
+		  endPrice : endPrice,
+		  roomNumberFrom : roomNumberFrom,
+		  roomNumberTill : roomNumberTill,
+		  guestNumber : guestNumber
+	  };
+	  
+	  $.ajax({
+		  type : "POST",
+		  url : "rest/searchAllApartments",
+		  contentType : "application/json",
+		  data : JSON.stringify(searchParams),
+		  success : function(response){
+			  $('#tableApartments tbody').empty();
+			  for(var apartment of response){
+				  addApartment(apartment);
+			  }
+			  $('#searchModal').modal('toggle');
+		   },
+		   error: function(message){
+			  $('#tableApartments tbody').empty();
+			  $('#searchModal').modal('toggle');
+			  alert(message.responseText);
+		   }
+	   });
+  });
+
 	$('form#formEditUser').submit(function(event) {
 		event.preventDefault();
 		let username = $('input#inputUserNameEdit').val();

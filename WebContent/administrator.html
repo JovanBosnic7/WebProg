@@ -33,7 +33,14 @@
             </ul>
             <ul class="nav navbar-nav navbar-left">
               <li><a href="#" id ="openUsers" ><span class="glyphicon glyphicon-user"></span>Prikaz svih korisnika</a></li>
-              <li><a href="#" id="openApratments" ><span class="glyphicon glyphicon-bed"></span>Prikaz svih apartmana</a></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" id="apartmentShow" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-bed"><span style="font-size: 15px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">Prikaz apartmana</span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#" id="openApratments" ><span class="glyphicon glyphicon-bed"></span>Prikaz apartmana</a></li>
+                  <li><a href="#" data-target="#searchModal" data-toggle="modal"><span class="glyphicon glyphicon-search"></span>Pretražite apartmane</a></li>
+                </ul>
+              </li>
               <li><a href="#" id= "openReservations" ><span class="glyphicon glyphicon-calendar"></span>Prikaz svih rezervacija</a></li>
               <li><a href="#" id="openComments" ><span class="glyphicon glyphicon-comment"></span>Prikaz svih komentara</a></li>
               <li><a href="#" id="openAmenities" ><span class="glyphicon glyphicon-pencil"></span>Održavanje sadržaja apartmana</a></li>
@@ -304,6 +311,84 @@
                   
               </div>
             <p id="errorAddAmenities" style="color:red;"></p>
+            </div>
+          </div>
+       </div>
+      </div>
+
+
+       <!-- -----------------------------------------SearchModal -------------------------------------------------------------------->
+
+<div>
+   
+  <div id="searchModal" class="modal" tabindex="-1" data-backdrop="false"> 
+      <!-- Modal content -->
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+              <button class="close" data-dismiss="modal">&times;</button>    
+              <h4 class="modal-title">Unesite kriterijume pretrage</h4>
+              </div>
+              <div class="modal-body">
+                  <form id="filterApartments">
+                      <div class="form-inline">
+                          <label style="font-size:15px;" class="label label-default">Odaberite datum dolaska:</label>
+                          <input class ="form-control" placeholder="" name="checkInDate" type="date" id="inputcheckInDate">
+                      </div>
+                      <div class="form-inline">
+                          <label style="font-size:15px;" class="label label-default">Odaberite datum odlaska:</label>
+                          <input class ="form-control" placeholder="" name="checkOutDate" type="date" id="inputcheckOutDate">
+                      </div>
+                      <div class="form-group">
+
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite željenu lokaciju" name="location" type="text" id="inputLocation">
+                      </div>
+                      <div class="form-group">
+
+                      </div>
+                      <div class="form-inline">
+                          <label style="font-size:15px;" class="label label-default">Cena od:</label>
+                          <input style="width: 100px;" class ="form-control" placeholder="" name="priceByNightFrom" type="text" id="inputpriceByNightFrom">
+                          <label style="font-size:15px;" class="label label-default">do:</label>
+                          <input style="width: 100px;" class ="form-control" placeholder="" name="priceByNightTill" type="text" id="inputpriceByNightTill">
+                          <label style="font-size:15px;" class="label label-default">RSD</label>
+                      </div>
+                      <div class="form-group">
+
+                      </div>
+                      <div class="form-inline">
+                          <label style="font-size:15px;" class="label label-default">Broj soba od:</label>
+                          <input style="width: 100px;" class ="form-control" placeholder="" name="roomNumberFrom" type="text" id="inputroomNumberFrom">
+                          <label style="font-size:15px;" class="label label-default">do:</label>
+                          <input style="width: 100px;" class ="form-control" placeholder="" name="roomNumberTill" type="text" id="inputroomNumberTill">
+                      </div>
+                      <div class="form-group">
+
+                      </div>
+                      <div class="form-inline">
+                          <label  style="font-size:15px;" class="label label-default"for="guestNumber">Odaberite broj gostiju:</label>
+                      <select class="form-control" name="guestNumber" id="inputguestNumber">
+                          <option value=""></option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="6plus">Više od 6</option>
+                    </select>
+                      </div>
+                  </form>  
+                  </div>
+                  <div class="modal-footer">
+                      <div class="form-inline">              
+                          <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+            <button type="submit" form="filterApartments" id="filterConfirmButton" class="btn btn-secondary">Pretražite</button>
+                      </div>
+
+              </div>
             </div>
           </div>
        </div>

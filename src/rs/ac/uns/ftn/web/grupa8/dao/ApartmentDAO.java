@@ -150,6 +150,45 @@ public class ApartmentDAO {
 		}
 
 	}
+	
+	public Collection<Apartment> searchAllApartments(Date startDate, Date endDate, String location, double startPrice, double endPrice, int roomNumberFrom, int roomNumberTill, int guestNumber){
+		Collection<Apartment> activeApartments = apartments.values();
+		Boolean flag = false;
+		if(startDate != null && endDate != null) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(
+					a -> a.getRentDates().stream().anyMatch(r -> r.getDate().compareTo(startDate) >= 0)
+					&& a.getRentDates().stream().anyMatch(r -> r.getDate().compareTo(endDate) < 0)).collect(Collectors.toList());
+		}
+		
+		if(!location.equals("")) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(a-> a.getLocation().getAddress().getCity().toLowerCase().contains(location)
+					|| a.getLocation().getAddress().getStreet().toLowerCase().contains(location)).collect(Collectors.toList());
+		}
+		
+		if(startPrice != 0 || endPrice != 0) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(a-> a.getPriceByNight() >= startPrice
+					&& a.getPriceByNight() <= endPrice).collect(Collectors.toList());
+		}
+		
+		if(roomNumberFrom != 0 || roomNumberTill != 0) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(a-> a.getRoomNumber() >= roomNumberFrom
+					&& a.getRoomNumber() <= roomNumberTill).collect(Collectors.toList());
+		}
+		
+		if(guestNumber != 0) {
+			flag = true;
+			activeApartments = activeApartments.stream().filter(a-> a.getGuestNumber() >= guestNumber).collect(Collectors.toList());
+		}
+		if(flag)
+			return activeApartments;
+		else
+			return new ArrayList<Apartment>();
+	}
+	
 
 	public void removeAmenities(Amenities amenities) {
 		for(Apartment a : apartments.values()) {

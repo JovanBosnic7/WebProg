@@ -124,6 +124,40 @@ public class ApartmentService {
 		return Response.ok(searched).status(200).build();
 	}
 	
+	@POST
+	@Path("/searchAllApartments")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchAllApartments(JsonNode obj) throws ServletException, IOException {
+		long start = obj.get("startDate").asLong(0);
+		Date startDate = null;
+		if(start != 0) {
+			startDate = new Date(start);
+		}
+		Date endDate = null;
+		long end = obj.get("endDate").asLong(0);
+		if(end != 0) {
+			endDate = new Date(end);
+		}
+		String location = obj.get("location").asText("");
+		location = location.trim();
+		location = location.toLowerCase();
+		double startPrice = obj.get("startPrice").asDouble(0);
+		double endPrice = obj.get("endPrice").asDouble(0);
+		int roomNumberFrom = obj.get("roomNumberFrom").asInt(0);
+		int roomNumberTill = obj.get("roomNumberTill").asInt(0);
+		int guestNumber = obj.get("guestNumber").asInt(0);
+		System.out.println(startDate +"\n" + endDate + "\n" + location + "\n" +
+				+ startPrice + "\n" + endPrice + "\n" + roomNumberFrom + "\n" + roomNumberTill + "\n"+ guestNumber);
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
+		Collection<Apartment> searched = apartmentDAO.searchAllApartments(startDate, endDate, location, startPrice, endPrice, roomNumberFrom, roomNumberTill, guestNumber);
+		if(searched.isEmpty()) {
+			return Response.status(400).entity("Ne postoje apartmani koji zadovoljavaju kriterijume pretrage")
+					.build();
+		}
+		return Response.ok(searched).status(200).build();
+	}
+	
 	@GET
 	@Path("/giveComment")
 	@Consumes(MediaType.APPLICATION_JSON)
