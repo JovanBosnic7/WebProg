@@ -8,6 +8,21 @@ $(document).ready(function(){
 	$('#showComments').hide();
 
 
+	$.ajax({
+		type : "get",
+		url : "rest/amenities",
+		contentType : "application/json",
+		success : function(response){
+			$('#amenitiesInput').empty();
+		   allAmenities = response;
+		   for(var amenities of response){
+			   addAmenities(amenities);
+		   }
+		 },
+		error : function(message) {
+			alert(message.responseText);
+		}
+		});
 	 $.ajax({
 	        type : "get",
 	        url : "rest/currentUser",
@@ -532,6 +547,29 @@ $(document).ready(function(){
 			sortReservationsDescending();
 
 		});
+		$('#apartmentTypeInput').change(function(event) {
+			
+			filterAparments();
+
+		});
+		$('#cancelFilter').click(function(event) {
+			
+			$.ajax({
+				type : "get",
+				url : "rest/apartments",
+				contentType : "application/json",
+				success : function(response){
+					$('#tableApartmentsGuest tbody').empty();
+					for(var apartment of response){
+						if(apartment.apartmentStatus == 'ACTIVE'){
+						apartments.push(apartment);
+						addApartment(apartment);
+					}   
+				 }
+			 }
+		  });
+
+		});
 		$('a#logout').click(function(event) {
 			event.preventDefault();
 			$.ajax({
@@ -559,6 +597,13 @@ $(document).ready(function(){
 		 tr.append(id).append(guest).append(apartment).append(content).append(grade);
 		 $('#tableComments tbody').append(tr);
 	
+}
+function addAmenities(amenities){
+	var labela =  $('<label></label>');
+	var inputAmenities = $('<input type="checkbox" value="'+amenities.id+'"/>');
+	   labela.append(inputAmenities);
+	   labela.append(amenities.name);
+	 $('#amenitiesInput').append(labela);
 }
 
 	  function addReservation(reservation){
@@ -758,6 +803,28 @@ $(document).ready(function(){
 			and mark that a switch has been done:*/
 			rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
 			switching = true;
+		  }
+		}
+	  }
+
+	  function filterAparments() {
+		// Declare variables
+		var input, filter, table, tr, td, i, txtValue;
+		input = document.getElementById("apartmentTypeInput");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("tableApartmentsGuest");
+		tr = table.getElementsByTagName("tr");
+	  
+		// Loop through all table rows, and hide those who don't match the search query
+		for (i = 0; i < tr.length; i++) {
+		  td = tr[i].getElementsByTagName("td")[5];
+		  if (td) {
+			txtValue = td.textContent || td.innerText;
+			if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			  tr[i].style.display = "";
+			} else {
+			  tr[i].style.display = "none";
+			}
 		  }
 		}
 	  }
