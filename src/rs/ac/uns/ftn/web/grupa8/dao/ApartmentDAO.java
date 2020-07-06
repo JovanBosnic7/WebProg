@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.web.grupa8.dao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -134,6 +135,8 @@ public class ApartmentDAO {
 			if (id > maxId)
 				maxId = id;
 		}
+		apartment.setCheckInTime(LocalTime.of(14, 0));
+		apartment.setCheckOutTime(LocalTime.of(10, 0));
 		apartment.setId(++maxId);
 		apartments.put(apartment.getId(), apartment);
 		saveApartments();

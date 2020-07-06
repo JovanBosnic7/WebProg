@@ -1,7 +1,9 @@
 var currentUser = 'none';
 var currentApartment = 'none';
+var enabledDates = [];
 
 $(document).ready(function(){
+	enabledDates.push(new Date());
     $.ajax({
         type : "get",
         url : "rest/currentUser",
@@ -14,7 +16,7 @@ $(document).ready(function(){
             alert(message.responseText);
         }
   });
-  
+
   $.ajax({
     type : "get",
     url : "rest/getApartmentClicked",
@@ -24,6 +26,64 @@ $(document).ready(function(){
         $('#apartmentInfo').empty();
             addApartment(response);
         }   
+    });
+
+    $('#formAddReservation').submit(function(event){
+        event.preventDefault();
+        var date = $('#inputDatePicker').datepicker('getDate');
+        var dateMiliseconds = date.getTime();
+        var inputedData ={
+            startDate : dateMiliseconds,
+            nightsNumber : $('#inputDuration').val(),
+            reservationMessage : $('#inputMessage').val()
+        };
+        $.ajax({
+			type : 'POST',
+			url : 'rest/createReservation',
+			data : JSON.stringify(inputedData),
+			contentType : 'application/json',
+			success : function() {
+				$('#addReservationModal').modal('toggle');
+				alert('Rezervacija uspešno kreirana');
+				location.reload();
+			},
+			error : function(message) {
+				$('#errorRes').text(message.responseText);
+				$('#errorRes').show();
+				$('#errorRes').delay(4000).fadeOut('slow');
+			}
+		});
+    });
+
+    $("#addReservationModal").on('show.bs.modal', function(){
+
+        if(Array.isArray(currentApartment.rentDates)){
+            for(date of currentApartment.rentDates){
+                if(date.available){
+                    enabledDates.push(new Date(Number(date.date)));
+                }
+            }
+        }
+        
+        $('#inputDatePicker').datepicker({
+            beforeShowDay: function(date){
+                for(edate of enabledDates){
+                    var diffTime = Math.abs(date - edate);
+                    var diffDays = (diffTime / (1000 * 60 * 60 * 24));
+                    var date1 = date.getDate();
+                    var date2 = edate.getDate();
+                    if ((diffDays < 1) && (date1 == date2))
+                  return {
+                    enabled: true
+                  }
+                else
+                  return {
+                    enabled: false
+                  }
+                }
+            }
+        });
+
     });
 
     $('#homepageApartments').click(function(event){

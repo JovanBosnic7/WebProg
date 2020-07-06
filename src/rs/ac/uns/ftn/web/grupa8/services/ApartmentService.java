@@ -84,7 +84,6 @@ public class ApartmentService {
 		if (test == null) {
 			return Response.status(400).entity("Niste odabrali apartman").build();
 		}
-		session.removeAttribute("apartmentClicked");
 		return Response.ok(test).status(200).build();
 	}
 	

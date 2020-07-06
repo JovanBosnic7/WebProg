@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 
+import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentRentDate;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
 
 public class ReservationDAO {
@@ -106,6 +109,30 @@ public class ReservationDAO {
 			if (id > maxId)
 				maxId = id;
 		}
+		
+		Date startDate = new Date(reservation.getStartDate().getTime());
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(startDate);
+		cal.add(Calendar.DATE, reservation.getNightsNumber());
+		Date endDate = cal.getTime();
+		cal.setTime(startDate);
+		Date d = cal.getTime();
+		System.out.println(startDate.toString() + ' ' + endDate.toString());
+		for(ApartmentRentDate rentDate : reservation.getApartment().getRentDates()) {
+			while(d.compareTo(endDate) < 0) {
+				int flag = rentDate.getDate().compareTo(d);
+				System.out.println(flag);
+				if(flag >= 0 && flag < 1) {
+					if(!rentDate.getAvailable()) {
+						return null;
+					}
+				}
+				
+				cal.add(Calendar.DATE, 1);
+				d = cal.getTime();
+			}
+		}
+		reservation.setTotalPrice(reservation.getApartment().getPriceByNight() * reservation.getNightsNumber());
 		reservation.setId(++maxId);
 		reservations.put(reservation.getId(), reservation);
 		saveReservations();
