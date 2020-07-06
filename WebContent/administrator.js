@@ -886,7 +886,176 @@ $(document).on("click", "a.editApartmentLink", function(){
 		function validateEditApartmentInputs(){
 			return validateEditName() && validateEditCity() && validateEditStreet() + validateEditZipcode() && validateEditLatitude() && validateEditLongitude() && validateEditPrice();
 		}
+		$('#inputUserNameReg').on('input', function() { 
+			validateUsername();
+		});
 	
+		function validateUsername(){
+			let username = $('#inputUserNameReg').val();
+			
+			if(username.length == 0){
+				$('#errorUserNameReg').text('Morate uneti korisničko ime');
+				$('#errorUserNameReg').show();
+				return false;
+			}
+			
+			if(username.length < 6 || username.length > 20){
+				$('#errorUserNameReg').text('Korisničko ime mora sadržati od 6 do 20 karaktera');
+				$('#errorUserNameReg').show();
+				return false;
+			}
+			
+			if(!usernamePattern.test(username)){
+				$('#errorUserNameReg').text('Korisničko ime sme da sadrži slova, brojeve i znakove: -,_');
+				$('#errorUserNameReg').show();
+				return false;
+			}
+			
+			$('#errorUserNameReg').text('');
+			$('#errorUserNameReg').hide();
+			return true;
+		}
+		
+		$('#inputFirstNameReg').on('input', function() { 
+			validateFirstname();
+		});
+	
+		function validateFirstname(){
+			let firstname = $('#inputFirstNameReg').val();
+			
+			if(firstname.length == 0){
+				$('#errorFirstNameReg').text('Morate uneti ime korisnika');
+				$('#errorFirstNameReg').show();
+				return false;
+			}
+			
+			if(!latinPattern.test(firstname)){
+				$('#errorFirstNameReg').text('Ime sme da sadrži samo slova');
+				$('#errorFirstNameReg').show();
+				return false;
+			}
+			
+			$('#errorFirstNameReg').text('');
+			$('#errorFirstNameReg').hide();
+			return true;
+				
+		}
+		
+		$('#inputLastNameReg').on('input', function() { 
+			validateLastname();
+		});
+	
+		function validateLastname(){
+			let lastname = $('#inputLastNameReg').val();
+			
+			if(lastname.length == 0){
+				$('#errorLastNameReg').text('Morate uneti prezime korisnika');
+				$('#errorLastNameReg').show();
+				return false;
+			}
+			
+			if(!latinPattern.test(lastname)){
+				$('#errorLastNameReg').text('Prezime sme da sadrži samo slova');
+				$('#errorLastNameReg').show();
+				return false;
+			}
+			
+			$('#errorLastNameReg').text('');
+			$('#errorLastNameReg').hide();
+			return true;
+				
+		}
+		
+		$('#inputPasswordReg').on('input', function() { 
+			validatePassword();
+		});
+	
+		function validatePassword(){
+			let password = $('#inputPasswordReg').val();
+			
+			if(password.length == 0){
+				$('#errorPasswordReg').text('Morate uneti lozinku');
+				$('#errorPasswordReg').show();
+				return false;
+			}
+			
+			if(password.length < 6 || password.length > 20){
+				$('#errorPasswordReg').text('Lozinka mora sadržati od 6 do 20 karaktera');
+				$('#errorPasswordReg').show();
+				return false;
+			}
+			
+			if(!usernamePattern.test(password)){
+				$('#errorPasswordReg').text('Lozinka sme da sadrži slova, brojeve i znakove: -,_');
+				$('#errorPasswordReg').show();
+				return false;
+			}
+			
+			$('#errorPasswordReg').text('');
+			$('#errorPasswordReg').hide();
+			return true;
+		}
+		
+		$('#confirmPasswordReg').on('input', function() { 
+			validateConfirmPassword();
+		});
+	
+		function validateConfirmPassword(){
+			let confirmPassword = $('#confirmPasswordReg').val();
+			let password = $('#inputPasswordReg').val();
+			if(password != confirmPassword){
+				$('#errorConfirmPassword').text('Unete lozinke se ne poklapaju');
+				$('#errorConfirmPassword').show();
+				return false;
+			}
+			
+			$('#errorConfirmPassword').text('');
+			$('#errorConfirmPassword').hide();
+			return true;
+		}
+		
+		function validateRegInputs(){
+			return validateUsername() && validateFirstname() && validateLastname() && validatePassword() && validateConfirmPassword();
+		}
+		
+		$('form#formRegisterHost').submit(function(event) {
+			event.preventDefault();
+			let username = $('input#inputUserNameReg').val();
+			let firstname = $('input#inputFirstNameReg').val();
+			let lastname = $('input#inputLastNameReg').val();
+			let gender = $('select#genderReg').val();
+			let inputedPassword = $('input#inputPasswordReg').val();
+	
+			if(!validateRegInputs()){
+				alert('Molimo proverite unete podatke');
+				return;
+			}
+			
+			var inputedData = {
+				"username" : username,
+				"firstname" : firstname,
+				"lastname" : lastname,
+				"gender" : gender,
+				"password" : inputedPassword,
+			}
+	
+			$.ajax({
+				type : 'POST',
+				url : 'rest/registerHost',
+				data : JSON.stringify(inputedData),
+				contentType : 'application/json',
+				success : function(data) {
+					$('#addHostModal').modal('toggle');
+					$('#showUsers').show();
+					$('#showApartments').hide();
+					$('#showReservations').hide();
+					$('#showComments').hide();
+					$('#showAmenities').hide();
+					addUser(data);
+				}
+				});
+			});
+		
     
     $('#openApratments').click(function(event){
 		event.preventDefault();
@@ -982,9 +1151,7 @@ function addUser(user){
     var lastname = $('<td class="tableData">'+user.lastname+'</td>');
     var gender = $('<td class="tableData">'+user.gender+'</td>');
     var typeOfAccount = $('<td class="tableData">'+user.accountType +'</td>');
-    var brisanje = $('<td class="tableData"><a href="#" style="color: white;"><span class="glyphicon glyphicon-trash"></span>Brisanje</a></td> ');
-    var izmena = $('<td class="tableData"><a href="#" style="color: white;"><span class="glyphicon glyphicon-edit"></span>Izmena</a></td> ');
-    tr.append(id).append(username).append(password).append(firstname).append(lastname).append(gender).append(typeOfAccount).append(brisanje).append(izmena);
+    tr.append(id).append(username).append(password).append(firstname).append(lastname).append(gender).append(typeOfAccount);
      $('#tableUsers tbody').append(tr);
 }
 

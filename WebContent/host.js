@@ -6,6 +6,7 @@ var latinPatternzip = new RegExp("^[0-9]+$");
 var latinPatternlonglat = new RegExp("^[0-9.]+$");
 var status = 'none';
 var apartments = [];
+var guests = [];
 $(document).ready(function() {
 
 	$.ajax({
@@ -993,14 +994,15 @@ function validateAddApartmentInputs(){
     contentType : "application/json",
     success : function(response){
         $('#tableReservations tbody').empty();
-        console.log(response);
+		console.log(response);
         for(var reservation of response){
-            if(reservation.apartment.host.username == currentUser.username){
-			addUser(reservation.guest);
-            addReservation(reservation);
-           }
+				if(reservation.apartment.host.username == currentUser.username){
+					
+					addUser(reservation.guest);
+					addReservation(reservation);
+				}
+			}    
      }
- }
 });
 $.ajax({
     type : "get",
@@ -1252,7 +1254,8 @@ function addReservation(reservation){
 }
 function addUser(user){
 	
-    var tr = $('<tr class="tableRow"></tr>');	
+				
+	var tr = $('<tr class="tableRow"></tr>');	
     var id = $('<td class="tableData">'+user.id+'</td>');
     var username = $('<td class="tableData">'+user.username+'</td>');
     var firstname = $('<td class="tableData">'+user.firstname +'</td>');     
@@ -1260,8 +1263,9 @@ function addUser(user){
     var gender = $('<td class="tableData">'+user.gender+'</td>');
     var typeOfAccount = $('<td class="tableData">'+user.accountType +'</td>');
     tr.append(id).append(username).append(firstname).append(lastname).append(gender).append(typeOfAccount);
-     $('#tableUsers tbody').append(tr);
-}
+     $('#tableUsers tbody').append(tr);	
+	}
+    
 
 function addApartment(apartment){
     var tr = $('<tr class="tableRow"></tr>');	

@@ -37,13 +37,67 @@
               <li><a href="#" id= "openReservations" ><span class="glyphicon glyphicon-calendar"></span>Prikaz svih rezervacija</a></li>
               <li><a href="#" id="openComments" ><span class="glyphicon glyphicon-comment"></span>Prikaz svih komentara</a></li>
               <li><a href="#" id="openAmenities" ><span class="glyphicon glyphicon-pencil"></span>Održavanje sadržaja apartmana</a></li>
-              
+              <li><a href="#" id="addHost"  data-target="#addHostModal" data-toggle="modal" ><span class="glyphicon glyphicon-plus-sign"></span>Dodajte novog domaćina</a></li>
             </ul>
       
       
         </div>
       </nav>
-     
+     <!-- -----------------------------------------AddHostModal -------------------------------------------------------------------->
+
+<div>
+   
+  <div id="addHostModal" class="modal" tabindex="-1" data-backdrop="false"> 
+      <!-- Modal content -->
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+              <button class="close" data-dismiss="modal">&times;</button>    
+              <h4 class="modal-title">Dodavanje novog domaćina</h4>
+              </div>
+              <div class="modal-body">
+                  <form id = "formRegisterHost" method="POST">
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite korisničko ime" name="username" type="text" id="inputUserNameReg">
+              <p id="errorUserNameReg" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite ime" name="firstname" type="text" id="inputFirstNameReg">
+              <p id="errorFirstNameReg" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <input class ="form-control" placeholder="Unesite prezime" name="lastname" type="text" id="inputLastNameReg">
+              <p id="errorLastNameReg" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <label  style="font-size:13px;" class="label label-default"for="pol">Odaberite pol:</label>
+                          <select name="gender" id="genderReg">
+                              <option value="MALE">Muški</option>
+                              <option value="FEMALE">Ženski</option>
+                <option value="UNDEFINED">Ne želim da odgovorim</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                          <input class="form-control" placeholder="Unesite lozinku" name="password" type="password" id="inputPasswordReg">
+              <p id="errorPasswordReg" style="color:red;"></p>
+                      </div>
+                      <div class="form-group">
+                          <input class="form-control" placeholder="Ponovite lozinku" type="password" id="confirmPasswordReg">
+              <p id="errorConfirmPassword" style="color:red;"></p>
+                      </div>    
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  
+                  <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                  <button  type="submit" form = "formRegisterHost" class="btn btn-secondary" id="buttonRegHost">Registracija</button>
+                  
+              </div>
+        <p id="errorReg" style="color:red;"></p>
+            </div>
+          </div>
+       </div>
+      </div>
 
       
           <!-- -----------------------------------------UsersTable -------------------------------------------------------------------->
@@ -61,8 +115,7 @@
                         <th style="width: 200px;" scope="col">Prezime</th>
                         <th style="width: 150px;" scope="col">Pol</th>
                         <th style="width: 150px;" scope="col">Tip profila</th> 
-                        <th style="width: 150px;" scope="col">Brisanje</th> 
-                        <th style="width: 150px;" scope="col">Izmena</th> 
+                       
                         
                                                
                     </tr>
