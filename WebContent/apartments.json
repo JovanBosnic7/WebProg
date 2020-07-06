@@ -1,9 +1,9 @@
 [ "java.util.ArrayList", [ [ "rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment", {
   "id" : 1,
-  "name" : "Apartman 1",
-  "apartmentType" : "ROOM",
-  "roomNumber" : 4,
-  "guestNumber" : 4,
+  "name" : "Apartman 2",
+  "apartmentType" : "WHOLE_APARTMENT",
+  "roomNumber" : 3,
+  "guestNumber" : 7,
   "location" : [ "rs.ac.uns.ftn.web.grupa8.beans.entities.Location", {
     "latitude" : 44.12345,
     "longitude" : 55.12345,
@@ -13,10 +13,7 @@
       "zipCode" : 21000
     } ]
   } ],
-  "rentDates" : [ "java.util.ArrayList", [ [ "rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentRentDate", {
-    "date" : [ "java.util.Date", 1593727200000 ],
-    "available" : true
-  } ] ] ],
+  "rentDates" : [ "java.util.ArrayList", [ ] ],
   "host" : [ "rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host", {
     "@id" : 1,
     "id" : 1,
@@ -28,6 +25,32 @@
     "accountType" : "HOST",
     "deleted" : false
   } ],
+  "comments" : [ "java.util.ArrayList", [ ] ],
+  "imagePaths" : [ "java.util.ArrayList", [ "apartment1.jpg" ] ],
+  "priceByNight" : 9000.0,
+  "checkInTime" : null,
+  "checkOutTime" : null,
+  "apartmentStatus" : "ACTIVE",
+  "amenities" : null,
+  "reservations" : null,
+  "deleted" : false
+} ], [ "rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment", {
+  "id" : 2,
+  "name" : "Apartman 1",
+  "apartmentType" : "ROOM",
+  "roomNumber" : 2,
+  "guestNumber" : 4,
+  "location" : [ "rs.ac.uns.ftn.web.grupa8.beans.entities.Location", {
+    "latitude" : 44.12345,
+    "longitude" : 55.12345,
+    "address" : [ "rs.ac.uns.ftn.web.grupa8.beans.entities.Address", {
+      "street" : "Bulevar Oslobodjenja 12",
+      "city" : "Novi Sad",
+      "zipCode" : 21000
+    } ]
+  } ],
+  "rentDates" : [ "java.util.ArrayList", [ ] ],
+  "host" : 1,
   "comments" : [ "java.util.ArrayList", [ ] ],
   "imagePaths" : [ "java.util.ArrayList", [ "apartment1.jpg" ] ],
   "priceByNight" : 5000.0,

@@ -5,6 +5,8 @@ var apartments = [];
 $(document).ready(function(){
 	$('#showApartments').show();
 	$('#showReservations').hide();
+	$('#showComments').hide();
+
 
 	 $.ajax({
 	        type : "get",
@@ -35,6 +37,20 @@ $(document).ready(function(){
 	  });
 	  $.ajax({
 		type : "get",
+		url : "rest/comments",
+		contentType : "application/json",
+		success : function(response){
+			$('#tableComments tbody').empty();
+			console.log(response);
+			for(var comment of response){
+				if(comment.guest.username == currentUser.username){
+				addComment(comment);      
+		  }
+		}
+	 }
+	});
+	  $.ajax({
+		type : "get",
 		url : "rest/reservations",
 		contentType : "application/json",
 		success : function(response){
@@ -50,13 +66,23 @@ $(document).ready(function(){
 	});
 	   $('#homePage').click(function(){
         $('#showApartments').show();
-        $('#showReservations').hide();
+		$('#showReservations').hide();
+		$('#showComments').hide();
       
 	}); 
 	$('#openReservations').click(function(){
         $('#showApartments').hide();
-        $('#showReservations').show();
+		$('#showReservations').show();
+		$('#showComments').hide();
+	});
+	$('#openComments').click(function(){
+       
+        $('#showApartments').hide();
+        $('#showReservations').hide();
+        $('#showComments').show();
     });
+	
+
 	  
 	  $('form#filterApartments').submit(function(event){
 		  	event.preventDefault();
@@ -424,6 +450,18 @@ $(document).ready(function(){
 			}
 			});
 	  });
+
+	  function addComment(comment){
+		var tr = $('<tr class="tableRow"></tr>');	
+		var id = $('<td class="tableData">'+comment.id+'</td>');
+		var guest = $('<td class="tableData">'+comment.guest.firstname+ '<br>' + comment.guest.lastname + '</td>');
+		var apartment = $('<td class="tableData">'+comment.apartment.name+'</td>');
+		var content = $('<td class="tableData">'+comment.commentText +'</td>');     
+		var grade = $('<td class="tableData">'+comment.grade+'</td>');  
+		 tr.append(id).append(guest).append(apartment).append(content).append(grade);
+		 $('#tableComments tbody').append(tr);
+	}
+
 	  function addReservation(reservation){
 		if(reservation.status == 'CREATED'){
 		var tr = $('<tr class="tableRow"></tr>');	

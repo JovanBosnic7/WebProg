@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 
 import rs.ac.uns.ftn.web.grupa8.beans.enums.AccountType;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
+import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.User;
 import rs.ac.uns.ftn.web.grupa8.dao.UserDAO;
 
@@ -41,6 +42,24 @@ public class UserAccountService {
 		}
 	}
 
+	@POST
+	@Path("/registerHost")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response registerHost(Host user) throws ServletException, IOException {
+		UserDAO dao = (UserDAO) ctx.getAttribute("userDAO");
+		if (!isUserValid(user)) {
+			return Response.status(400).entity("Popunite sva polja za registraciju korisnika").build();
+		}
+		user.setAccountType(AccountType.HOST);
+		user.setDeleted(false);
+		Host forReg = (Host) dao.add(user);
+		if (forReg == null)
+			return Response.status(400).entity("Korisnik sa unetim korisničkim imenom već postoji").build();
+		else {
+			return Response.ok(forReg).status(200).build();
+		}
+	}
 	@POST
 	@Path("/register")
 	@Produces(MediaType.APPLICATION_JSON)
