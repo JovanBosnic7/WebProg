@@ -55,7 +55,8 @@ $(document).ready(function(){
 				$('#errorCom').show();
 				$('#errorCom').delay(4000).fadeOut('slow');
 			}
-		});
+        });
+       
     });
 
     $.ajax({
@@ -134,12 +135,38 @@ $(document).ready(function(){
         });
 
     });
+    $.ajax({
+        type : "get",
+        url : "rest/comments",
+        contentType : "application/json",
+        success : function(response){
+            $('#tableComments tbody').empty();
+            console.log(response);
+            for(var comment of response){
+                if(comment.apartment.id == currentApartment.id && comment.visible){
+                addComment(comment);
+                }
+         }
+     }
+    });
 
     $('#homepageApartments').click(function(event){
         event.preventDefault();
         window.location.href = "guest.html";
       
 	}); 
+
+    function addComment(comment){
+		
+		var tr = $('<tr class="tableRow"></tr>');	
+		var guest = $('<td class="tableData">'+comment.guest.firstname+ '<br>' + comment.guest.lastname + '</td>');
+		var apartment = $('<td class="tableData">'+comment.apartment.name+'</td>');
+		var content = $('<td class="tableData">'+comment.commentText +'</td>');     
+		var grade = $('<td class="tableData">'+comment.grade+'</td>');  	
+		 tr.append(guest).append(apartment).append(content).append(grade);
+		 $('#tableShowComments tbody').append(tr);
+	
+}
 
     function addApartment(apartment){
         var div = $('<div class="flex-container" style="margin-left: 20px;"></div>');
