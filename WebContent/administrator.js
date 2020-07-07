@@ -1288,9 +1288,73 @@ $(document).on("click", "a.editApartmentLink", function(){
 		sortReservations();
 
 	});
+	$('#statusInput').change(function(event) {
+			
+		filterReservations();
+
+	});
+	$('#cancelFilter').click(function(event) {
+			
+		$.ajax({
+			type : "get",
+			url : "rest/reservations",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableReservations tbody').empty();
+				console.log(response);
+				for(var reservation of response){
+					addReservation(reservation);
+				   
+			 }
+		 }
+		});
+	});
 	$('#sortReservationsDescending').click(function(event) {
 		
 		sortReservationsDescending();
+
+	});
+	$('#apartmentTypeInput').change(function(event) {
+			
+		filterAparments();
+
+	});
+	$('#apartmentStatusInput').change(function(event) {
+			
+		filterAparmentsStatus();
+
+	});
+	$.ajax({
+		type : "get",
+		url : "rest/amenities",
+		contentType : "application/json",
+		success : function(response){
+			$('#amenitiesInputFilter').empty();
+		   allAmenities = response;
+		   for(var amenities of response){
+			   addAmenitiesFilter(amenities);
+		   }
+		 },
+		error : function(message) {
+			alert(message.responseText);
+		}
+		});
+	$('#cancelFilterApartment').click(function(event) {
+			
+		$.ajax({
+			type : "get",
+			url : "rest/apartments",
+			contentType : "application/json",
+			success : function(response){
+				$('#tableApartments tbody').empty();
+				console.log(response);
+				for(var apartment of response){
+					
+					addApartment(apartment);
+					 
+				 }
+			 }
+		  });
 
 	});
 	$('#openAmenities').click(function(event){
@@ -1312,6 +1376,13 @@ function addComment(comment){
     var grade = $('<td class="tableData">'+comment.grade+'</td>');  
      tr.append(id).append(guest).append(apartment).append(content).append(grade);
      $('#tableComments tbody').append(tr);
+}
+function addAmenitiesFilter(amenities){
+	var labela =  $('<label></label>');
+	var inputAmenities = $('<input type="checkbox" value="'+amenities.id+'"/>');
+	   labela.append(inputAmenities);
+	   labela.append(amenities.name);
+	 $('#amenitiesInputFilter').append(labela);
 }
 function addReservation(reservation){
     var tr = $('<tr class="tableRow"></tr>');	
@@ -1372,11 +1443,13 @@ function addApartment(apartment){
         apartment.location.longitude +'</td>');
         
     var apartmentType = $('<td class="tableData">'+apartment.apartmentType+'</td>');
-    var price = $('<td class="tableData">'+apartment.priceByNight+'</td>');
+	var price = $('<td class="tableData">'+apartment.priceByNight+'</td>');
+	var status = $('<td class="tableData">'+apartment.apartmentStatus+'</td>');
+
     var host = $('<td class="tableData">'+apartment.host.firstname + '<br>' + apartment.host.lastname +'</td>');
 	var brisanje = $('<td class="tableData"><a class="deleteApartmentLink" id="' + apartment.id + '" style="color: white; cursor:pointer;"><span class="glyphicon glyphicon-trash"></span>Brisanje</a></td> ');
     var izmena = $('<td class="tableData"><a  class="editApartmentLink" data-target="#editApartmentModal" data-toggle="modal" style="color: white;" id="' + apartment.id + '"><span class="glyphicon glyphicon-edit"></span>Izmena</a></td> ');
-    tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host).append(brisanje).append(izmena);
+    tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(status).append(host).append(brisanje).append(izmena);
      $('#tableApartments tbody').append(tr);
 }
 
@@ -1448,6 +1521,70 @@ function sortTable() {
 	  }
 	}
   }
+  function filterReservations() {
+	// Declare variables
+	var input, filter, table, tr, td, i, txtValue;
+	input = document.getElementById("statusInput");
+	filter = input.value.toUpperCase();
+	table = document.getElementById("tableReservations");
+	tr = table.getElementsByTagName("tr");
+  
+	// Loop through all table rows, and hide those who don't match the search query
+	for (i = 0; i < tr.length; i++) {
+	  td = tr[i].getElementsByTagName("td")[6];
+	  if (td) {
+		txtValue = td.textContent || td.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		  tr[i].style.display = "";
+		} else {
+		  tr[i].style.display = "none";
+		}
+	  }
+	}
+  }
+  function filterAparments() {
+	// Declare variables
+	var input, filter, table, tr, td, i, txtValue;
+	input = document.getElementById("apartmentTypeInput");
+	filter = input.value.toUpperCase();
+	table = document.getElementById("tableApartments");
+	tr = table.getElementsByTagName("tr");
+  
+	// Loop through all table rows, and hide those who don't match the search query
+	for (i = 0; i < tr.length; i++) {
+	  td = tr[i].getElementsByTagName("td")[5];
+	  if (td) {
+		txtValue = td.textContent || td.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		  tr[i].style.display = "";
+		} else {
+		  tr[i].style.display = "none";
+		}
+	  }
+	}
+  }
+  function filterAparmentsStatus() {
+	// Declare variables
+	var input, filter, table, tr, td, i, txtValue;
+	input = document.getElementById("apartmentStatusInput");
+	filter = input.value.toUpperCase();
+	table = document.getElementById("tableApartments");
+	tr = table.getElementsByTagName("tr");
+  
+	// Loop through all table rows, and hide those who don't match the search query
+	for (i = 0; i < tr.length; i++) {
+	  td = tr[i].getElementsByTagName("td")[7];
+	  if (td) {
+		txtValue = td.textContent || td.innerText;
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		  tr[i].style.display = "";
+		} else {
+		  tr[i].style.display = "none";
+		}
+	  }
+	}
+  }
+
   function sortReservations() {
 	var table, rows, switching, i, x, y, shouldSwitch;
 	table = document.getElementById("tableReservations");
