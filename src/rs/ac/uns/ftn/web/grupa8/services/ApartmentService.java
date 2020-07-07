@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Apartment;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentComment;
+import rs.ac.uns.ftn.web.grupa8.beans.entities.ApartmentRentDate;
 import rs.ac.uns.ftn.web.grupa8.beans.entities.Reservation;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Guest;
 import rs.ac.uns.ftn.web.grupa8.beans.user_hierarchy.Host;
@@ -86,6 +88,7 @@ public class ApartmentService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> addApartment(Apartment a) {
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
+		
 		apartmentDAO.add(a);
 		return apartmentDAO.getAll();
 	}
@@ -291,10 +294,34 @@ public class ApartmentService {
 	}
 	
 	@POST
+	@Path("/setRentDates")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Collection<Apartment> setRentDates(ApartmentRentDate date, @Context HttpServletRequest request) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		Apartment ap = (Apartment) session.getAttribute("apartmentClicked");
+		Host h = (Host) session.getAttribute("user");
+		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
+		Boolean flag = true;
+		for(ApartmentRentDate apr2 : ap.getRentDates()) {
+			if(date.getDate().equals(apr2.getDate())) {
+				flag = false;
+				break;
+			}
+		}
+		if(flag) {
+			ap.getRentDates().add(date);
+		}
+		apartmentDAO.update(ap);
+		return apartmentDAO.getAll().stream().filter(a -> a.getHost().getUsername().equals(h.getUsername())).collect(Collectors.toList());
+	}
+	
+	@POST
 	@Path("/updateApartmentHost")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Collection<Apartment> updateApartmentHost(Apartment ap, @Context HttpServletRequest request) throws ServletException, IOException {
+		System.out.println(ap.getRentDates());
 		HttpSession session = request.getSession();
 		Host h = (Host) session.getAttribute("user");
 		ApartmentDAO apartmentDAO = (ApartmentDAO) ctx.getAttribute("apartmentDAO");
