@@ -8,6 +8,9 @@ var status = 'none';
 var apartments = [];
 var guests = [];
 var images = [];
+var currentApartment = 'none';
+var myrentDates = [];
+var enabledDates = [];
 $(document).ready(function() {
 
 	$.ajax({
@@ -238,6 +241,7 @@ $(document).ready(function() {
 	  }
 
 	$("#editUserModal").on('show.bs.modal', function(){
+
 			$.ajax({
 	        type : "get",
 	        url : "rest/currentUser",
@@ -1173,6 +1177,109 @@ $(document).on("click", "a.deleteApartmentLink", function(){
 		}
 	});
 	});
+
+	$("#chooseDatesModal").on('shown.bs.modal', function(){
+		$.ajax({
+			type : "get",
+			url : "rest/getApartmentClicked",
+			contentType : "application/json",
+			async : true,
+			success : function(response){
+					currentApartment = response;
+					enabledDates.length = 0;
+					myrentDates.length = 0;
+					
+				}
+			});
+
+			if(Array.isArray(currentApartment.rentDates)){
+				for(dateR of currentApartment.rentDates){
+					enabledDates.push(new Date(Number(dateR.date)));
+				}
+			}
+
+			console.log(enabledDates);
+
+			$('#inputDatePicker').datepicker({
+				
+				beforeShowDay: function(date){
+					if(enabledDates.length > 0){
+						var flag = true;
+						for(edate of enabledDates){
+							var diffTime = Math.abs(date - edate);
+							var diffDays = (diffTime / (1000 * 60 * 60 * 24));
+							var date1 = date.getDate();
+							var date2 = edate.getDate();
+							if ((diffDays < 1) && (date1 == date2)){
+								flag = false;
+							}
+						}
+						return{
+							enabled: flag
+						}
+					}
+					else{
+						return {
+							enabled: true
+						}
+					}
+				}
+			});
+			});
+			
+  });
+
+	$(document).on("click", "a.apartmentClick" , function(event) {
+		event.preventDefault();
+		var str = $(this).attr('id');
+		id_clicked = (str.split("_").pop());
+		console.log(id_clicked);
+		$.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "rest/setApartmentClicked",
+		data : JSON.stringify({id : id_clicked}),
+		success : function(){
+			
+		 },
+		error : function(message) {
+			alert(message.responseText);
+		}
+		});
+		$('#chooseDatesModal').modal('show');
+	});
+	$('form#formChooseDates').submit(function(event) {
+		event.preventDefault();
+
+		var dateInput = $('#sandbox-container div').datepicker('getDate');
+		var valueInput = {date : dateInput,
+					available : true}
+			
+		$.ajax({
+			type : 'POST',
+			url : 'rest/setRentDates',
+			data : JSON.stringify(valueInput),
+			contentType : 'application/json',
+			success : function(response) {
+				$('#tableApartments tbody').empty();
+				$('#tableApartmentsInactive tbody').empty();
+				apartments.length = 0;
+				for(var a of response) {
+					if(a.host.username == currentUser.username){
+						apartments.push(a);
+						addApartment(a);
+				}
+				}	
+				alert('Datumi uspešno odabrani');
+				location.reload();
+			},
+			error : function(message) {
+				alert('Došlo je do greške pri odabiru datuma')
+			}
+		});
+		$('#chooseDatesModal').modal('toggle');
+		});
+
 	$(document).on("click", "a.setVisibilityFalse", function(){
 		event.preventDefault();
 		let id = $(this).attr('id');	
@@ -1491,7 +1598,6 @@ $(document).on("click", "a.acceptReservationLink", function(){
 		});
     });
 });
-});
 
 function addAmenities(amenities){
 	var labela =  $('<label></label>');
@@ -1598,7 +1704,9 @@ function addApartment(apartment){
 	if(apartment.imagePaths.length > 0){
 		imgPath=apartment.imagePaths[0];
 	}
-	var image = $('<td><img class="img-fluid img-thumbnail" alt="Slika" src="'+imgPath+'"</img></td>');
+	
+	var image1 = $('<td><a href="#" data-toggle="modal" data-target="#chooseDateModal" class="apartmentClick" id="apartmentClicked_'+apartment.id+'"><img class="img-fluid img-thumbnail" alt="Slika" src="'+imgPath+'"</img></a></td>');
+	var image2 = $('<td><img class="img-fluid img-thumbnail" alt="Slika" src="'+imgPath+'"</img></td>');
     var name = $('<td class="tableData">'+apartment.name+'</td>');
     var roomNumber = $('<td class="tableData">'+apartment.roomNumber+'</td>');
     var guestNumber = $('<td class="tableData">'+apartment.guestNumber+'</td>');
@@ -1613,11 +1721,12 @@ function addApartment(apartment){
     var host = $('<td class="tableData">'+apartment.host.firstname + '<br>' + apartment.host.lastname +'</td>');
     var brisanje = $('<td class="tableData"><a class="deleteApartmentLink" id="' + apartment.id + '" style="color: white; cursor:pointer;"><span class="glyphicon glyphicon-trash"></span>Brisanje</a></td> ');
     var izmena = $('<td class="tableData"><a  class="editApartmentLink" data-target="#editApartmentModal" data-toggle="modal" style="color: white;" id="' + apartment.id + '"><span class="glyphicon glyphicon-edit"></span>Izmena</a></td> ');
-    tr.append(image).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host).append(brisanje).append(izmena);
 	if(apartment.apartmentStatus == 'ACTIVE'){
+		tr.append(image1).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host).append(brisanje).append(izmena);
 		$('#tableApartments tbody').append(tr);
 	}
 	else{
+		tr.append(image2).append(name).append(roomNumber).append(guestNumber).append(location).append(apartmentType).append(price).append(host).append(brisanje).append(izmena);
 		$('#tableApartmentsInactive tbody').append(tr);
 	}
 }

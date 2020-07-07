@@ -10,6 +10,9 @@
   <script src="host.js"></script>
   <script src="userAccount.js"></script>
   
+  <link rel="stylesheet" type="text/css" href="bootstrap-datepicker3.css" /> 
+  <script type="text/javascript" src="bootstrap-datepicker.js"></script>
+
   <link rel="stylesheet" type="text/css" href="custom.css">
  
 </head>
@@ -216,6 +219,39 @@
               </div>
             </div>
           </div>
+          
+          <!-- -----------------------------------------Reservation schedul modal -------------------------------------------------------------------->
+
+<div>
+   
+  <div id="chooseDatesModal" class="modal" tabindex="-1" data-backdrop="false"> 
+      <!-- Modal content -->
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+              <button class="close" data-dismiss="modal">&times;</button>    
+              <h4 class="modal-title">Definisanje raspoloživosti apartmana</h4>
+              </div>
+              <div class="modal-body">
+                  <form id = "formChooseDates" method="POST">
+                          <label style="font-size:15px;" class="label label-default">Odaberite datume za rezervaciju apartmana:</label>
+                          <div id="sandbox-container">
+                            <div class="input-group date">
+                                <input type="text" id="inputDatePicker" class="form-control"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                              </div>
+                            </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  
+                  <button class="btn btn-secondary" data-dismiss="modal">Odustanak</button>
+                  <button  type="submit" form = "formChooseDates" class="btn btn-secondary" id="buttonChooseDates">Potvrda</button>
+                  
+              </div>
+            </div>
+          </div>
+       </div>
+      </div>
 
 <!-- -----------------------------------------EditUserModal -------------------------------------------------------------------->
 

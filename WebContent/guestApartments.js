@@ -5,7 +5,6 @@ var reservations = [];
 var currentId = 'none';
 
 $(document).ready(function(){
-	enabledDates.push(new Date());
     $.ajax({
         type : "get",
         url : "rest/currentUser",
@@ -113,22 +112,27 @@ $(document).ready(function(){
                 }
             }
         }
-        
         $('#inputDatePicker').datepicker({
             beforeShowDay: function(date){
-                for(edate of enabledDates){
-                    var diffTime = Math.abs(date - edate);
-                    var diffDays = (diffTime / (1000 * 60 * 60 * 24));
-                    var date1 = date.getDate();
-                    var date2 = edate.getDate();
-                    if ((diffDays < 1) && (date1 == date2))
-                  return {
-                    enabled: true
-                  }
-                else
-                  return {
-                    enabled: false
-                  }
+                if(enabledDates.length > 0){
+                    var flag = false;
+                    for(edate of enabledDates){
+                        var diffTime = Math.abs(date - edate);
+                        var diffDays = (diffTime / (1000 * 60 * 60 * 24));
+                        var date1 = date.getDate();
+                        var date2 = edate.getDate();
+                        if ((diffDays < 1) && (date1 == date2)){
+                            flag = true;
+                        }
+                    }
+                    return{
+                        enabled: flag
+                    }
+                }
+                else{
+                    return {
+                        enabled: false
+                    }
                 }
             }
         });
